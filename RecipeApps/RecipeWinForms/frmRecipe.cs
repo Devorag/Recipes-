@@ -18,7 +18,6 @@ namespace RecipeWinForms
             InitializeComponent();
         }
 
-
         public void ShowForm(int recipeid)
         {
             string sql = "select * from recipe r where r.RecipeId = " + recipeid.ToString();

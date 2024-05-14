@@ -13,7 +13,6 @@ namespace RecipeWinForms
             gRecipes.CellDoubleClick += GRecipes_CellDoubleClick1;        
             FormatGrid();
         }
-
         private void SearchForRecipe(string recipename)
         {
             string sql = "select RecipeId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived, RecipeStatus, RecipePicture from recipe r where r.RecipeName like '%" + recipename + "%'";
