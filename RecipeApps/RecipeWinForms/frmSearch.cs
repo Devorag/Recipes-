@@ -1,4 +1,5 @@
 ﻿using CPUFramework;
+using CPUWindowsFormsFramework;
 using System.Data;
 using System.Diagnostics;
 
@@ -11,29 +12,29 @@ namespace RecipeWinForms
         {
             InitializeComponent();
             btnSearch.Click += BtnSearch_Click;
-            gRecipes.CellDoubleClick += GRecipes_CellDoubleClick1;        
-            FormatGrid();
+            gRecipes.CellDoubleClick += GRecipes_CellDoubleClick1;
+            btnNew.Click += BtnNew_Click;
+            WindowsFormsUtility.FormatGridForSearchResults(gRecipes);
         }
+
+
         private void SearchForRecipe(string recipename)
         {
-            string sql = "select RecipeId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived, RecipeStatus, RecipePicture from recipe r where r.RecipeName like '%" + recipename + "%'";
+            string sql = "select RecipeId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived from recipe r where r.RecipeName like '%" + recipename + "%'";
             Debug.Print(sql);
             DataTable dt = SQLUtility.GetDataTable(sql);
             gRecipes.DataSource = dt;
             gRecipes.Columns["RecipeId"].Visible = false;
         }
 
-        private void FormatGrid()
-        {
-            gRecipes.AllowUserToAddRows = false;
-            gRecipes.ReadOnly = true;
-            gRecipes.AutoSizeColumnsMode = (DataGridViewAutoSizeColumnsMode)DataGridViewAutoSizeColumnMode.AllCells;
-            gRecipes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        }
 
         private void ShowRecipesForm(int rowindex)
         {
-            int id = (int)gRecipes.Rows[rowindex].Cells["RecipeId"].Value;
+            int id = 0;
+            if (rowindex > -1)
+            {
+                id = (int)gRecipes.Rows[rowindex].Cells["RecipeId"].Value;
+            }
             frmRecipe frm = new frmRecipe();
             frm.ShowForm(id);
         }
@@ -48,5 +49,9 @@ namespace RecipeWinForms
             SearchForRecipe(txtRecipeName.Text);
         }
 
+        private void BtnNew_Click(object? sender, EventArgs e)
+        {
+            ShowRecipesForm(-1);
+        }
     }
 }
