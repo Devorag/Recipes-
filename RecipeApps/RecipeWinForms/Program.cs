@@ -1,4 +1,4 @@
-using CPUFramework;
+using RecipeSystem;
 namespace RecipeWinForms
 {
     internal static class Program
@@ -12,7 +12,7 @@ namespace RecipeWinForms
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            SQLUtility.ConnectionString = "Server=.\\SQLExpress;Database=RecipeDB;Trusted_Connection=true";
+            DBManager.SetConnectionString("Server=.\\SQLExpress;Database=RecipeDB;Trusted_Connection=true");
             Application.Run(new frmSearch());
         }
     }
