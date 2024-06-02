@@ -1,8 +1,4 @@
-﻿using CPUWindowsFormFramework;
-using System.Data;
-using System.Diagnostics;
-using RecipeSystem;
-
+﻿using System.Data;
 
 namespace RecipeWinForms
 {

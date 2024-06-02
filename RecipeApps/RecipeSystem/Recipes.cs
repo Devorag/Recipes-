@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CPUFramework;
+
 
 namespace RecipeSystem
 {
@@ -14,7 +9,7 @@ namespace RecipeSystem
         public static DataTable SearchRecipes(string recipename)
         {
             string sql = "select RecipeId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived from recipe r where r.RecipeName like '%" + recipename + "%'";
-            
+
             DataTable dt = SQLUtility.GetDataTable(sql);
             return dt;
         }
@@ -22,8 +17,8 @@ namespace RecipeSystem
         public static DataTable Load(int recipeid)
         {
             string sql = "select r.*, u.Username , C.Cuisinetype from users u join recipe r on u.UsersId = r.UsersId " +
-    "join cuisine c on c.CuisineId = r.CuisineId " +
-    "where r.RecipeId = " + recipeid.ToString();
+            "join cuisine c on c.CuisineId = r.CuisineId " +
+            "where r.RecipeId = " + recipeid.ToString();
             return SQLUtility.GetDataTable(sql);
         }
 
@@ -57,7 +52,7 @@ namespace RecipeSystem
             }
             else
             {
-                sql = "insert recipe(CusineId, UsersId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived)";
+                sql = "insert recipe(CuisineId, UsersId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived)";
                 sql += $"Select '{r["CuisineId"]}', '{r["UsersId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["DateDrafted"]}', '{r["DatePublished"]}', '{r["DateArchived"]}'";
             }
             Debug.Print("--------");

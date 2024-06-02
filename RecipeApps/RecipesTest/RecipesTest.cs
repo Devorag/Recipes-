@@ -12,6 +12,52 @@ namespace RecipesTest
             DBManager.SetConnectionString("Server=.\\SQLExpress;Database=RecipeDB;Trusted_Connection=true");
         }
 
+        [Test]
+        [TestCase("Sweet potato salad", 200, "2017-01-01", "2017-12-24", "2018-01-01")]
+        [TestCase("Peanut butter chews", 450, "2019-01-01", "2019-12-24", "2020-01-01")]
+        public void InsertNewRecipe(string recipename, int calories, DateTime datedrafted, DateTime datepublished, DateTime datearchived)
+        {
+            DataTable dt = SQLUtility.GetDataTable("select * from recipe where recipeid = 0");
+            DataRow r = dt.Rows.Add();
+            Assume.That(dt.Rows.Count == 1);
+            int cuisineId = SQLUtility.GetFirstCFirstRValue("select top 1 cuisineId from cuisine");
+            int usersId = SQLUtility.GetFirstCFirstRValue("select top 1 usersId from users");
+            Assume.That(cuisineId > 0, "Can't run test, no cuisines in the DB");
+
+            r["CuisineId"] = cuisineId;
+            r["UsersId"] = usersId;
+            r["Recipename"] = recipename;
+            r["Calories"] = calories;
+            r["DateDrafted"] = datedrafted;
+            r["DatePublished"] = datepublished;
+            r["DateArchived"] = datearchived;
+            Recipes.Save(dt);
+
+            int newid = SQLUtility.GetFirstCFirstRValue("select * from recipe where recipename = " + "Sweet potato salad");
+
+            Assert.IsTrue(newid > 0, "recipe with recipename = " + "Sweet potato salad" + "is not found in DB");
+            TestContext.WriteLine("Recipe with recipename = " + "Sweet potato salead" + " is found in DB with pk value = " + newid);
+        }
+
+        [Test] 
+        public void ChangeExistingRecipeUsersId()
+        {
+            int recipeId = GetExistingRecipeId();
+            Assume.That(recipeId > 0, "No recipes in DB, can't run test");
+            int UsersId = SQLUtility.GetFirstCFirstRValue("select UsersId from recipe where recipeid = " + recipeId);
+            TestContext.WriteLine("UsersId for recipeid " + recipeId + " is " + recipeId);
+            UsersId = UsersId + 1;
+            TestContext.WriteLine("Change yearpublisehd to " + UsersId);
+            DataTable dt = Recipes.Load(recipeId);
+
+            dt.Rows[0]["UsersId"] = UsersId;
+            Recipes.Save(dt);
+
+            int newUsersId = SQLUtility.GetFirstCFirstRValue("select UsersId from recipe where recipeid = " + recipeId);
+            Assert.IsTrue(newUsersId == UsersId, "UsersId for recipe (" + recipeId + ") + " + newUsersId);
+            TestContext.WriteLine(" UsersId for recipe (" + recipeId + ") + " + newUsersId);
+        }
+
         [Test] 
         public void DeletePresident()
         {
@@ -37,7 +83,7 @@ namespace RecipesTest
         [Test] 
         public void LoadRecipe()
         {
-            int recipeId = SQLUtility.GetFirstCFirstRValue("select top 1 recipeid from recipe");
+            int recipeId = GetExistingRecipeId();
             Assume.That(recipeId > 0, "No recipes in DB, can't run test");
             TestContext.WriteLine("existing recipe with id = " + recipeId);
             TestContext.WriteLine("Ensure that app loads recipe " + recipeId);
@@ -60,6 +106,11 @@ namespace RecipesTest
             Assert.IsTrue(dt.Rows.Count == cuisineCount,"num rows returned by app (" + dt.Rows.Count + ") <> " + cuisineCount);
 
             TestContext.WriteLine("Number of rows in Cuisines return by app = " + dt.Rows.Count);
+        }
+
+        private int GetExistingRecipeId()
+        {
+            return SQLUtility.GetFirstCFirstRValue("select top 1 recipeid from recipe");
         }
     }
 }
