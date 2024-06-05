@@ -67,9 +67,5 @@ namespace RecipeSystem
             SQLUtility.ExecuteSQL(sql);
         }
 
-        public static DataTable LoadRecipe(int recipeid)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
