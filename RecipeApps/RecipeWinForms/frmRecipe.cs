@@ -12,8 +12,6 @@ namespace RecipeWinForms
             btnDelete.Click += BtnDelete_Click;
         }
 
-
-
         public void ShowForm(int recipeid)
         {
             dtRecipes = Recipes.Load(recipeid);
