@@ -66,20 +66,20 @@ namespace RecipesTest
         [Test] 
         public void DeleteRecipe()
         {
-            DataTable dt = SQLUtility.GetDataTable("select r.recipeId, r.recipeName, r.recipestatus from recipe r left join cuisine c on r.cuisineid = c.cuisineid where c.cuisinetype is null");
+            DataTable dt = SQLUtility.GetDataTable("select r.recipeid, r.recipename, r.recipestatus from recipe r left join recipesteps rs on r.recipeid = rs.recipeid where rs.instructions is null");
             int recipeId = 0;
-            string recipedesc = "";
+            string recipeDesc = "";
             if(dt.Rows.Count > 0) 
             {
                 recipeId =(int)dt.Rows[0]["recipeid"];
-                recipedesc = dt.Rows[0]["RecipeName"] + " " + dt.Rows[0]["RecipeStatus"];
+                recipeDesc = dt.Rows[0]["RecipeName"] + " " + dt.Rows[0]["RecipeStatus"];
             }
 
-            Assume.That(recipeId > 0, "There is no recipe in DB that doesn't have a cuisinetype, can't run test");
-            TestContext.WriteLine("existing recipe in DB that doesn't have cuisinetype with id = " + recipeId + " " + recipedesc);
+            Assume.That(recipeId > 0, "There is no recipes in DB that doesn't have instructions, can't run test");
+            TestContext.WriteLine("existing recipes in DB that doesn't have instructions with id = " + recipeId + " " + recipeDesc);
             TestContext.WriteLine("ensure that app can delete " + recipeId);
             Recipes.Delete(dt);
-            DataTable dtAfterDelete = SQLUtility.GetDataTable("select * from recipe where r.recipeId = " + recipeId);
+            DataTable dtAfterDelete = SQLUtility.GetDataTable("select * from recipe r where r.recipeId = " + recipeId);
             Assert.IsTrue(dtAfterDelete.Rows.Count == 0, "record with recipeid " + recipeId + "exists in DB");
             TestContext.WriteLine("Record with recipeId  = " + recipeId + "does not exist in DB");
         }
