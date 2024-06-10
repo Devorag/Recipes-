@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿
 using System.Diagnostics;
 
 
@@ -8,28 +8,38 @@ namespace RecipeSystem
     {
         public static DataTable SearchRecipes(string recipename)
         {
-            string sql = "select RecipeId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived from recipe r where r.RecipeName like '%" + recipename + "%'";
-
-            DataTable dt = SQLUtility.GetDataTable(sql);
+            DataTable dt = new();
+            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeGet");
+            cmd.Parameters["@RecipeName"].Value = recipename;
+            dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
 
         public static DataTable Load(int recipeid)
         {
-            string sql = "select r.*, u.Username , C.Cuisinetype from users u join recipe r on u.UsersId = r.UsersId " +
-            "join cuisine c on c.CuisineId = r.CuisineId " +
-            "where r.RecipeId = " + recipeid.ToString();
-            return SQLUtility.GetDataTable(sql);
+            DataTable dt = new();
+            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeGet");
+            cmd.Parameters["@RecipeId"].Value = recipeid;
+            dt = SQLUtility.GetDataTable(cmd);
+            return dt;
         }
 
         public static DataTable GetCuisineList()
         {
-            return SQLUtility.GetDataTable("select CuisineId, CuisineType from cuisine");
+            DataTable dt = new();
+            SqlCommand cmd = SQLUtility.GetSQLCommand("CuisineGet");
+            cmd.Parameters["@All"].Value = 1;
+            dt = SQLUtility.GetDataTable(cmd);
+            return dt;
         }
 
         public static DataTable GetUsersList()
         {
-            return SQLUtility.GetDataTable("select UsersId, UserName from users");
+            DataTable dt = new();
+            SqlCommand cmd = SQLUtility.GetSQLCommand("UsersGet");
+            cmd.Parameters["@All"].Value = 1;
+            dt = SQLUtility.GetDataTable(cmd);
+            return dt;
         }
 
         public static void Save(DataTable dtRecipes)
