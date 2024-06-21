@@ -4,7 +4,7 @@ namespace RecipeWinForms
 {
     public partial class frmRecipe : Form
     {
-        DataTable? dtRecipes;
+        DataTable dtRecipes;
         public frmRecipe()
         {
             InitializeComponent();
