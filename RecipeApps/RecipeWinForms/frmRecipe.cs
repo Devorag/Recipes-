@@ -1,10 +1,9 @@
-﻿using System.Data;
-
+﻿
 namespace RecipeWinForms
 {
     public partial class frmRecipe : Form
     {
-        DataTable dtRecipes;
+        DataTable dtRecipes = new DataTable();
         public frmRecipe()
         {
             InitializeComponent();
@@ -25,8 +24,14 @@ namespace RecipeWinForms
             lstCuisine.ValueMember = "CuisineId";
             lstCuisine.DisplayMember = "CuisineType";
             lstCuisine.DataBindings.Add("SelectedValue", dtRecipes, "CuisineId");
+
             DataTable dtUsers = Recipes.GetUsersList();
-            WindowsFormsUtility.SetListBinding(lstUserName, dtUsers, dtRecipes, "Users");
+            //WindowsFormsUtility.SetListBinding(lstUserName, dtUsers, dtRecipes, "Users");
+            lstUserName.DataSource = dtUsers;
+            lstUserName.ValueMember = "UsersId";
+            lstUserName.DisplayMember = "UserName";
+            lstUserName.DataBindings.Add("SelectedValue", dtRecipes, "UsersId");
+
             WindowsFormsUtility.SetControlBinding(txtRecipeName, dtRecipes);
             WindowsFormsUtility.SetControlBinding(txtCalories, dtRecipes);
             WindowsFormsUtility.SetControlBinding(txtDateDrafted, dtRecipes);
@@ -38,13 +43,38 @@ namespace RecipeWinForms
 
         private void Save()
         {
-            Recipes.Save(dtRecipes);
+            Application.UseWaitCursor = true;
+            try
+            {
+                Recipes.Save(dtRecipes);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message, "Recipes");
+            }
+            finally
+            {
+                Application.UseWaitCursor = false;
+            }
         }
 
         private void Delete()
         {
-            Recipes.Delete(dtRecipes);
-            this.Close();
+            Application.UseWaitCursor = true;
+            try
+            {
+                Recipes.Delete(dtRecipes);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Recipes");
+            }
+            finally
+            {
+                Application.UseWaitCursor = false;
+            }
         }
 
         private void BtnDelete_Click(object? sender, EventArgs e)

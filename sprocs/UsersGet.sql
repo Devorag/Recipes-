@@ -4,7 +4,7 @@ as
 begin 
 
 	select @UsersName = nullif(@UsersName, '')
-	select u.UserName, u.FirstName, u.FirstName, u.UserName
+	select u.UsersId, u.FirstName, u.LastName, u.UserName
 	from Users u 
 	where u.UsersId = @UsersId 
 	or @All = 1
