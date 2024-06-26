@@ -16,7 +16,9 @@ namespace RecipeWinForms
             dtRecipes = Recipes.Load(recipeid);
             if (recipeid == 0)
             {
-                dtRecipes.Rows.Add();
+                DataRow newRow = dtRecipes.NewRow();
+                newRow["DateDrafted"] = DateTime.Now;
+                dtRecipes.Rows.Add(newRow);
             }
             DataTable dtCuisine = Recipes.GetCuisineList();
             //WindowsFormsUtility.SetListBinding(lstCuisine, dtCuisine, dtRecipes, "CuisineType");
