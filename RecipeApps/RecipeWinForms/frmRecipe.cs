@@ -7,7 +7,6 @@ namespace RecipeWinForms
         public frmRecipe()
         {
             InitializeComponent();
-            btnSave.Click += BtnSave_Click;
             btnDelete.Click += BtnDelete_Click;
         }
 
@@ -40,8 +39,23 @@ namespace RecipeWinForms
             WindowsFormsUtility.SetControlBinding(txtDatePublished, dtRecipes);
             WindowsFormsUtility.SetControlBinding(txtDateArchived, dtRecipes);
 
+            this.FormClosing += new FormClosingEventHandler(frmRecipe_FormClosing);
+            this.btnSave.Click += new EventHandler(btnSave_Click);
+
             this.Show();
         }
+
+        private void frmRecipe_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (dtRecipes.Rows.Count > 0)
+            {
+                DataRow currentRow = dtRecipes.Rows[0];
+                SetDateField(currentRow, "DatePublished", txtDatePublished.Text);
+                SetDateField(currentRow, "DateArchived", txtDateArchived.Text);
+            }
+        }
+
+
 
         private void Save()
         {
@@ -79,16 +93,62 @@ namespace RecipeWinForms
             }
         }
 
+        private void SetDateField(DataRow row, string columnName, string textBoxValue)
+        {
+            if (string.IsNullOrWhiteSpace(textBoxValue))
+            {
+                row[columnName] = DBNull.Value;
+            }
+            else
+            {
+                DateTime dateValue;
+                if (DateTime.TryParse(textBoxValue, out dateValue))
+                {
+                    if (dateValue == DateTime.MinValue)
+                    {
+                        row[columnName] = DBNull.Value;
+                    }
+                    else
+                    {
+                        row[columnName] = dateValue;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Invalid date format.", "Validation Error");
+                }
+            }
+        }
+
+
         private void BtnDelete_Click(object? sender, EventArgs e)
         {
             Delete();
         }
 
-        private void BtnSave_Click(object? sender, EventArgs e)
+        private void btnSave_Click(object? sender, EventArgs e)
         {
-            Save();
+            if (dtRecipes.Rows.Count > 0)
+            {
+                DataRow currentRow = dtRecipes.Rows[0];
+                SetDateField(currentRow, "DatePublished", txtDatePublished.Text);
+                SetDateField(currentRow, "DateArchived", txtDateArchived.Text);
+            }
+            if (ValidateFields())
+            {
+                Save();
+            }
         }
 
+        private bool ValidateFields()
+        {
+            if (lstCuisine.SelectedValue == null || lstUserName.SelectedValue == null)
+            {
+                MessageBox.Show("Cuisine and User cannot be blank.", "Validation error");
+                return false;
+            }
+            return true;
+        }
 
     }
 }

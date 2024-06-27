@@ -1,7 +1,6 @@
 
 using NUnit.Framework.Internal;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
+using System.Net.Security;
 
 namespace RecipesTest
 {
@@ -80,6 +79,21 @@ namespace RecipesTest
             dt.Rows[0]["Calories"] = Calories;
 
             Exception ex = Assert.Throws<Exception>(()=> Recipes.Save(dt), "Calories can only be more than zero");
+            TestContext.WriteLine(ex.Message);
+        }
+
+        [Test]
+        public void ChangeExistingRecipeToInvalidRecipeName()
+        {
+            int recipeId = GetExistingRecipeId();
+            Assume.That(recipeId > 0, "No recipes in DB, can't run test");
+            string recipeName = GetFirstRowFirstColumnValue("select top 1 recipename from recipe where recipeid <> " + recipeId);
+            TestContext.WriteLine("Change recipeid " + recipeId + " recipeName to " + recipeName);
+
+            DataTable dt = Recipes.Load(recipeId);
+            dt.Rows[0]["RecipeName"] = recipeName;
+
+            Exception ex = Assert.Throws<Exception>(() => Recipes.Save(dt), " Recipe Name must be unique");
             TestContext.WriteLine(ex.Message);
         }
 

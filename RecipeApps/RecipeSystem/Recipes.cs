@@ -60,10 +60,12 @@ namespace RecipeSystem
                     $"DateArchived = '{r["DateArchived"]}'",
                     $"where RecipeId = {r["RecipeId"]}");
             }
-            else
+            else if (id == 0)
             {
-                sql = "insert recipe(CuisineId, UsersId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived)";
-                sql += $"Select '{r["CuisineId"]}', '{r["UsersId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["DateDrafted"]}', '{r["DatePublished"]}', '{r["DateArchived"]}'";
+                //sql = "insert recipe(CuisineId, UsersId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived)";
+                //sql += $"Select '{r["CuisineId"]}', '{r["UsersId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["DateDrafted"]}', '{r["DatePublished"]}', '{r["DateArchived"]}'";
+                sql = "insert recipe(CuisineId, UsersId, RecipeName, Calories, DateDrafted)";
+                sql += $"Select '{r["CuisineId"]}', '{r["UsersId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["DateDrafted"]}'";
             }
             Debug.Print("--------");
 
