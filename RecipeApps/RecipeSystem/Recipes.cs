@@ -55,9 +55,9 @@ namespace RecipeSystem
                     $"UsersId = '{r["UsersId"]}',",
                     $"RecipeName = '{r["Recipename"]}',",
                     $"Calories = '{r["Calories"]}',",
-                    $"DateDrafted = '{r["DateDrafted"]}',",
-                    $"DatePublished = '{r["DatePublished"]}',",
-                    $"DateArchived = '{r["DateArchived"]}'",
+                    $"DateDrafted = '{r["DateDrafted"]}'",
+                    //$"DatePublished = '{r["DatePublished"]}',",
+                    //$"DateArchived = '{r["DateArchived"]}'",
                     $"where RecipeId = {r["RecipeId"]}");
             }
             else if (id == 0)

@@ -30,6 +30,7 @@ namespace RecipeWinForms
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRecipe));
             tableLayoutPanel1 = new TableLayoutPanel();
             lblCuisine = new Label();
@@ -52,9 +53,11 @@ namespace RecipeWinForms
             toolStripSeparator1 = new ToolStripSeparator();
             btnDelete = new ToolStripButton();
             toolStripSeparator3 = new ToolStripSeparator();
+            errorProvider = new ErrorProvider(components);
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).BeginInit();
             toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -86,7 +89,7 @@ namespace RecipeWinForms
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tableLayoutPanel1.Size = new Size(737, 369);
+            tableLayoutPanel1.Size = new Size(737, 367);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // lblCuisine
@@ -259,6 +262,10 @@ namespace RecipeWinForms
             toolStripSeparator3.Name = "toolStripSeparator3";
             toolStripSeparator3.Size = new Size(6, 41);
             // 
+            // errorProvider
+            // 
+            errorProvider.ContainerControl = this;
+            // 
             // frmRecipe
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
@@ -275,6 +282,7 @@ namespace RecipeWinForms
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -302,5 +310,6 @@ namespace RecipeWinForms
         private ToolStripSeparator toolStripSeparator3;
         private ComboBox lstUserName;
         private ComboBox lstCuisine;
+        private ErrorProvider errorProvider;
     }
 }

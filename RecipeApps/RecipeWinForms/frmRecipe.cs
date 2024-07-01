@@ -8,6 +8,19 @@ namespace RecipeWinForms
         {
             InitializeComponent();
             btnDelete.Click += BtnDelete_Click;
+            btnSave.Click += new EventHandler(btnSave_Click);
+            lstCuisine.SelectedIndexChanged += LstCuisine_SelectedIndexChanged;
+            lstUserName.SelectedIndexChanged += LstUserName_SelectedIndexChanged;
+        }
+
+        private void LstUserName_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            ClearUserError();
+        }
+
+        private void LstCuisine_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            ClearCuisineError();
         }
 
         public void ShowForm(int recipeid)
@@ -40,8 +53,6 @@ namespace RecipeWinForms
             WindowsFormsUtility.SetControlBinding(txtDateArchived, dtRecipes);
 
             this.FormClosing += new FormClosingEventHandler(frmRecipe_FormClosing);
-            this.btnSave.Click += new EventHandler(btnSave_Click);
-
             this.Show();
         }
 
@@ -55,18 +66,16 @@ namespace RecipeWinForms
             }
         }
 
-
-
         private void Save()
         {
             Application.UseWaitCursor = true;
             try
             {
+                ValidateForm();
                 Recipes.Save(dtRecipes);
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message, "Recipes");
             }
             finally
@@ -120,6 +129,27 @@ namespace RecipeWinForms
             }
         }
 
+        private void ClearCuisineError()
+        {
+            DataRow row = dtRecipes.Rows[0];
+            bool isCuisineSelected = row["CuisineId"] != DBNull.Value;
+
+            if(isCuisineSelected)
+            {
+                errorProvider.SetError(lstCuisine, string.Empty);
+            }
+        }
+
+        private void ClearUserError()
+        {
+            DataRow row = dtRecipes.Rows[0];
+            bool isUserSelected = row["UsersId"] != DBNull.Value;
+
+            if (isUserSelected)
+            {
+                errorProvider.SetError(lstUserName, string.Empty);
+            }
+        }
 
         private void BtnDelete_Click(object? sender, EventArgs e)
         {
@@ -133,22 +163,53 @@ namespace RecipeWinForms
                 DataRow currentRow = dtRecipes.Rows[0];
                 SetDateField(currentRow, "DatePublished", txtDatePublished.Text);
                 SetDateField(currentRow, "DateArchived", txtDateArchived.Text);
-            }
-            if (ValidateFields())
-            {
+
+                Validate();
+
                 Save();
             }
         }
 
-        private bool ValidateFields()
+        private void ValidateForm()
         {
-            if (lstCuisine.SelectedValue == null || lstUserName.SelectedValue == null)
+            DataRow row = dtRecipes.Rows[0];
+
+            bool isCuisineSelelected = row["CuisineId"] != DBNull.Value;
+            bool isUserSelected = row["UsersId"] != DBNull.Value;
+
+            if (!isCuisineSelelected)
             {
-                MessageBox.Show("Cuisine and User cannot be blank.", "Validation error");
-                return false;
+                errorProvider.SetError(lstCuisine, "Please selece a cuisine.");
+                throw new Exception("Please select a cuisine.");
             }
-            return true;
+            else
+            {
+                errorProvider.SetError(lstCuisine, string.Empty);
+            }
+
+            if (!isUserSelected)
+            {
+                errorProvider.SetError(lstUserName, "Please select a user.");
+                throw new Exception("Please select a user.");
+            }
+            else
+            {
+                errorProvider.SetError(lstUserName, string.Empty);
+            }
+
+            DateTime dateDrafted = Convert.ToDateTime(row["DateDrafted"]);
+            DateTime currentDate = DateTime.Now;
+
+            if (dateDrafted.Date > currentDate.Date)
+            {
+                throw new Exception("Date Drafted cannot be future date");
+            }
+            else if (dateDrafted.Date == currentDate.Date && dateDrafted.TimeOfDay > currentDate.TimeOfDay)
+            {
+                throw new Exception("Date Drafted cannot be a future time");
+            }
         }
+
 
     }
 }
