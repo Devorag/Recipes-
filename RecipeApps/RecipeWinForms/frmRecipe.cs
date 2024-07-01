@@ -86,6 +86,11 @@ namespace RecipeWinForms
 
         private void Delete()
         {
+            var response = MessageBox.Show("Are you sure you want to delete this recipe?", "Recipes", MessageBoxButtons.YesNo);
+            if (response == DialogResult.No)
+            {
+                return;
+            }
             Application.UseWaitCursor = true;
             try
             {
@@ -160,19 +165,37 @@ namespace RecipeWinForms
         {
             if (dtRecipes.Rows.Count > 0)
             {
+                this.BindingContext[dtRecipes].EndCurrentEdit();
+
                 DataRow currentRow = dtRecipes.Rows[0];
+
+                currentRow["CuisineId"] = lstCuisine.SelectedValue ?? DBNull.Value;
+                currentRow["UsersId"] = lstUserName.SelectedValue ?? DBNull.Value;
+
+                lstCuisine.BindingContext[dtRecipes].EndCurrentEdit();
+                lstUserName.BindingContext[dtRecipes].EndCurrentEdit();
+
                 SetDateField(currentRow, "DatePublished", txtDatePublished.Text);
                 SetDateField(currentRow, "DateArchived", txtDateArchived.Text);
 
-                Validate();
-
-                Save();
+                try
+                {
+                    ValidateForm();
+                    Save();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Validation Error");
+                }
             }
         }
 
         private void ValidateForm()
         {
             DataRow row = dtRecipes.Rows[0];
+
+            errorProvider.SetError(lstCuisine, string.Empty);
+            errorProvider.SetError(lstUserName, string.Empty);
 
             bool isCuisineSelelected = row["CuisineId"] != DBNull.Value;
             bool isUserSelected = row["UsersId"] != DBNull.Value;
@@ -182,19 +205,11 @@ namespace RecipeWinForms
                 errorProvider.SetError(lstCuisine, "Please selece a cuisine.");
                 throw new Exception("Please select a cuisine.");
             }
-            else
-            {
-                errorProvider.SetError(lstCuisine, string.Empty);
-            }
 
             if (!isUserSelected)
             {
                 errorProvider.SetError(lstUserName, "Please select a user.");
                 throw new Exception("Please select a user.");
-            }
-            else
-            {
-                errorProvider.SetError(lstUserName, string.Empty);
             }
 
             DateTime dateDrafted = Convert.ToDateTime(row["DateDrafted"]);
