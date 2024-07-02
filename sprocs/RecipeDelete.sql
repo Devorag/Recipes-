@@ -5,14 +5,14 @@ as
 begin
 	begin try 
 		begin tran 
-		delete RecipeIngredient where RecipeIngredientId = @RecipeId
-		delete RecipeSteps where RecipeStepsId = @RecipeId 
-		delete Recipe where RecipeId = @RecipeId
+		delete from RecipeIngredient where RecipeId = @RecipeId
+		delete from RecipeSteps where RecipeId = @RecipeId 
+		delete from Recipe where RecipeId = @RecipeId
 		commit 
 	end try 
 	begin catch 
 		rollback;
-		throw
+		throw;
 	end catch
 end
 go

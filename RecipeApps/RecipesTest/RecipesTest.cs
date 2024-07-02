@@ -101,17 +101,23 @@ namespace RecipesTest
         public void DeleteRecipe()
         {
             string sql = @"
-select top 1 r.recipeid, r.recipename, r.reciepstatus
+select top 1 r.recipeid, r.recipename, r.recipestatus
 from recipe r 
 left join recipesteps rs 
 on rs.recipeid = r.recipeid 
 left join recipeingredient ri 
 on ri.recipeid = r.recipeid
+left join mealcourserecipe mc 
+on mc.recipeid = r.recipeid
+left join cookbookrecipe cr 
+on cr.recipeid = r.recipeid
 where rs.recipestepsid is null 
 and ri.recipeingredientid is null
+and mc.mealcourserecipeid is null 
+and cr.cookbookrecipeid is null 
 order by r.recipeid
 ";
-            DataTable dt = SQLUtility.GetDataTable("select r.recipeid, r.recipename, r.recipestatus from recipe r left join recipesteps rs on r.recipeid = rs.recipeid where rs.instructions is null");
+            DataTable dt = SQLUtility.GetDataTable(sql);
             int recipeId = 0;
             string recipeDesc = "";
             if(dt.Rows.Count > 0) 
@@ -126,7 +132,7 @@ order by r.recipeid
             Recipes.Delete(dt);
             DataTable dtAfterDelete = SQLUtility.GetDataTable("select * from recipe r where r.recipeId = " + recipeId);
             Assert.IsTrue(dtAfterDelete.Rows.Count == 0, "record with recipeid " + recipeId + "exists in DB");
-            TestContext.WriteLine("Record with recipeId  = " + recipeId + "does not exist in DB");
+            TestContext.WriteLine("Record with recipeId  = " + recipeId + " does not exist in DB");
         }
 
 

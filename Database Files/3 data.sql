@@ -87,6 +87,7 @@ union select (select c.cuisineId from Cuisine C where c.CuisineType = 'American'
 union select (select c.cuisineId from cuisine c where c.CuisineType = 'French'), u.usersId, 'Ministroni soup', 200, '08-12-2023', null, '01-03-2024' from users u where u.lastname = 'Korb'
 union select (select c.cuisineId from cuisine c where c.cuisineType = 'Indian'), u.usersId, 'Roasted Vegetables', 150, '07-06-2015', '06-06-2016', null from users u where u.lastname = 'Mozes'
 union select (select c.cuisineId from cuisine c where c.CuisineType = 'Chinese'), u.usersId, 'Sesame Chicken', 325, '01-01-2021', '03-04-2021', '11-11-2021' from users u where u.lastname = 'Katz'
+union select (select c.cuisineId from cuisine c where c.CuisineType = 'Chinese'), u.usersId, 'Falafel balls', 450, '01-01-2021', '03-04-2021', '11-11-2021' from users u where u.lastname = 'Katz'
 ;
 
 insert UnitOfMeasure(MeasurementType)
@@ -154,6 +155,8 @@ with x as(
     union select 'Sesame Chicken', 'soy sauce', 1/2, 'cup', 5 
     union select 'Sesame Chicken', 'sesame seeds', 1, 'cup', 6 
     union select 'Sesame Chicken', 'oil', 0 , null , 7 
+    union select 'Falafel Balls', 'oil', 0, null , 5
+    union select 'Falafel Balls', 'bread crumbs', 2, 'cup', 2
 )
 insert RecipeIngredient(RecipeId, IngredientId, UnitOfMeasureId, MeasurementAmount, IngredientSequence)
 select r.recipeId, i.ingredientId, um.UnitOfMeasureId, x.Measurementamount, x.IngredientSequence
