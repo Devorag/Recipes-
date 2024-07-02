@@ -100,6 +100,17 @@ namespace RecipesTest
         [Test] 
         public void DeleteRecipe()
         {
+            string sql = @"
+select top 1 r.recipeid, r.recipename, r.reciepstatus
+from recipe r 
+left join recipesteps rs 
+on rs.recipeid = r.recipeid 
+left join recipeingredient ri 
+on ri.recipeid = r.recipeid
+where rs.recipestepsid is null 
+and ri.recipeingredientid is null
+order by r.recipeid
+";
             DataTable dt = SQLUtility.GetDataTable("select r.recipeid, r.recipename, r.recipestatus from recipe r left join recipesteps rs on r.recipeid = rs.recipeid where rs.instructions is null");
             int recipeId = 0;
             string recipeDesc = "";

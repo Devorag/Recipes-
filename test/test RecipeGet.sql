@@ -1,9 +1,11 @@
 
-declare @id int
+declare @id int 
 
-select top 1 @id = r.recipeId from Recipe r 
-order by r.RecipeName desc 
+select top 1 @id = r.recipeid from recipe r 
+
+select @id 
+
+exec RecipeGet @RecipeId = @id
+ 
 
 --select @id
-
-exec RecipeGet @recipeId = @id
