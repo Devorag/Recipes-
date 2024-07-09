@@ -24,7 +24,7 @@ begin
 
 select @RecipeId = SCOPE_IDENTITY() 
 end 
-else 
+else  
 begin 
     update Recipe 
     set 
