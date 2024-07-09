@@ -1,5 +1,8 @@
 
+using NUnit.Framework;
 using NUnit.Framework.Internal;
+using RecipeSystem;
+using System.Data.SqlClient;
 using System.Net.Security;
 
 namespace RecipesTest
@@ -13,7 +16,7 @@ namespace RecipesTest
         }
 
         [Test]
-        [TestCase("Turkey" , "2017-01-01", "2017-12-24", "2018-01-01")]
+        [TestCase("Turkey", "2017-01-01", "2017-12-24", "2018-01-01")]
         [TestCase("Popcorn", "2019-01-01", "2019-12-24", "2020-01-01")]
         public void InsertNewRecipe(String recipename, DateTime datedrafted, DateTime datepublished, DateTime datearchived)
         {
@@ -27,7 +30,7 @@ namespace RecipesTest
             int maxCalories = SQLUtility.GetFirstCFirstRValue("select max(calories) from recipe");
 
             maxCalories = maxCalories + 100;
-            
+
             TestContext.WriteLine("insert recipe with Calories = " + maxCalories);
 
             r["CuisineId"] = cuisineId;
@@ -45,7 +48,7 @@ namespace RecipesTest
             TestContext.WriteLine("Recipe with Calories = " + maxCalories + " is found in DB with pk value = " + newid);
         }
 
-        [Test] 
+        [Test]
         public void ChangeExistingRecipeCalories()
         {
             int recipeId = GetExistingRecipeId();
@@ -78,7 +81,7 @@ namespace RecipesTest
 
             dt.Rows[0]["Calories"] = Calories;
 
-            Exception ex = Assert.Throws<Exception>(()=> Recipes.Save(dt), "Calories can only be more than zero");
+            Exception ex = Assert.Throws<Exception>(() => Recipes.Save(dt), "Calories can only be more than zero");
             TestContext.WriteLine(ex.Message);
         }
 
@@ -97,7 +100,7 @@ namespace RecipesTest
             TestContext.WriteLine(ex.Message);
         }
 
-        [Test] 
+        [Test]
         public void DeleteRecipe()
         {
             string sql = @"
@@ -110,9 +113,8 @@ on ri.recipeid = r.recipeid
 left join mealcourserecipe mc 
 on mc.recipeid = r.recipeid
 left join cookbookrecipe cr 
-on cr.recipeid = r.recipeid
-where rs.recipestepsid is null 
-and ri.recipeingredientid is null
+on cr.recipeid = r.recipeid 
+where ri.recipeingredientid is null
 and mc.mealcourserecipeid is null 
 and cr.cookbookrecipeid is null 
 order by r.recipeid
@@ -120,41 +122,93 @@ order by r.recipeid
             DataTable dt = SQLUtility.GetDataTable(sql);
             int recipeId = 0;
             string recipeDesc = "";
-            if(dt.Rows.Count > 0) 
+
+            if (dt.Rows.Count > 0)
             {
-                recipeId =(int)dt.Rows[0]["recipeid"];
+                recipeId = (int)dt.Rows[0]["recipeid"];
                 recipeDesc = dt.Rows[0]["RecipeName"] + " " + dt.Rows[0]["RecipeStatus"];
             }
+            Assume.That(dt.Rows.Count > 0, "There are no recipes in DB that do not have instructions, can't run test");
 
-            Assume.That(recipeId > 0, "There is no recipes in DB that doesn't have instructions, can't run test");
-            TestContext.WriteLine("existing recipes in DB that doesn't have instructions with id = " + recipeId + " " + recipeDesc);
-            TestContext.WriteLine("ensure that app can delete " + recipeId);
-            Recipes.Delete(dt);
+            TestContext.WriteLine($"Existing deletable recipe in DB with id = {recipeId}, {recipeDesc}");
+            TestContext.WriteLine($"Ensure that app can delete recipe with id = {recipeId}");
+
+            Exception ex = Assert.Throws<Exception>(() => Recipes.Delete(dt, "Cant"));
+
             DataTable dtAfterDelete = SQLUtility.GetDataTable("select * from recipe r where r.recipeId = " + recipeId);
-            Assert.IsTrue(dtAfterDelete.Rows.Count == 0, "record with recipeid " + recipeId + "exists in DB");
+            Assert.IsTrue(dtAfterDelete.Rows.Count > 0, "record with recipeid " + recipeId + " exists in DB");
+            TestContext.WriteLine("Record with recipeId  = " + recipeId + " does not exist in DB");
+        }
+
+        [Test]
+        public void DeleteRecipeWithForeignConstraints()
+        {
+            string sql = @"
+select r.recipeid, r.recipename, r.recipestatus
+from recipe r 
+where r.recipename like '%chocolate%'
+";
+            DataTable dt = SQLUtility.GetDataTable(sql);
+            int recipeId = 0;
+            string recipeDesc = "";
+
+            if (dt.Rows.Count > 0)
+            {
+                recipeId = (int)dt.Rows[0]["recipeid"];
+                recipeDesc = dt.Rows[0]["RecipeName"] + " " + dt.Rows[0]["RecipeStatus"];
+            }
+            Assume.That(dt.Rows.Count > 0, "There are no recipes in DB that do not have instructions, can't run test");
+
+            TestContext.WriteLine($"Existing deletable recipe in DB with id = {recipeId}, {recipeDesc}");
+            TestContext.WriteLine($"Ensure that app can delete recipe with id = {recipeId}");
+
+            Exception ex = Assert.Throws<Exception>(() => Recipes.Delete(dt, "Cant"));
+
+            DataTable dtAfterDelete = SQLUtility.GetDataTable("select * from recipe r where r.recipeId = " + recipeId);
+            Assert.IsTrue(dtAfterDelete.Rows.Count > 0, "record with recipeid " + recipeId + " exists in DB");
             TestContext.WriteLine("Record with recipeId  = " + recipeId + " does not exist in DB");
         }
 
 
         [Test]
-        public void DeleteRecipeWithRecipeInstructions()
+        public void DeleteNonDeletableRecipe()
         {
-            DataTable dt = SQLUtility.GetDataTable("select r.recipeid, r.recipename, r.recipestatus from recipe r join recipesteps rs on r.recipeid = rs.recipeid");
+            string sql = @"
+SELECT TOP 1 r.recipeid, r.RecipeName, r.RecipeStatus 
+FROM recipe r 
+WHERE 
+    r.RecipeStatus <> 'Drafted' 
+    and DATEDIFF(day, r.DateArchived, GETDATE()) <= 30";
+
+            DataTable dt = SQLUtility.GetDataTable(sql);
             int recipeId = 0;
             string recipeDesc = "";
+
             if (dt.Rows.Count > 0)
             {
                 recipeId = (int)dt.Rows[0]["recipeid"];
                 recipeDesc = dt.Rows[0]["RecipeName"] + " " + dt.Rows[0]["RecipeStatus"];
             }
 
-            Assume.That(recipeId > 0, "There is no recipes in DB that have instructions, can't run test");
-            TestContext.WriteLine("existing recipes in DB that have instructions with id = " + recipeId + " " + recipeDesc);
-            TestContext.WriteLine("ensure that app cannot delete " + recipeId);
+            // Assuming that a recipeId was found that should not be deletable
+            Assume.That(recipeId > 0, "No recipes in DB that are non-deletable based on the business rules, can't run test");
 
-            Exception ex = Assert.Throws<Exception>(()=> Recipes.Delete(dt));
+            TestContext.WriteLine($"Existing non-deletable recipe in DB with id = {recipeId}, {recipeDesc}");
+            TestContext.WriteLine($"Ensure that app cannot delete recipe with id = {recipeId}");
+
+            Exception ex = Assert.Throws<Exception>(() => Recipes.Delete(dt, "Cannot delete recipe because it has not been archived for over 30 days or it is not currently drafted."));
             TestContext.WriteLine(ex.Message);
+
+            DataTable dtAfterDelete = SQLUtility.GetDataTable($"SELECT * FROM recipe r WHERE r.recipeid = {recipeId}");
+            Assert.IsTrue(dtAfterDelete.Rows.Count > 0, $"Record with recipeid {recipeId} should still exist in DB");
+
+            TestContext.WriteLine($"Record with recipeId = {recipeId} exists in DB");
         }
+
+
+
+
+
 
         [Test] 
         public void LoadRecipe()

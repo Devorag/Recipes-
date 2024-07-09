@@ -83,7 +83,6 @@ namespace RecipeWinForms
                 Application.UseWaitCursor = false;
             }
         }
-
         private void Delete()
         {
             var response = MessageBox.Show("Are you sure you want to delete this recipe?", "Recipes", MessageBoxButtons.YesNo);
@@ -94,7 +93,7 @@ namespace RecipeWinForms
             Application.UseWaitCursor = true;
             try
             {
-                Recipes.Delete(dtRecipes);
+                Recipes.Delete(dtRecipes, "Can't delete recipe with current date drafted or that has not been archived in over 30 days");
                 this.Close();
             }
             catch (Exception ex)
@@ -106,6 +105,8 @@ namespace RecipeWinForms
                 Application.UseWaitCursor = false;
             }
         }
+
+
 
         private void SetDateField(DataRow row, string columnName, string textBoxValue)
         {

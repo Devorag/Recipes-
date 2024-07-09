@@ -3,7 +3,7 @@ go
 
 declare @Recipeid int 
 
-select top 1 @recipeid = r.recipeId 
+select  @recipeid = r.recipeId ,
 from recipe r 
 join recipesteps rs 
 on rs.recipeid = r.recipeid 
@@ -14,11 +14,13 @@ on i.IngredientId = ri.IngredientId
 join MealCourseRecipe mcr 
 on mcr.RecipeId = r.RecipeId 
 join CookbookRecipe cr 
-on cr.RecipeId = r.RecipeId 
+on cr.RecipeId = r.RecipeId
+where mcr.MealCourseRecipeid is null 
+and cr.CookbookRecipeId is null 
 order by r.recipeid 
 
 select * from recipe r where r.recipeid = @recipeid
 
-exec recipedelete @Recipeid = @RecipeId
+exec recipedelete @Recipeid = @RecipeId, @Message = "working"
 
 select * from recipe r where r.recipeid = @recipeid

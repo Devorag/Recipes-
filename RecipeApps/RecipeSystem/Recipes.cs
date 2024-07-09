@@ -72,26 +72,53 @@ namespace RecipeSystem
             SQLUtility.ExecuteSQL(sql);
         }
 
-        public static void Delete(DataTable dtRecipes)
+        //public static void Delete(DataTable dtRecipes)
+        // {
+        // int id = (int)dtRecipes.Rows[0]["RecipeId"];
+        //   SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeDelete");
+        // SQLUtility.SetParamValue(cmd, "@RecipeId", id);
+        //SQLUtility.ExecuteSQL(cmd);
+        //}
+        //}
+
+        public static void Delete(DataTable dtRecipes, string message)
         {
             int id = (int)dtRecipes.Rows[0]["RecipeId"];
             SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeDelete");
             SQLUtility.SetParamValue(cmd, "@RecipeId", id);
+            SQLUtility.SetParamValue(cmd, "@Message", message); // Set the @Message parameter
+
             try
             {
                 SQLUtility.ExecuteSQL(cmd);
             }
             catch (SqlException ex)
             {
+                // Parse the constraint violation message
                 string userMessage = SQLUtility.ParseConstraintMsg(ex.Message);
+
+                // Display the user-friendly error message
                 DisplayMessageToUser(userMessage);
             }
         }
+
+
 
         private static void DisplayMessageToUser(string message)
         {
             Console.WriteLine(message);
         }
 
+
+
+
     }
 }
+
+
+
+
+
+
+
+
