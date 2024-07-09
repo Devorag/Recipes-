@@ -42,10 +42,17 @@ namespace RecipesTest
             r["DateArchived"] = datearchived;
             Recipes.Save(dt);
 
-            int newid = SQLUtility.GetFirstCFirstRValue("select * from recipe where calories = " + maxCalories);
+            int newCalories = SQLUtility.GetFirstCFirstRValue("select * from recipe where calories = " + maxCalories);
+            int pkid = 0;
+            if (r["RecipeId"] != DBNull.Value)
+            {
+               pkid = (int)r["RecipeId"];
+            }
 
-            Assert.IsTrue(newid > 0, "recipe with Calories = " + maxCalories + " is not found in DB");
-            TestContext.WriteLine("Recipe with Calories = " + maxCalories + " is found in DB with pk value = " + newid);
+            Assert.IsTrue(newCalories > 0, "recipe with Calories = " + maxCalories + " is not found in DB");
+            Assert.IsTrue(pkid > 0, "primary key is not updated in datatable");
+            TestContext.WriteLine("Recipe with Calories = " + maxCalories + " is found in DB with pk value = " + newCalories);
+            TestContext.WriteLine("new primary key = " + pkid);
         }
 
         [Test]

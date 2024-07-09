@@ -1,6 +1,6 @@
 
 
-create or alter proc dbo.PresidentUpdate( 
+create or alter proc dbo.RecipesUpdate( 
     @RecipeId int output, 
     @CuisineId int, 
     @UsersId int, 
@@ -15,7 +15,7 @@ as
 begin 
     DECLARE @RETURN  int = 0 
 
-    select @RecipeId = isnull(@RecipeId,0)
+    select @RecipeId = isnull(@RecipeId, 0), @CuisineId = nullif(@CuisineId, 0), @UsersId = nullif(@UsersId, 0)
 
     if @RecipeId = 0 
     begin 
@@ -28,7 +28,7 @@ else
 begin 
     update Recipe 
     set 
-        CuisineID = @CuisineId, 
+        CuisineId = @CuisineId, 
         UsersId = @UsersId, 
         RecipeName = @RecipeName,
         Calories = @Calories, 
@@ -39,6 +39,6 @@ begin
 end 
 
     return @return 
-    finished:
+    
 end
 go 
