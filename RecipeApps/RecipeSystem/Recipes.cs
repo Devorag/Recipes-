@@ -6,11 +6,10 @@ namespace RecipeSystem
 {
     public class Recipes
     {
-        public static DataTable SearchRecipes(string recipename)
+        public static DataTable SearchRecipes()
         {
             DataTable dt = new();
-            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeGet");
-            cmd.Parameters["@RecipeName"].Value = recipename;
+            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeSearch");
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
@@ -19,7 +18,7 @@ namespace RecipeSystem
         {
             DataTable dt = new();
             SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeGet");
-            cmd.Parameters["@RecipeId"].Value = recipeid;
+            SQLUtility.SetParamValue(cmd, "@RecipeId", recipeid);
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
@@ -28,7 +27,7 @@ namespace RecipeSystem
         {
             DataTable dt = new();
             SqlCommand cmd = SQLUtility.GetSQLCommand("CuisineGet");
-            cmd.Parameters["@All"].Value = 1;
+            SQLUtility.SetParamValue(cmd, "@All", 1);
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
@@ -37,7 +36,7 @@ namespace RecipeSystem
         {
             DataTable dt = new();
             SqlCommand cmd = SQLUtility.GetSQLCommand("UsersGet");
-            cmd.Parameters["@All"].Value = 1;
+            SQLUtility.SetParamValue(cmd, "@All", 1);
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
@@ -76,8 +75,6 @@ namespace RecipeSystem
                 DisplayMessageToUser(userMessage);
             }
         }
-
-
 
         private static void DisplayMessageToUser(string message)
         {

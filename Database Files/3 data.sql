@@ -237,7 +237,7 @@ union select 'palate cleanser', 4
 insert Meal(UsersId, MealName)
 select u.usersId, 'Breakfast Bash' from users u where u.lastname = 'Katz'
 union select u.usersID, 'Brunch o'' lunch' from users u where u.lastname = 'Mozes'
-union select u.usersId, 'noon refreshments' from users u where u.lastname = 'Mozes'
+union select u.usersId, 'noon refreshments' from users u where u.lastname = 'Diena'
 union select u.usersId, 'Supper Crunch' from users u where u.lastname = 'Azoulay' 
 ;
 with x as(
@@ -290,7 +290,7 @@ and mc.mealId = m.mealId
 
 insert cookbook(UsersId, CookbookName, Price)
 select u.usersID, 'Treats for two', 30 from users u where u.LastName = 'Korb'
-union select u.usersId, 'The Cook''s Secret', 35 from users u where u.lastname = 'Korb'
+union select u.usersId, 'The Cook''s Secret', 35 from users u where u.lastname = 'Katz'
 union select u.usersId, 'Taste It', 40 from users u where u.lastname = 'Svei' 
 union select u.usersID, 'Njoy', 25 from users u where u.LastName = 'Weinberger'
 ;

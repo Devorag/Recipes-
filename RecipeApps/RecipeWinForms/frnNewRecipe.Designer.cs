@@ -2,7 +2,7 @@
 
 namespace RecipeWinForms
 {
-    partial class frmRecipe
+    partial class frmNewRecipe
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@ namespace RecipeWinForms
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRecipe));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewRecipe));
             tableLayoutPanel1 = new TableLayoutPanel();
             lblCuisine = new Label();
             lblUser = new Label();
@@ -266,7 +266,7 @@ namespace RecipeWinForms
             // 
             errorProvider.ContainerControl = this;
             // 
-            // frmRecipe
+            // frmNewRecipe
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -275,8 +275,8 @@ namespace RecipeWinForms
             Controls.Add(tableLayoutPanel1);
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             Margin = new Padding(4);
-            Name = "frmRecipe";
-            Text = "frmRecipe";
+            Name = "frmNewRecipe";
+            Text = "frmNewRecipe";
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).EndInit();

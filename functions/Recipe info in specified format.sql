@@ -3,7 +3,12 @@ returns varchar(75)
 as 
 begin 
     declare @value varchar (75) = '' 
-    select @value = concat(r.RecipeName, ' (', c.cuisinetype, ') has ', count(distinct ri.IngredientId), ' ingredients and ', count(distinct rs.RecipeStepsId), ' steps.')
+
+    select @value = concat(
+        r.RecipeName, ' (', c.cuisinetype, ') has ',
+        count(distinct ri.IngredientId), ' ingredients and ',
+        count(distinct rs.RecipeStepsId), ' steps.'
+    )
     from recipe r 
     left join Cuisine c 
     on c.CuisineId = r.CuisineID
@@ -12,7 +17,6 @@ begin
     left join RecipeSteps rs 
     on rs.RecipeId = r.RecipeId
     where r.RecipeId = @recipeid 
-    group by r.RecipeName, c.CuisineType
 
     return @value
 end 
