@@ -44,8 +44,8 @@ namespace RecipeWinForms
             if (dtRecipes.Rows.Count > 0)
             {
                 DataRow currentRow = dtRecipes.Rows[0];
-                SetDateField(currentRow, "DatePublished", txtDatePublished.Text);
-                SetDateField(currentRow, "DateArchived", txtDateArchived.Text);
+                SetDateField(currentRow, "DatePublished", txtPublished.Text);
+                SetDateField(currentRow, "DateArchived", txtArchived.Text);
             }
         }
 
@@ -87,9 +87,9 @@ namespace RecipeWinForms
 
             WindowsFormsUtility.SetControlBinding(txtRecipeName, bindingSource);
             WindowsFormsUtility.SetControlBinding(txtCalories, bindingSource);
-            WindowsFormsUtility.SetControlBinding(txtDateDrafted, bindingSource);
-            WindowsFormsUtility.SetControlBinding(txtDatePublished, bindingSource);
-            WindowsFormsUtility.SetControlBinding(txtDateArchived, bindingSource);
+            WindowsFormsUtility.SetControlBinding(txtDrafted, bindingSource);
+            WindowsFormsUtility.SetControlBinding(txtPublished, bindingSource);
+            WindowsFormsUtility.SetControlBinding(txtArchived, bindingSource);
 
             //this.FormClosing += new FormClosingEventHandler(frmNewRecipe_FormClosing);
             this.Show();
@@ -222,8 +222,8 @@ namespace RecipeWinForms
                 lstCuisine.BindingContext[dtRecipes].EndCurrentEdit();
                 lstUserName.BindingContext[dtRecipes].EndCurrentEdit();
 
-                SetDateField(currentRow, "DatePublished", txtDatePublished.Text);
-                SetDateField(currentRow, "DateArchived", txtDateArchived.Text);
+                SetDateField(currentRow, "DatePublished", txtPublished.Text);
+                SetDateField(currentRow, "DateArchived", txtArchived.Text);
 
                 try
                 {

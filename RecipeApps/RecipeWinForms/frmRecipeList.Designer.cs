@@ -66,13 +66,14 @@
             tblSearch.Name = "tblSearch";
             tblSearch.RowCount = 1;
             tblSearch.RowStyles.Add(new RowStyle());
-            tblSearch.Size = new Size(269, 106);
+            tblSearch.Size = new Size(283, 120);
             tblSearch.TabIndex = 0;
             // 
             // btnNew
             // 
             btnNew.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            btnNew.Location = new Point(3, 3);
+            btnNew.Location = new Point(10, 10);
+            btnNew.Margin = new Padding(10);
             btnNew.Name = "btnNew";
             btnNew.Size = new Size(263, 100);
             btnNew.TabIndex = 3;
@@ -83,21 +84,22 @@
             // 
             gRecipes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gRecipes.Dock = DockStyle.Fill;
-            gRecipes.Location = new Point(3, 115);
+            gRecipes.Location = new Point(10, 136);
+            gRecipes.Margin = new Padding(10);
             gRecipes.Name = "gRecipes";
             gRecipes.RowHeadersWidth = 62;
             gRecipes.RowTemplate.Height = 33;
-            gRecipes.Size = new Size(890, 494);
+            gRecipes.Size = new Size(876, 466);
             gRecipes.StandardTab = true;
             gRecipes.TabIndex = 1;
             // 
-            // frmNewRecipe
+            // frmRecipeList
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(896, 612);
             Controls.Add(tblMain);
-            Name = "frmNewRecipe";
+            Name = "frmRecipeList";
             Text = "Recipe List ";
             tblMain.ResumeLayout(false);
             tblMain.PerformLayout();

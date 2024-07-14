@@ -25,17 +25,15 @@ namespace RecipeWinForms
         }
 
 
-       private void ShowRecipesForm(int rowindex)
+        private void ShowRecipesForm(int rowindex)
         {
-           int id = 0;
+            int id = 0;
             if (rowindex > -1)
             {
                 id = WindowsFormsUtility.GetIdFromGrid(gRecipes, rowindex, "RecipeId");
             }
-            //if (this.MdiParent != null && this.MdiParent is frmMain)
-            //{
-              //  (frmMain)this.MdiParent).OpenForm(typeof(frmRecipeList), id);
-            //}
+            frmNewRecipe frm = new frmNewRecipe();
+            frm.LoadForm(id);
         }
 
         private void GRecipes_CellDoubleClick1(object? sender, DataGridViewCellEventArgs e)
@@ -51,7 +49,7 @@ namespace RecipeWinForms
 
         private void GRecipes_KeyDown(object? sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter && gRecipes.SelectedRows.Count > 0)
+            if (e.KeyCode == Keys.Enter && gRecipes.SelectedRows.Count > 0)
             {
                 ShowRecipesForm(gRecipes.SelectedRows[0].Index);
                 e.SuppressKeyPress = true;
