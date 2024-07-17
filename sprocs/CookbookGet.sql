@@ -1,33 +1,24 @@
-create or alter proc dbo.CookbookGet(
-    @CookbookId int = 0,
-    @All bit = 0, 
-    @Message varchar(500) = '' output
+create or alter procedure dbo.CookbookGet (
+    @CookbookId int = 0, 
+    @CookbookName varchar(100) = '',
+    @All bit = 0
 )
 as 
 begin 
+        select @CookbookName = nullif(@CookbookName, '')
 
-    declare @return int = 0 
-    
-    select @All = ISNULL(@All,0), @CookbookId = ISNULL(@CookbookId,0)
-    
-    ;
-    with x as (
-        select cr.cookbookId, NumRecipes = count(distinct cr.recipeID) 
-        from recipe r 
-        join CookbookRecipe cr 
-        on cr.RecipeId = r.RecipeId 
-        group by cr.CookbookId
-    )
-    
-    select c.CookbookName, Author = u.UserName, x.NumRecipes, c.Price 
-    from x 
-    join Cookbook c 
-    on x.cookbookId = c.CookbookId 
-    join users u 
-    on u.UsersId = c.UsersId 
-    order by c.CookbookName
-    
-    return @return 
+        select c.CookbookId, u.UsersId, c.CookbookName, c.Price, c.Active, c.DateCreated, c.CookbookPicture
+        from Cookbook c 
+        left join users u 
+        on u.usersid = c.usersid
+        where c.CookbookId = @CookbookId 
+        or @all = 1 
+        or c.CookbookName like '%' + @CookbookName + '%'
+        order by c.CookbookName
 
 end 
-go 
+go
+
+exec CookbookGet @All = 1 
+
+

@@ -53,6 +53,7 @@
             // 
             // tsMain
             // 
+            tsMain.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tsMain.ImageScalingSize = new Size(24, 24);
             tsMain.Location = new Point(0, 42);
             tsMain.Name = "tsMain";
@@ -196,7 +197,7 @@
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             IsMdiContainer = true;
             MainMenuStrip = menuMain;
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             Name = "frmMain";
             Text = "Hearty Hearth";
             menuMain.ResumeLayout(false);

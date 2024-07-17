@@ -30,6 +30,7 @@
         {
             tblMain = new TableLayoutPanel();
             gCookbooks = new DataGridView();
+            btnNewCookbook = new Button();
             tblMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gCookbooks).BeginInit();
             SuspendLayout();
@@ -37,13 +38,15 @@
             // tblMain
             // 
             tblMain.ColumnCount = 1;
-            tblMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tblMain.Controls.Add(gCookbooks, 0, 0);
+            tblMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblMain.Controls.Add(gCookbooks, 0, 1);
+            tblMain.Controls.Add(btnNewCookbook, 0, 0);
             tblMain.Dock = DockStyle.Fill;
             tblMain.Location = new Point(0, 0);
             tblMain.Name = "tblMain";
-            tblMain.RowCount = 1;
-            tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tblMain.RowCount = 2;
+            tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
+            tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 85F));
             tblMain.Size = new Size(800, 450);
             tblMain.TabIndex = 0;
             // 
@@ -51,13 +54,22 @@
             // 
             gCookbooks.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gCookbooks.Dock = DockStyle.Fill;
-            gCookbooks.Location = new Point(20, 20);
-            gCookbooks.Margin = new Padding(20);
+            gCookbooks.Location = new Point(3, 70);
             gCookbooks.Name = "gCookbooks";
             gCookbooks.RowHeadersWidth = 62;
             gCookbooks.RowTemplate.Height = 33;
-            gCookbooks.Size = new Size(760, 410);
+            gCookbooks.Size = new Size(794, 377);
             gCookbooks.TabIndex = 0;
+            // 
+            // btnNewCookbook
+            // 
+            btnNewCookbook.Location = new Point(10, 10);
+            btnNewCookbook.Margin = new Padding(10, 10, 3, 10);
+            btnNewCookbook.Name = "btnNewCookbook";
+            btnNewCookbook.Size = new Size(156, 47);
+            btnNewCookbook.TabIndex = 1;
+            btnNewCookbook.Text = "New Cookbook";
+            btnNewCookbook.UseVisualStyleBackColor = true;
             // 
             // frmCookbookList
             // 
@@ -76,5 +88,6 @@
 
         private TableLayoutPanel tblMain;
         private DataGridView gCookbooks;
+        private Button btnNewCookbook;
     }
 }

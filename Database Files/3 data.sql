@@ -16,7 +16,7 @@ Delete Cuisine
 delete Users 
 delete Ingredient 
 go 
-insert Users(FirstName, LastName, UserName)
+insert Users(FirstName, LastName, UsersName)
 select 'Devorah', 'Mozes', 'Dmozes'
 union select 'Baila', 'Diena', 'Bdiena'
 union select 'Dina', 'Azoulay', 'Dazoulay'
@@ -67,7 +67,7 @@ union select 'duck sauce'
 union select 'soy sauce'
 union select 'sesame seeds'
 
-insert Cuisine(CuisineType)
+insert Cuisine(CuisineName)
 select 'French'
 union select 'American'
 union select 'Chinese'
@@ -79,15 +79,15 @@ union select 'Dutch'
 
 --I realized after this table that I should've done this using a CTE but this works also so please accept!!!!
 insert Recipe(CuisineID, UsersId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived)
-select (select c.cuisineId from Cuisine c where c.CuisineType = 'American'), u.usersID,  'Chocolate Chip Cookies', 450, '01-03-2023', null, '07-01-2024' from users u where u.lastname = 'Diena'
-union select (select c.cuisineId from Cuisine c where c.CuisineType = 'French'), u.usersId, 'Apple yogurt smoothie', 125, '04-05-2021', '12-10-2021', null from users u where u.LastName = 'Azoulay'
-union select (select c.cuisineId from Cuisine c where c.CuisineType = 'English'), u.usersId, 'Cheese bread', 350, '11-10-2017', '01-01-2018', '02-02-2019' from users u where u.lastname = 'Weinberger'
-union select (select c.CuisineId from cuisine c where c.CuisineType = 'American'), u.usersId, 'Butter muffins', 375, '01-01-2016', null , null from users u where u.LastName = 'Svei'
-union select (select c.cuisineId from Cuisine C where c.CuisineType = 'American'), u.usersId, 'Muddy Buddies', 300, '01-01-2019', '04-04-2019', '05-05-2020' from users u where u.lastname = 'Svei'
-union select (select c.cuisineId from cuisine c where c.CuisineType = 'French'), u.usersId, 'Ministroni soup', 200, '08-12-2023', null, '01-03-2024' from users u where u.lastname = 'Korb'
-union select (select c.cuisineId from cuisine c where c.cuisineType = 'Indian'), u.usersId, 'Roasted Vegetables', 150, '07-06-2015', '06-06-2016', null from users u where u.lastname = 'Mozes'
-union select (select c.cuisineId from cuisine c where c.CuisineType = 'Chinese'), u.usersId, 'Sesame Chicken', 325, '01-01-2021', '03-04-2021', '11-11-2021' from users u where u.lastname = 'Katz'
-union select (select c.cuisineId from cuisine c where c.CuisineType = 'Chinese'), u.usersId, 'Falafel balls', 450, '01-01-2021', '06-14-2021', '06-20-2021' from users u where u.lastname = 'Katz'
+select (select c.cuisineId from Cuisine c where c.CuisineName = 'American'), u.usersID,  'Chocolate Chip Cookies', 450, '01-03-2023', null, '07-01-2024' from users u where u.lastname = 'Diena'
+union select (select c.cuisineId from Cuisine c where c.CuisineName = 'French'), u.usersId, 'Apple yogurt smoothie', 125, '04-05-2021', '12-10-2021', null from users u where u.LastName = 'Azoulay'
+union select (select c.cuisineId from Cuisine c where c.CuisineName = 'English'), u.usersId, 'Cheese bread', 350, '11-10-2017', '01-01-2018', '02-02-2019' from users u where u.lastname = 'Weinberger'
+union select (select c.CuisineId from cuisine c where c.CuisineName = 'American'), u.usersId, 'Butter muffins', 375, '01-01-2016', null , null from users u where u.LastName = 'Svei'
+union select (select c.cuisineId from Cuisine C where c.CuisineName = 'American'), u.usersId, 'Muddy Buddies', 300, '01-01-2019', '04-04-2019', '05-05-2020' from users u where u.lastname = 'Svei'
+union select (select c.cuisineId from cuisine c where c.CuisineName = 'French'), u.usersId, 'Ministroni soup', 200, '08-12-2023', null, '01-03-2024' from users u where u.lastname = 'Korb'
+union select (select c.cuisineId from cuisine c where c.CuisineName = 'Indian'), u.usersId, 'Roasted Vegetables', 150, '07-06-2015', '06-06-2016', null from users u where u.lastname = 'Mozes'
+union select (select c.cuisineId from cuisine c where c.CuisineName = 'Chinese'), u.usersId, 'Sesame Chicken', 325, '01-01-2021', '03-04-2021', '11-11-2021' from users u where u.lastname = 'Katz'
+union select (select c.cuisineId from cuisine c where c.CuisineName = 'Chinese'), u.usersId, 'Falafel balls', 450, '01-01-2021', '06-14-2021', '06-20-2021' from users u where u.lastname = 'Katz'
 ;
 
 insert UnitOfMeasure(MeasurementType)

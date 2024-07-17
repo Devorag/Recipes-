@@ -38,7 +38,6 @@
             tblGrid = new TableLayoutPanel();
             gDashboard = new DataGridView();
             pageSetupDialog1 = new PageSetupDialog();
-            label2 = new Label();
             tblMain.SuspendLayout();
             tblButtons.SuspendLayout();
             tblGrid.SuspendLayout();
@@ -169,21 +168,11 @@
             gDashboard.Size = new Size(534, 410);
             gDashboard.TabIndex = 0;
             // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(1088, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(59, 25);
-            label2.TabIndex = 1;
-            label2.Text = "label2";
-            // 
             // frmDashboard
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1087, 859);
-            Controls.Add(label2);
             Controls.Add(tblMain);
             Name = "frmDashboard";
             Text = "Dashboard";
@@ -193,7 +182,6 @@
             tblGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gDashboard).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -203,7 +191,6 @@
         private Label lblDesc;
         private TableLayoutPanel tblButtons;
         private PageSetupDialog pageSetupDialog1;
-        private Label label2;
         private Button btnRecipeList;
         private Button btnMealList;
         private Button btnCookbookList;

@@ -32,6 +32,10 @@ namespace RecipeWinForms
             {
                 id = WindowsFormsUtility.GetIdFromGrid(gRecipes, rowindex, "RecipeId");
             }
+            if (this.MdiParent != null && this.MdiParent is frmMain)
+            {
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmRecipeList), id);
+            }
             frmNewRecipe frm = new frmNewRecipe();
             frm.LoadForm(id);
         }

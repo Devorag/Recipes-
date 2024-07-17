@@ -22,9 +22,9 @@ create table dbo.Users(
         constraint ck_User_FirstName_cannot_be_Blank check(FirstName <> ''),
     LastName varchar(100) not null 
         constraint ck_User_LastName_cannot_be_blank check(LastName <> ''),
-    UserName varchar(100) not null 
-        constraint ck_User_UserName_Cannot_be_Blank check(UserName <> ''),
-    constraint u_Users_UserName unique(UserName)
+    UsersName varchar(100) not null 
+        constraint ck_User_UserName_Cannot_be_Blank check(UsersName <> ''),
+    constraint u_Users_UserName unique(UsersName)
 )    
 go 
 create table dbo.ingredient(
@@ -37,9 +37,9 @@ create table dbo.ingredient(
 go 
 create table dbo.Cuisine(
     CuisineId int not null identity primary key,
-    CuisineType varchar(100) not null 
-        constraint ck_Cuisine_CuisineType_cannot_be_Blank check(CuisineType <> ''),
-        constraint u_Cuisine_CuisineType unique(CuisineType)
+    CuisineName varchar(100) not null 
+        constraint ck_Cuisine_CuisineName_cannot_be_Blank check(CuisineName <> ''),
+        constraint u_Cuisine_CuisineName unique(CuisineName)
 )
 go 
 create table dbo.Recipe(

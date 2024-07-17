@@ -21,7 +21,7 @@ begin
         group by mc.MealId
     )
     
-    select m.MealName, u.UserName, NumCalories = dbo.TotalCaloriesPerMeal(m.MealId), x.NumCourses, x.NumRecipes
+    select m.mealid, m.MealName, u.UsersName, NumCalories = dbo.TotalCaloriesPerMeal(m.MealId), x.NumCourses, x.NumRecipes
     from x 
     join meal m 
     on m.MealId = x.mealid

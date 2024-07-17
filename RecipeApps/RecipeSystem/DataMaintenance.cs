@@ -27,5 +27,11 @@
             SQLUtility.ExecuteSQL(cmd);
         }
 
+        public static DataTable GetDashboard()
+        {
+            SqlCommand cmd = SQLUtility.GetSQLCommand("DashboardGet");
+            return  SQLUtility.GetDataTable(cmd);
+        }
+
     }
 }

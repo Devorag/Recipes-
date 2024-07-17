@@ -1,24 +1,20 @@
-﻿
-using System.Diagnostics;
-
-
-namespace RecipeSystem
+﻿namespace RecipeSystem
 {
     public class Recipes
     {
         public static DataTable SearchRecipes()
         {
             DataTable dt = new();
-            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeSearch");
+            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeList");
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
 
-        public static DataTable Load(int recipeid)
+        public static DataTable Load(int recipeId)
         {
             DataTable dt = new();
             SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeGet");
-            SQLUtility.SetParamValue(cmd, "@RecipeId", recipeid);
+            SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
@@ -28,6 +24,7 @@ namespace RecipeSystem
             DataTable dt = new();
             SqlCommand cmd = SQLUtility.GetSQLCommand("CuisineGet");
             SQLUtility.SetParamValue(cmd, "@All", 1);
+            SQLUtility.SetParamValue(cmd, "@IncludeBlank", 1);
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
@@ -35,8 +32,9 @@ namespace RecipeSystem
         public static DataTable GetUsersList()
         {
             DataTable dt = new();
-            SqlCommand cmd = SQLUtility.GetSQLCommand("UsersGet");
+            SqlCommand cmd = SQLUtility.GetSQLCommand("UserGet");
             SQLUtility.SetParamValue(cmd, "@All", 1);
+            SQLUtility.SetParamValue(cmd, "@IncludeBlank", 1);
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
@@ -49,7 +47,7 @@ namespace RecipeSystem
                 throw new Exception("Cannot call Recipe save method because there are no rows in the table");
             }
             DataRow r = dtRecipes.Rows[0];
-            SQLUtility.SaveDataRow(r, "RecipesUpdate");
+            SQLUtility.SaveDataRow(r, "UpdateRecipe");
 
 
             //SQLUtility.ExecuteSQL(sql);
@@ -82,7 +80,21 @@ namespace RecipeSystem
         }
 
 
+        public static DataTable GetRecipeById(int recipeId)
+        {
+            string sql = $"select * from recipes where recipeid = {recipeId}";
+            return SQLUtility.GetDataTable(sql);
+        }
 
+        public static void UpdateRecipeStatus(int recipeId, int newStatus)
+        {
+            using(SqlCommand cmd = new SqlCommand("ChangeRecipeStatus")) 
+            {
+                SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
+                SQLUtility.SetParamValue(cmd, "@NewStatus", newStatus);
+                SQLUtility.ExecuteSQL(cmd);
+            }
+        }
 
     }
 }

@@ -1,16 +1,4 @@
-﻿using CPUFramework;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace RecipeWinForms
+﻿namespace RecipeWinForms
 {
     public partial class frmDashboard : Form
     {
@@ -18,33 +6,21 @@ namespace RecipeWinForms
         {
             InitializeComponent();
             this.Activated += FrmDashboard_Activated;
-            this.Load += FrmDashboard_Load;
             btnCookbookList.Click += BtnCookbookList_Click;
             btnRecipeList.Click += BtnRecipeList_Click;
             btnMealList.Click += BtnMealList_Click;
         }
 
-        private void FrmDashboard_Load(object? sender, EventArgs e)
-        {
-            DataTable dt = GetDashboardList();
-            gDashboard.DataSource = dt;
-            GridSetup();
-        }
-
         private void FrmDashboard_Activated(object? sender, EventArgs e)
         {
-
-            WindowsFormsUtility.FormatGridForSearchResults(gDashboard, "Dashboard");
+            BindData();
         }
 
-
-        private void GridSetup()
+        private void BindData()
         {
-            gDashboard.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            
-            gDashboard.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 9.75F, FontStyle.Bold);
-            gDashboard.RowHeadersVisible = false;
-
+            DataTable dt = DataMaintenance.GetDashboard();
+            gDashboard.DataSource = dt;
+            WindowsFormsUtility.FormatGridForSearchResults(gDashboard, "Dashboard");
         }
 
         private void OpenForm(Type frmType)
@@ -53,14 +29,6 @@ namespace RecipeWinForms
             {
                 ((frmMain)this.MdiParent).OpenForm(frmType);
             }
-        }
-
-        public static DataTable GetDashboardList()
-        {
-            DataTable dt = new();
-            SqlCommand cmd = SQLUtility.GetSQLCommand("DashboardGet");
-            dt = SQLUtility.GetDataTable(cmd);
-            return dt;
         }
 
         private void BtnRecipeList_Click(object? sender, EventArgs e)

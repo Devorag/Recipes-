@@ -1,6 +1,6 @@
 
 
-create or alter proc dbo.RecipesUpdate( 
+create or alter proc dbo.UpdateRecipe( 
     @RecipeId int output, 
     @CuisineId int, 
     @UsersId int, 
