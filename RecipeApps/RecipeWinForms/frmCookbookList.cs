@@ -34,10 +34,8 @@ namespace RecipeWinForms
             }
             if (this.MdiParent != null && this.MdiParent is frmMain)
             {
-                ((frmMain)this.MdiParent).OpenForm(typeof(frmCookbookList), id);
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewCookbook), id);
             }
-            frmNewCookbook frm = new frmNewCookbook();
-            frm.LoadForm(id);
         }
 
         private void GCookbooks_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)

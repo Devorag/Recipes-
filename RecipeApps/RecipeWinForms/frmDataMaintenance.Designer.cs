@@ -145,6 +145,7 @@
             // 
             // gDataMaint
             // 
+            gDataMaint.BackgroundColor = SystemColors.Control;
             gDataMaint.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gDataMaint.Dock = DockStyle.Fill;
             gDataMaint.Location = new Point(315, 3);

@@ -1,7 +1,7 @@
 create or alter procedure dbo.RecipeList 
 as 
 begin 
-        declare @return int = 0, @count int = 0 
+        declare @return int = 0
 
         ;
         with x as
@@ -13,7 +13,7 @@ begin
         group by r.RecipeName
         )
 
-        select r.recipeid, r.RecipeName, Status = r.recipestatus, u.UsersName, r.Calories, x.NumIngredients
+        select r.RecipeId, r.RecipeName, Status = r.recipestatus, u.UsersName, r.Calories, x.NumIngredients
         from x 
         join recipe r 
         on r.RecipeName = x.RecipeName 

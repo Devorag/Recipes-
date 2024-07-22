@@ -288,11 +288,11 @@ join MealCourse mc
 on mc.courseID = c.CourseId 
 and mc.mealId = m.mealId 
 
-insert cookbook(UsersId, CookbookName, Price)
-select u.usersID, 'Treats for two', 30 from users u where u.LastName = 'Korb'
-union select u.usersId, 'The Cook''s Secret', 35 from users u where u.lastname = 'Katz'
-union select u.usersId, 'Taste It', 40 from users u where u.lastname = 'Svei' 
-union select u.usersID, 'Njoy', 25 from users u where u.LastName = 'Weinberger'
+insert cookbook(UsersId, CookbookName, Price, Active)
+select u.usersID, 'Treats for two', 30, 1 from users u where u.LastName = 'Korb'
+union select u.usersId, 'The Cook''s Secret', 35, 1 from users u where u.lastname = 'Katz'
+union select u.usersId, 'Taste It', 40, 0 from users u where u.lastname = 'Svei' 
+union select u.usersID, 'Njoy', 25, 1 from users u where u.LastName = 'Weinberger'
 ;
 with  x as(
     SELECT CookbookName = 'Treats for two', RecipeName = 'Chocolate Chip Cookies', RecipeSequence = 1

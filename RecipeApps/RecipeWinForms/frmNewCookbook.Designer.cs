@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             tblMain = new TableLayoutPanel();
             tblOptions = new TableLayoutPanel();
             btnDelete = new Button();
@@ -42,13 +43,15 @@
             tblNum = new TableLayoutPanel();
             txtPrice = new TextBox();
             lblDateCreated = new Label();
-            check = new CheckBox();
+            ckActive = new CheckBox();
             btnSaveRecipe = new Button();
-            gRecipeCookbook = new DataGridView();
+            gCookbookRecipe = new DataGridView();
+            errorProvider = new ErrorProvider(components);
             tblMain.SuspendLayout();
             tblOptions.SuspendLayout();
             tblNum.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)gRecipeCookbook).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)gCookbookRecipe).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
             // tblMain
@@ -57,7 +60,7 @@
             tblMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tblMain.Controls.Add(tblOptions, 0, 0);
             tblMain.Controls.Add(btnSaveRecipe, 0, 1);
-            tblMain.Controls.Add(gRecipeCookbook, 0, 2);
+            tblMain.Controls.Add(gCookbookRecipe, 0, 2);
             tblMain.Dock = DockStyle.Fill;
             tblMain.Location = new Point(0, 0);
             tblMain.Margin = new Padding(20, 3, 3, 3);
@@ -84,7 +87,7 @@
             tblOptions.Controls.Add(lblText, 1, 3);
             tblOptions.Controls.Add(lstUsersName, 1, 2);
             tblOptions.Controls.Add(tblNum, 1, 4);
-            tblOptions.Controls.Add(check, 1, 5);
+            tblOptions.Controls.Add(ckActive, 1, 5);
             tblOptions.Dock = DockStyle.Fill;
             tblOptions.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tblOptions.Location = new Point(3, 3);
@@ -225,15 +228,17 @@
             lblDateCreated.TabIndex = 1;
             lblDateCreated.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // check
+            // ckActive
             // 
-            check.AutoSize = true;
-            check.Dock = DockStyle.Fill;
-            check.Location = new Point(322, 397);
-            check.Name = "check";
-            check.Size = new Size(650, 75);
-            check.TabIndex = 11;
-            check.UseVisualStyleBackColor = true;
+            ckActive.AutoSize = true;
+            ckActive.Checked = true;
+            ckActive.CheckState = CheckState.Checked;
+            ckActive.Dock = DockStyle.Fill;
+            ckActive.Location = new Point(322, 397);
+            ckActive.Name = "ckActive";
+            ckActive.Size = new Size(650, 75);
+            ckActive.TabIndex = 11;
+            ckActive.UseVisualStyleBackColor = true;
             // 
             // btnSaveRecipe
             // 
@@ -246,16 +251,21 @@
             btnSaveRecipe.Text = "Save";
             btnSaveRecipe.UseVisualStyleBackColor = true;
             // 
-            // gRecipeCookbook
+            // gCookbookRecipe
             // 
-            gRecipeCookbook.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gRecipeCookbook.Dock = DockStyle.Fill;
-            gRecipeCookbook.Location = new Point(3, 591);
-            gRecipeCookbook.Name = "gRecipeCookbook";
-            gRecipeCookbook.RowHeadersWidth = 62;
-            gRecipeCookbook.RowTemplate.Height = 33;
-            gRecipeCookbook.Size = new Size(975, 476);
-            gRecipeCookbook.TabIndex = 2;
+            gCookbookRecipe.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            gCookbookRecipe.Dock = DockStyle.Fill;
+            gCookbookRecipe.GridColor = SystemColors.Control;
+            gCookbookRecipe.Location = new Point(3, 591);
+            gCookbookRecipe.Name = "gCookbookRecipe";
+            gCookbookRecipe.RowHeadersWidth = 62;
+            gCookbookRecipe.RowTemplate.Height = 33;
+            gCookbookRecipe.Size = new Size(975, 476);
+            gCookbookRecipe.TabIndex = 2;
+            // 
+            // errorProvider
+            // 
+            errorProvider.ContainerControl = this;
             // 
             // frmNewCookbook
             // 
@@ -270,7 +280,8 @@
             tblOptions.PerformLayout();
             tblNum.ResumeLayout(false);
             tblNum.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)gRecipeCookbook).EndInit();
+            ((System.ComponentModel.ISupportInitialize)gCookbookRecipe).EndInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             ResumeLayout(false);
         }
 
@@ -287,11 +298,12 @@
         private TextBox txtCookbookName;
         private Label lblText;
         private Button btnSaveRecipe;
-        private DataGridView gRecipeCookbook;
+        private DataGridView gCookbookRecipe;
         private ComboBox lstUsersName;
         private TableLayoutPanel tblNum;
         private TextBox txtPrice;
         private Label lblDateCreated;
-        private CheckBox check;
+        private CheckBox ckActive;
+        private ErrorProvider errorProvider;
     }
 }

@@ -49,6 +49,7 @@
             // 
             // gMeals
             // 
+            gMeals.BackgroundColor = SystemColors.Control;
             gMeals.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gMeals.Dock = DockStyle.Fill;
             gMeals.Location = new Point(20, 20);

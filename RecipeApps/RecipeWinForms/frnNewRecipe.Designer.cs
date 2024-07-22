@@ -55,6 +55,7 @@ namespace RecipeWinForms
             tblStatus = new TableLayoutPanel();
             lblDatePublished = new Label();
             lblDateArchived = new Label();
+            lblDateDrafted = new Label();
             tblChildRecords = new TableLayoutPanel();
             tbChildRecords = new TabControl();
             tbIngredients = new TabPage();
@@ -65,8 +66,7 @@ namespace RecipeWinForms
             tblSteps = new TableLayoutPanel();
             btnSaveStep = new Button();
             gSteps = new DataGridView();
-            lblDisplay = new Label();
-            lblDateDrafted = new Label();
+            lblRecipeStatus = new Label();
             ((System.ComponentModel.ISupportInitialize)fileSystemWatcher1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             tblMain.SuspendLayout();
@@ -111,7 +111,7 @@ namespace RecipeWinForms
             tblMain.Controls.Add(lblCuisine, 0, 3);
             tblMain.Controls.Add(tblStatus, 1, 7);
             tblMain.Controls.Add(tblChildRecords, 0, 8);
-            tblMain.Controls.Add(lblDisplay, 1, 5);
+            tblMain.Controls.Add(lblRecipeStatus, 1, 5);
             tblMain.Dock = DockStyle.Fill;
             tblMain.Location = new Point(0, 0);
             tblMain.Name = "tblMain";
@@ -356,6 +356,7 @@ namespace RecipeWinForms
             lblDatePublished.Name = "lblDatePublished";
             lblDatePublished.Size = new Size(198, 60);
             lblDatePublished.TabIndex = 1;
+            lblDatePublished.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblDateArchived
             // 
@@ -366,6 +367,18 @@ namespace RecipeWinForms
             lblDateArchived.Name = "lblDateArchived";
             lblDateArchived.Size = new Size(182, 60);
             lblDateArchived.TabIndex = 2;
+            lblDateArchived.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblDateDrafted
+            // 
+            lblDateDrafted.AutoSize = true;
+            lblDateDrafted.BackColor = SystemColors.ButtonShadow;
+            lblDateDrafted.Dock = DockStyle.Fill;
+            lblDateDrafted.Location = new Point(3, 0);
+            lblDateDrafted.Name = "lblDateDrafted";
+            lblDateDrafted.Size = new Size(198, 60);
+            lblDateDrafted.TabIndex = 3;
+            lblDateDrafted.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tblChildRecords
             // 
@@ -486,26 +499,16 @@ namespace RecipeWinForms
             gSteps.Size = new Size(795, 309);
             gSteps.TabIndex = 1;
             // 
-            // lblDisplay
+            // lblRecipeStatus
             // 
-            lblDisplay.AutoSize = true;
-            lblDisplay.BackColor = SystemColors.ButtonShadow;
-            lblDisplay.Dock = DockStyle.Fill;
-            lblDisplay.Location = new Point(228, 363);
-            lblDisplay.Name = "lblDisplay";
-            lblDisplay.Size = new Size(596, 66);
-            lblDisplay.TabIndex = 15;
-            // 
-            // lblDateDrafted
-            // 
-            lblDateDrafted.AutoSize = true;
-            lblDateDrafted.BackColor = SystemColors.ButtonShadow;
-            lblDateDrafted.Dock = DockStyle.Fill;
-            lblDateDrafted.Location = new Point(3, 0);
-            lblDateDrafted.Name = "lblDateDrafted";
-            lblDateDrafted.Size = new Size(198, 60);
-            lblDateDrafted.TabIndex = 3;
-            lblDateDrafted.TextAlign = ContentAlignment.MiddleCenter;
+            lblRecipeStatus.AutoSize = true;
+            lblRecipeStatus.BackColor = SystemColors.ButtonShadow;
+            lblRecipeStatus.Dock = DockStyle.Fill;
+            lblRecipeStatus.Location = new Point(228, 363);
+            lblRecipeStatus.Name = "lblRecipeStatus";
+            lblRecipeStatus.Size = new Size(596, 66);
+            lblRecipeStatus.TabIndex = 15;
+            lblRecipeStatus.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // frmNewRecipe
             // 
@@ -570,7 +573,7 @@ namespace RecipeWinForms
         private TableLayoutPanel tblSteps;
         private Button btnSaveStep;
         private DataGridView gSteps;
-        private Label lblDisplay;
+        private Label lblRecipeStatus;
         private Label lblDatePublished;
         private Label lblDateArchived;
         private Label lblDateDrafted;

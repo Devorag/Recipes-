@@ -1,6 +1,6 @@
 create or alter procedure dbo.CuisineUpdate(
 	@CuisineId int  output,
-	@CuisineType varchar (100),
+	@CuisineName varchar (100),
 	@Message varchar(500) = ''  output
 )
 as
@@ -11,8 +11,8 @@ begin
 	
 	if @CuisineId = 0
 	begin
-		insert Cuisine(CuisineType)
-		values(@CuisineType)
+		insert Cuisine(CuisineName)
+		values(@CuisineName)
 
 		select @CuisineId= scope_identity()
 	end
@@ -20,7 +20,7 @@ begin
 	begin
 		update Cuisine
 		set
-			CuisineType = @CuisineType
+			CuisineName = @CuisineName
 		where CuisineId = @CuisineId
 	end
 	

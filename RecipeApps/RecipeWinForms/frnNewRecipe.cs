@@ -30,18 +30,6 @@ namespace RecipeWinForms
             tbChildRecords.SelectedIndexChanged += TbChildRecords_SelectedIndexChanged;
         }
 
-        private void OpenChangeStatusForm()
-        {
-            int recipeId = (int)this.Tag;
-            if (recipeId > 0)
-            {
-                if (this.MdiParent != null && this.MdiParent is frmMain)
-                {
-                    frmChangeStatus changeStatusForm = new frmChangeStatus();
-                    changeStatusForm.ShowDialog();
-                }
-            }
-        }
 
         public void LoadForm(int recipeidval)
         {
@@ -64,13 +52,14 @@ namespace RecipeWinForms
 
             WindowsFormsUtility.SetControlBinding(txtRecipeName, bindingSource);
             WindowsFormsUtility.SetControlBinding(txtCalories, bindingSource);
-            //WindowsFormsUtility.SetControlBinding(lblDisplay, bindingSource);
+            WindowsFormsUtility.SetControlBinding(lblRecipeStatus, bindingSource);
             WindowsFormsUtility.SetControlBinding(lblDateDrafted, bindingSource);
             WindowsFormsUtility.SetControlBinding(lblDatePublished, bindingSource);
             WindowsFormsUtility.SetControlBinding(lblDateArchived, bindingSource);
 
             this.Text = GetRecipeDesc();
             LoadRecipeIngredients();
+            SetButtonsEnabledBasedOnNewRecord();
 
             this.Show();
         }
@@ -93,7 +82,6 @@ namespace RecipeWinForms
             WindowsFormsUtility.AddComboBoxToGrid(gSteps, DataMaintenance.GetDataList("Steps"), "RecipeSteps", "Instructions");
             WindowsFormsUtility.AddDeleteButtonToGrid(gSteps, deleteColName);
             WindowsFormsUtility.FormatGridForEdit(gSteps, "RecipeSteps");
-
         }
 
         private void SaveRecipeIngredient()
@@ -127,7 +115,7 @@ namespace RecipeWinForms
             {
                 try
                 {
-                    RecipeSteps.Delete(id);
+                    RecipeIngredient.Delete(id);
                     LoadRecipeIngredients();
                 }
                 catch (Exception ex)
@@ -218,8 +206,6 @@ namespace RecipeWinForms
             }
         }
 
-
-
         private void SetDateField(DataRow row, string columnName, string textBoxValue)
         {
             if (string.IsNullOrWhiteSpace(textBoxValue))
@@ -291,6 +277,10 @@ namespace RecipeWinForms
                 throw new Exception("Please select a user.");
             }
 
+            SetDateField(row, "DateDrafted", lblDateDrafted.Text);
+            SetDateField(row, "DatePublished", lblDatePublished.Text);
+            SetDateField(row, "DateArchived", lblDateArchived.Text);
+
             DateTime dateDrafted = Convert.ToDateTime(row["DateDrafted"]);
             DateTime currentDate = DateTime.Now;
 
@@ -310,6 +300,7 @@ namespace RecipeWinForms
             btnDelete.Enabled = b;
             btnSaveIngredient.Enabled = b;
             btnSaveStep.Enabled = b;
+            btnChangeStatus.Enabled = b;
         }
 
         private string GetRecipeDesc()
@@ -318,7 +309,7 @@ namespace RecipeWinForms
             int pkValue = SQLUtility.GetValueFromFirstRowAsInt(dtRecipes, "RecipeId");
             if (pkValue > 0)
             {
-                value = SQLUtility.GetValueFromFirstRowAsString(dtRecipes, "RecipeName");
+                value = "Recipe - " + SQLUtility.GetValueFromFirstRowAsString(dtRecipes, "RecipeName");
             }
             return value;
         }
@@ -357,6 +348,62 @@ namespace RecipeWinForms
             }
         }
 
+        private void TbChildRecords_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (tbChildRecords.SelectedTab == tbSteps)
+            {
+                LoadRecipeSteps();
+            }
+            if(tbChildRecords.SelectedTab == tbIngredients)
+            {
+                LoadRecipeIngredients();
+            }
+        }
+
+        private void BtnChangeStatus_Click(object? sender, EventArgs e)
+        {
+            if (this.MdiParent != null && this.MdiParent is frmMain)
+            {
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmChangeStatus), recipeId);
+            }
+        }
+
+        private void LstUserName_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            ClearUserError();
+        }
+
+        private void LstCuisine_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            ClearCuisineError();
+        }
+
+        private void BtnSaveStep_Click(object? sender, EventArgs e)
+        {
+            SaveRecipeSteps();
+        }
+
+        private void BtnSaveIngredient_Click(object? sender, EventArgs e)
+        {
+            SaveRecipeIngredient();
+        }
+
+        private void GIngredient_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == gIngredient.Columns[deleteColName].Index && e.RowIndex >= 0)
+            {
+                DeleteRecipeIngredient(e.RowIndex);
+            }
+        }
+
+        private void GSteps_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == gSteps.Columns[deleteColName].Index && e.RowIndex >= 0)
+            {
+                DeleteRecipeSteps(e.RowIndex);
+            }
+        }
+
         private void frmNewRecipe_FormClosing(object? sender, FormClosingEventArgs e)
         {
             bindingSource.EndEdit();
@@ -386,49 +433,5 @@ namespace RecipeWinForms
                 SetDateField(currentRow, "DateArchived", lblArchived.Text);
             }
         }
-
-        private void TbChildRecords_SelectedIndexChanged(object? sender, EventArgs e)
-        {
-            if (tbChildRecords.SelectedTab == tbSteps)
-            {
-                LoadRecipeSteps();
-            }
-        }
-
-        private void BtnChangeStatus_Click(object? sender, EventArgs e)
-        {
-            OpenChangeStatusForm();
-        }
-
-        private void LstUserName_SelectedIndexChanged(object? sender, EventArgs e)
-        {
-            ClearUserError();
-        }
-
-        private void LstCuisine_SelectedIndexChanged(object? sender, EventArgs e)
-        {
-            ClearCuisineError();
-        }
-
-        private void BtnSaveStep_Click(object? sender, EventArgs e)
-        {
-            SaveRecipeSteps();
-        }
-
-        private void BtnSaveIngredient_Click(object? sender, EventArgs e)
-        {
-            SaveRecipeIngredient();
-        }
-
-        private void GIngredient_CellContentClick(object? sender, DataGridViewCellEventArgs e)
-        {
-            DeleteRecipeIngredient(e.RowIndex);
-        }
-
-        private void GSteps_CellContentClick(object? sender, DataGridViewCellEventArgs e)
-        {
-            DeleteRecipeSteps(e.RowIndex);
-        }
-
     }
 }

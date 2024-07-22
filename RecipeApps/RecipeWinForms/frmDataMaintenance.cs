@@ -1,13 +1,11 @@
 ﻿using CPUFramework;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace RecipeWinForms
 {
     public partial class frmDataMaintenance : Form
     {
 
-        private enum TableTypeEnum {User, Cuisine, Ingredient, Measurement, Course}
+        private enum TableTypeEnum { User, Cuisine, Ingredient, Measurement, Course }
         DataTable dtList = new();
         TableTypeEnum currentTableType = TableTypeEnum.User;
         string deleteColName = "deletecol";
@@ -39,7 +37,7 @@ namespace RecipeWinForms
             try
             {
                 DataMaintenance.SaveDataList(dtList, currentTableType.ToString());
-                b = true; 
+                b = true;
             }
             catch (Exception ex)
             {
@@ -55,7 +53,7 @@ namespace RecipeWinForms
         private void Delete(int rowIndex)
         {
             int id = WindowsFormsUtility.GetIdFromGrid(gDataMaint, rowIndex, currentTableType.ToString());
-            if(id != 0)
+            if (id != 0)
             {
                 try
                 {
@@ -67,7 +65,7 @@ namespace RecipeWinForms
                     MessageBox.Show(ex.Message, Application.ProductName);
                 }
             }
-            else if(id == 0 && rowIndex < gDataMaint.Rows.Count)
+            else if (id == 0 && rowIndex < gDataMaint.Rows.Count)
             {
                 gDataMaint.Rows.Remove(gDataMaint.Rows[rowIndex]);
             }
@@ -75,9 +73,9 @@ namespace RecipeWinForms
 
         private void SetUpRadioButtons()
         {
-            foreach(Control c in tblChoices.Controls)
+            foreach (Control c in tblChoices.Controls)
             {
-                if(c is RadioButton)
+                if (c is RadioButton)
                 {
                     c.Click += C_Click;
                 }
@@ -91,7 +89,7 @@ namespace RecipeWinForms
 
         private void C_Click(object? sender, EventArgs e)
         {
-            if(sender is Control && ((Control)sender).Tag is TableTypeEnum)
+            if (sender is Control && ((Control)sender).Tag is TableTypeEnum)
             {
                 BindData((TableTypeEnum)((Control)sender).Tag);
             }
@@ -132,5 +130,6 @@ namespace RecipeWinForms
         {
             Save();
         }
+
     }
 }

@@ -166,6 +166,7 @@
             // lblDateDrafted
             // 
             lblDateDrafted.AutoSize = true;
+            lblDateDrafted.BackColor = SystemColors.ButtonShadow;
             lblDateDrafted.BorderStyle = BorderStyle.FixedSingle;
             lblDateDrafted.Dock = DockStyle.Fill;
             lblDateDrafted.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
@@ -178,6 +179,7 @@
             // lblDatePublished
             // 
             lblDatePublished.AutoSize = true;
+            lblDatePublished.BackColor = SystemColors.ButtonShadow;
             lblDatePublished.BorderStyle = BorderStyle.FixedSingle;
             lblDatePublished.Dock = DockStyle.Fill;
             lblDatePublished.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
@@ -190,6 +192,7 @@
             // lblDateArchived
             // 
             lblDateArchived.AutoSize = true;
+            lblDateArchived.BackColor = SystemColors.ButtonShadow;
             lblDateArchived.BorderStyle = BorderStyle.FixedSingle;
             lblDateArchived.Dock = DockStyle.Fill;
             lblDateArchived.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);

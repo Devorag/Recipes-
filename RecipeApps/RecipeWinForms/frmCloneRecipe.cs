@@ -11,12 +11,19 @@ namespace RecipeWinForms
             btnClone.Click += btnClone_Click;
         }
 
+        public void LoadForm()
+        {
+            DataTable dtRecipeName = GetRecipeList();
+
+            lstRecipe.DataSource = dtRecipeName;
+            lstRecipe.ValueMember = "RecipeId";
+            lstRecipe.DisplayMember = "RecipeName";
+        }
         private void CloneRecipe(int recipeId)
         {
             try
             {
                 SqlCommand cmd = SQLUtility.GetSQLCommand("CloneRecipe");
-
 
                 SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
                 SQLUtility.SetParamValue(cmd, "@NewRecipeId", DBNull.Value); // Output parameter
@@ -57,14 +64,6 @@ namespace RecipeWinForms
 
         }
 
-        public void LoadForm()
-        {
-            DataTable dtRecipeName = GetRecipeList();
-
-            lstRecipe.DataSource = dtRecipeName;
-            lstRecipe.ValueMember = "RecipeId";
-            lstRecipe.DisplayMember = "RecipeName";
-        }
 
         private void OpenRecipeList(int recipeId)
         {

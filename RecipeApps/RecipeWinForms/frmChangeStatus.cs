@@ -1,4 +1,5 @@
 ﻿using CPUFramework;
+using System.Linq.Expressions;
 
 namespace RecipeWinForms
 {
@@ -8,107 +9,155 @@ namespace RecipeWinForms
         DataTable dtRecipes = new DataTable();
         int recipeId = 0;
         private string currentRecipe;
-        public enum RecipeStatus { Drafted, Published, Archived};
-        
+        private string currentStatus;
+
         public frmChangeStatus()
         {
             InitializeComponent();
-            this.Activated += FrmChangeStatus_Activated;
             this.recipeId = recipeId;
             btnDraft.Click += BtnDraft_Click;
             btnPublish.Click += BtnPublish_Click;
             btnArchive.Click += BtnArchive_Click;
         }
 
-        private void FrmChangeStatus_Activated(object? sender, EventArgs e)
-        {
-            LoadRecipeData(recipeId);
-        }
-
         private DataTable RecipeStatusGet(int recipeId = 0, string recipeName = null, bool all = false)
         {
-            using (SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeStatusGet"))
-            {
-                SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
-                SQLUtility.SetParamValue(cmd, "@RecipeName", recipeName);
-                SQLUtility.SetParamValue(cmd, "@All", all ? 1 : 0);
-                return SQLUtility.GetDataTable(cmd);
-            }
+            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeStatusGet");
+
+            SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
+            SQLUtility.SetParamValue(cmd, "@RecipeName", recipeName);
+            SQLUtility.SetParamValue(cmd, "@All", 1);
+            return SQLUtility.GetDataTable(cmd);
         }
 
         private void LoadCurrentStatus()
         {
-            DataTable dtStatus = RecipeStatusGet(recipeId);
-            if (dtStatus.Rows.Count > 0)
+            try
             {
-                DataRow row = dtStatus.Rows[0];
-                lblRecipe.Text = row["RecipeName"].ToString();
-                lblCurrentStatus.Text = row["RecipeStatus"].ToString();
+                DataTable dtStatus = RecipeStatusGet(recipeId);
+                if (dtStatus.Rows.Count > 0)
+                {
+                    DataRow row = dtStatus.Rows[0];
+                    lblRecipe.Text = row["RecipeName"].ToString();
+                    currentStatus = "Current Status: " + row["RecipeStatus"].ToString();
+                    lblCurrentStatus.Text = currentStatus;
+                    UpdateStatusDate(currentStatus);
+                    DisableCurrentStatusButton();
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading recipe status: " + ex.Message);
+            }
+        }
+
+        private void ChangeStatus(string newStatus)
+        {
+            try
+            {
+                using (SqlCommand cmd = SQLUtility.GetSQLCommand("dbo.ChangeRecipeStatus"))
+                {
+                    SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
+                    SQLUtility.SetParamValue(cmd, "@NewStatus", newStatus);
+                    SQLUtility.SetParamValue(cmd, "@Message", DBNull.Value); // Output parameter
+
+                    SQLUtility.ExecuteSQL(cmd);
+                    string message = Convert.ToString(cmd.Parameters["@Message"].Value);
+
+                    MessageBox.Show(message);
+
+                    if (message.Contains("changed"))
+                    {
+                        currentStatus = newStatus;
+                        lblCurrentStatus.Text = currentStatus;
+                        UpdateStatusDate(newStatus);
+                        DisableCurrentStatusButton();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error changing status: " + ex.Message);
+            }
+        }
+
+        private void UpdateStatusDate(string status)
+        {
+            string dateFormatted = DateTime.Now.ToString("dd MMM, yyyy");
+
+            switch (status)
+            {
+                case "Drafted":
+                    lblDateDrafted.Text = dateFormatted;
+                    break;
+                case "Published":
+                    lblDatePublished.Text = dateFormatted;
+                    break;
+                case "Archived":
+                    lblDateArchived.Text = dateFormatted;
+                    break;
+            }
+        }
+
+
+        public void LoadForm(int recipeIdVal)
+        {
+            LoadRecipeForm(recipeIdVal);
+            LoadCurrentStatus();
+        }
+
+        private void LoadRecipeForm(int recipeIdval)
+        {
+            recipeId = recipeIdval;
+            this.Tag = recipeId;
+            dtRecipes = Recipes.Load(recipeId);
+            bindingSource.DataSource = dtRecipes;
+            if (recipeId == 0)
+            {
+                dtRecipes.Rows.Add();
+            }
+            WindowsFormsUtility.SetControlBinding(lblRecipe, bindingSource);
+            WindowsFormsUtility.SetControlBinding(lblCurrentStatus, bindingSource);
+            WindowsFormsUtility.SetControlBinding(lblDateDrafted, bindingSource);
+            WindowsFormsUtility.SetControlBinding(lblDatePublished, bindingSource);
+            WindowsFormsUtility.SetControlBinding(lblDateArchived, bindingSource);
+        }
+
+        private void DisableCurrentStatusButton()
+        {
+            btnDraft.Enabled = lblCurrentStatus.Text != "Drafted";
+            btnPublish.Enabled = lblCurrentStatus.Text != "Published";
+            btnArchive.Enabled = lblCurrentStatus.Text != "Archived";
+        }
+
+        private bool ConfirmStatusChange(string status)
+        {
+            return MessageBox.Show($"Are you sure you want to change this recipe to {status}?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes;
         }
 
         private void BtnArchive_Click(object? sender, EventArgs e)
         {
+            if (currentStatus != "Archived" && ConfirmStatusChange("Archived"))
+            {
+                ChangeStatus("Archived");
+            }
 
         }
 
         private void BtnPublish_Click(object? sender, EventArgs e)
         {
+            if (currentStatus != "Published" && ConfirmStatusChange("Published"))
+            {
+                ChangeStatus("Published");
+            }
 
         }
 
         private void BtnDraft_Click(object? sender, EventArgs e)
         {
-
-        }
-
-        private void LoadRecipeData(int recipeIdval)
-        {
-            
-            BindFormData();
-        }
-
-        private void BindFormData()
-        {
-            dtRecipes = Recipes.Load(recipeId);
-            bindingSource.DataSource = dtRecipes;
-            if (dtRecipes.Rows.Count > 0)
+            if (currentStatus != "Drafted" && ConfirmStatusChange("Drafted"))
             {
-                WindowsFormsUtility.SetControlBinding(lblRecipe, bindingSource);
-                WindowsFormsUtility.SetControlBinding(lblCurrentStatus, bindingSource);
-                WindowsFormsUtility.SetControlBinding(lblDateDrafted, bindingSource);
-                WindowsFormsUtility.SetControlBinding(lblDatePublished, bindingSource);
-                WindowsFormsUtility.SetControlBinding(lblDateArchived, bindingSource);
-            }
-        }
-
-        private void PromptAndChangeStatus(RecipeStatus newStatus)
-        {
-            string statusName = Enum.GetName(typeof(RecipeStatus), newStatus);
-            var result = MessageBox.Show($"Are you sure you want to change this recipe to {statusName}?", "Change Recipe Status", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                ChangeRecipeStatus(newStatus);
-            }
-        }
-
-        private void ChangeRecipeStatus(RecipeStatus newStatus)
-        {
-            if(dtRecipes.Rows.Count > 0)
-            {
-                DataRow row = dtRecipes.Rows[0];
-                row["RecipeStatus"] = (int)newStatus;
-
-                try
-                {
-                    Recipes.UpdateRecipeStatus(recipeId, (int)newStatus);
-                    BindFormData();
-                    
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show($"Failed to update recipe status: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                ChangeStatus("Drafted");
             }
         }
     }

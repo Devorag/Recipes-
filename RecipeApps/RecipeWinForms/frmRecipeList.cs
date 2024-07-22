@@ -34,10 +34,8 @@ namespace RecipeWinForms
             }
             if (this.MdiParent != null && this.MdiParent is frmMain)
             {
-                ((frmMain)this.MdiParent).OpenForm(typeof(frmRecipeList), id);
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewRecipe), id);
             }
-            frmNewRecipe frm = new frmNewRecipe();
-            frm.LoadForm(id);
         }
 
         private void GRecipes_CellDoubleClick1(object? sender, DataGridViewCellEventArgs e)

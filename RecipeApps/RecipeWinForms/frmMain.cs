@@ -19,34 +19,10 @@
             this.Shown += FrmMain_Shown;
         }
 
-        private void MenuNewCookbook_Click(object? sender, EventArgs e)
-        {
-            OpenForm(typeof(frmNewCookbook));
-        }
-
-        private void MenuAutoCreate_Click(object? sender, EventArgs e)
-        {
-            OpenForm(typeof(frmCreateCookbook));      
-        }
-
-        private void MenuCloneRecipe_Click(object? sender, EventArgs e)
-        {
-            OpenForm(typeof(frmCloneRecipe));
-        }
-
-        private void MenuEditData_Click(object? sender, EventArgs e)
-        {
-            OpenForm(typeof(frmDataMaintenance));
-        }
-
-        private void FrmMain_Shown(object? sender, EventArgs e)
-        {
-            OpenForm(typeof(frmDashboard));
-        }
 
         public void OpenForm(Type frmType, int pkValue = 0)
         {
-            bool b = WindowsFormsUtility.IsFormOpen(frmType);
+            bool b = WindowsFormsUtility.IsFormOpen(frmType, pkValue);
 
             if(b == false)
             {
@@ -96,6 +72,13 @@
                 {
                     frmNewCookbook f = new();
                     newFrm = f;
+                    f.LoadForm(pkValue);
+                }
+                else if(frmType == typeof(frmChangeStatus))
+                {
+                    frmChangeStatus f = new();
+                    newFrm = f;
+                    f.LoadForm(pkValue);
                 }
                 if(newFrm != null)
                 {
@@ -107,6 +90,31 @@
                 }
                 WindowsFormsUtility.SetupNav(tsMain);
             }
+        }
+
+        private void MenuNewCookbook_Click(object? sender, EventArgs e)
+        {
+            OpenForm(typeof(frmNewCookbook));
+        }
+
+        private void MenuAutoCreate_Click(object? sender, EventArgs e)
+        {
+            OpenForm(typeof(frmCreateCookbook));
+        }
+
+        private void MenuCloneRecipe_Click(object? sender, EventArgs e)
+        {
+            OpenForm(typeof(frmCloneRecipe));
+        }
+
+        private void MenuEditData_Click(object? sender, EventArgs e)
+        {
+            OpenForm(typeof(frmDataMaintenance));
+        }
+
+        private void FrmMain_Shown(object? sender, EventArgs e)
+        {
+            OpenForm(typeof(frmDashboard));
         }
 
         private void NewFrm_TextChanged(object? sender, EventArgs e)
