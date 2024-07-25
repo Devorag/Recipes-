@@ -53,6 +53,7 @@
             // gCookbooks
             // 
             gCookbooks.BackgroundColor = SystemColors.Control;
+            gCookbooks.BorderStyle = BorderStyle.None;
             gCookbooks.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gCookbooks.Dock = DockStyle.Fill;
             gCookbooks.Location = new Point(3, 70);

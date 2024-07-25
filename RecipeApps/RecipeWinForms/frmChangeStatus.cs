@@ -1,6 +1,4 @@
-﻿using CPUFramework;
-using System.Linq.Expressions;
-
+﻿
 namespace RecipeWinForms
 {
     public partial class frmChangeStatus : Form
@@ -8,8 +6,13 @@ namespace RecipeWinForms
         BindingSource bindingSource = new BindingSource();
         DataTable dtRecipes = new DataTable();
         int recipeId = 0;
-        private string currentRecipe;
-        private string currentStatus;
+        string currentRecipe;
+        string currentStatus;
+        public void LoadForm(int recipeIdVal)
+        {
+            LoadRecipeForm(recipeIdVal);
+            LoadCurrentStatus();
+        }
 
         public frmChangeStatus()
         {
@@ -65,6 +68,8 @@ namespace RecipeWinForms
                     string message = Convert.ToString(cmd.Parameters["@Message"].Value);
 
                     MessageBox.Show(message);
+                    this.Close();
+                    OpenRecipeForm(typeof(frmNewRecipe));
 
                     if (message.Contains("changed"))
                     {
@@ -99,13 +104,6 @@ namespace RecipeWinForms
             }
         }
 
-
-        public void LoadForm(int recipeIdVal)
-        {
-            LoadRecipeForm(recipeIdVal);
-            LoadCurrentStatus();
-        }
-
         private void LoadRecipeForm(int recipeIdval)
         {
             recipeId = recipeIdval;
@@ -116,8 +114,6 @@ namespace RecipeWinForms
             {
                 dtRecipes.Rows.Add();
             }
-            WindowsFormsUtility.SetControlBinding(lblRecipe, bindingSource);
-            WindowsFormsUtility.SetControlBinding(lblCurrentStatus, bindingSource);
             WindowsFormsUtility.SetControlBinding(lblDateDrafted, bindingSource);
             WindowsFormsUtility.SetControlBinding(lblDatePublished, bindingSource);
             WindowsFormsUtility.SetControlBinding(lblDateArchived, bindingSource);
@@ -133,6 +129,14 @@ namespace RecipeWinForms
         private bool ConfirmStatusChange(string status)
         {
             return MessageBox.Show($"Are you sure you want to change this recipe to {status}?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes;
+        }
+
+        private void OpenRecipeForm(Type frmType)
+        {
+            if (this.MdiParent != null && this.MdiParent is frmMain)
+            {
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewRecipe));
+            }
         }
 
         private void BtnArchive_Click(object? sender, EventArgs e)

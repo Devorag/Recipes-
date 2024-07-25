@@ -3,11 +3,11 @@ namespace RecipeSystem
 {
     public class CookbookRecipe
     {
-        public static DataTable LoadByRecipeId(int recipeId)
+        public static DataTable LoadByCookbookId(int cookbookId)
         {
             DataTable dt = new();
             SqlCommand cmd = SQLUtility.GetSQLCommand("CookbookRecipeGet");
-            cmd.Parameters["@RecipeId"].Value = recipeId;
+            cmd.Parameters["@CookbookId"].Value = cookbookId;
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }

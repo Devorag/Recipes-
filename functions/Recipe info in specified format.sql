@@ -5,22 +5,18 @@ begin
     declare @value varchar (75) = '' 
 
     select @value = concat(
-        r.RecipeName, ' (', c.cuisinetype, ') has ',
-        count(distinct ri.IngredientId), ' ingredients and ',
-        count(distinct rs.RecipeStepsId), ' steps.'
+        r.RecipeName, ' (', c.CuisineName, ') has ',
+        (select count(*) from RecipeIngredient ri where ri.RecipeId = r.RecipeId), ' ingredients and ',
+        (select count(*) from RecipeSteps rs where rs.RecipeId = r.RecipeId), ' steps.'
     )
     from recipe r 
     left join Cuisine c 
     on c.CuisineId = r.CuisineID
-    left join RecipeIngredient ri 
-    on ri.RecipeId = r.RecipeId 
-    left join RecipeSteps rs 
-    on rs.RecipeId = r.RecipeId
     where r.RecipeId = @recipeid 
 
     return @value
 end 
 go 
 
-select RecipeSpecifiedFormat = dbo.RecipeInfoInSpecifiedFormat(r.recipeid), *
+select RecipeSpecifiedFormat = dbo.RecipeInfoInSpecifiedFormat(r.recipeid)
 from recipe r 

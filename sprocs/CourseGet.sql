@@ -10,11 +10,11 @@ begin
     
     select @All = ISNULL(@All, 0), @CourseId = ISNULL(@CourseId,0), @IncludeBlank = ISNULL(@IncludeBlank,0)
 
-    select c.CourseId, c.CourseType
+    select c.CourseId, c.CourseType, c.CourseSequence
     from Course c 
     where c.CourseId = @CourseId 
     or @All = 1 
-    union SELECT 0, ''
+    union SELECT 0, '', 0
     where @IncludeBlank = 1 
     order by c.CourseType
 

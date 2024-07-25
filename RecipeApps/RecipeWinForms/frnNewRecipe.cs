@@ -41,7 +41,9 @@ namespace RecipeWinForms
             {
                 DataRow newRow = dtRecipes.NewRow();
                 newRow["DateDrafted"] = DateTime.Now.ToString("dd MMM, yyyy");
+                newRow["RecipeStatus"] = "Drafted";
                 dtRecipes.Rows.Add(newRow);
+                
             }
             DataTable dtCuisine = Recipes.GetCuisineList();
             WindowsFormsUtility.SetListBinding(lstCuisineName, dtCuisine, dtRecipes, "Cuisine");
@@ -69,6 +71,7 @@ namespace RecipeWinForms
             dtRecipeIngredient = RecipeIngredient.LoadByRecipeId(recipeId);
             gIngredient.Columns.Clear();
             gIngredient.DataSource = dtRecipeIngredient;
+            WindowsFormsUtility.AddComboBoxToGrid(gIngredient, DataMaintenance.GetDataList("Measurement"), "RecipeIngredient", "MeasurementType");
             WindowsFormsUtility.AddComboBoxToGrid(gIngredient, DataMaintenance.GetDataList("Ingredient"), "Ingredient", "IngredientName");
             WindowsFormsUtility.AddDeleteButtonToGrid(gIngredient, deleteColName);
             WindowsFormsUtility.FormatGridForEdit(gIngredient, "RecipeIngredient");
@@ -206,33 +209,6 @@ namespace RecipeWinForms
             }
         }
 
-        private void SetDateField(DataRow row, string columnName, string textBoxValue)
-        {
-            if (string.IsNullOrWhiteSpace(textBoxValue))
-            {
-                row[columnName] = DBNull.Value;
-            }
-            else
-            {
-                DateTime dateValue;
-                if (DateTime.TryParse(textBoxValue, out dateValue))
-                {
-                    if (dateValue == DateTime.MinValue)
-                    {
-                        row[columnName] = DBNull.Value;
-                    }
-                    else
-                    {
-                        row[columnName] = dateValue;
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Invalid date format.", "Validation Error");
-                }
-            }
-        }
-
         private void ClearCuisineError()
         {
             DataRow row = dtRecipes.Rows[0];
@@ -276,10 +252,6 @@ namespace RecipeWinForms
                 errorProvider.SetError(lstUsersName, "Please select a user.");
                 throw new Exception("Please select a user.");
             }
-
-            SetDateField(row, "DateDrafted", lblDateDrafted.Text);
-            SetDateField(row, "DatePublished", lblDatePublished.Text);
-            SetDateField(row, "DateArchived", lblDateArchived.Text);
 
             DateTime dateDrafted = Convert.ToDateTime(row["DateDrafted"]);
             DateTime currentDate = DateTime.Now;
@@ -333,9 +305,6 @@ namespace RecipeWinForms
                 lstCuisineName.BindingContext[dtRecipes].EndCurrentEdit();
                 lstUsersName.BindingContext[dtRecipes].EndCurrentEdit();
 
-                SetDateField(currentRow, "DatePublished", lblPublished.Text);
-                SetDateField(currentRow, "DateArchived", lblArchived.Text);
-
                 try
                 {
                     ValidateForm();
@@ -366,6 +335,7 @@ namespace RecipeWinForms
             {
                 ((frmMain)this.MdiParent).OpenForm(typeof(frmChangeStatus), recipeId);
             }
+            this.Close();
         }
 
         private void LstUserName_SelectedIndexChanged(object? sender, EventArgs e)
@@ -425,12 +395,6 @@ namespace RecipeWinForms
                         this.Activate();
                         break;
                 }
-            }
-            if (dtRecipes.Rows.Count > 0)
-            {
-                DataRow currentRow = dtRecipes.Rows[0];
-                SetDateField(currentRow, "DatePublished", lblPublished.Text);
-                SetDateField(currentRow, "DateArchived", lblArchived.Text);
             }
         }
     }

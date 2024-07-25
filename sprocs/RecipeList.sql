@@ -19,10 +19,10 @@ begin
         on r.RecipeName = x.RecipeName 
         left join users u 
         on u.usersid = r.usersid 
-        order by r.datepublished, r.datedrafted, r.datearchived
+        order by r.RecipeStatus desc 
         
         return @return
 end 
 go
 
-exec RecipeSearch 
+exec RecipeList

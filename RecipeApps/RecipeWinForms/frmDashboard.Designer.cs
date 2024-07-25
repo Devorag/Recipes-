@@ -46,6 +46,7 @@
             // 
             // tblMain
             // 
+            tblMain.BackColor = SystemColors.Control;
             tblMain.ColumnCount = 1;
             tblMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tblMain.Controls.Add(lblTitlle, 0, 0);
@@ -95,6 +96,7 @@
             // btnRecipeList
             // 
             btnRecipeList.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnRecipeList.BackColor = SystemColors.ButtonHighlight;
             btnRecipeList.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnRecipeList.Location = new Point(87, 3);
             btnRecipeList.Margin = new Padding(20, 3, 3, 3);
@@ -102,21 +104,23 @@
             btnRecipeList.Size = new Size(288, 100);
             btnRecipeList.TabIndex = 0;
             btnRecipeList.Text = "Recipe List";
-            btnRecipeList.UseVisualStyleBackColor = true;
+            btnRecipeList.UseVisualStyleBackColor = false;
             // 
             // btnMealList
             // 
             btnMealList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnMealList.BackColor = SystemColors.ButtonHighlight;
             btnMealList.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnMealList.Location = new Point(381, 3);
             btnMealList.Name = "btnMealList";
             btnMealList.Size = new Size(278, 100);
             btnMealList.TabIndex = 1;
             btnMealList.Text = "Meal List";
-            btnMealList.UseVisualStyleBackColor = true;
+            btnMealList.UseVisualStyleBackColor = false;
             // 
             // btnCookbookList
             // 
+            btnCookbookList.BackColor = SystemColors.ButtonHighlight;
             btnCookbookList.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnCookbookList.Location = new Point(665, 3);
             btnCookbookList.Margin = new Padding(3, 3, 20, 3);
@@ -124,7 +128,7 @@
             btnCookbookList.Size = new Size(288, 100);
             btnCookbookList.TabIndex = 2;
             btnCookbookList.Text = "Cookbook List";
-            btnCookbookList.UseVisualStyleBackColor = true;
+            btnCookbookList.UseVisualStyleBackColor = false;
             // 
             // lblDesc
             // 
@@ -175,6 +179,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlLight;
             ClientSize = new Size(1087, 859);
             Controls.Add(tblMain);
             Name = "frmDashboard";

@@ -38,12 +38,12 @@
             lblCookbookName = new Label();
             lblPrice = new Label();
             btnSave = new Button();
-            lblText = new Label();
             lstUsersName = new ComboBox();
             tblNum = new TableLayoutPanel();
             txtPrice = new TextBox();
             lblDateCreated = new Label();
             ckActive = new CheckBox();
+            lblText = new Label();
             btnSaveRecipe = new Button();
             gCookbookRecipe = new DataGridView();
             errorProvider = new ErrorProvider(components);
@@ -84,20 +84,20 @@
             tblOptions.Controls.Add(lblCookbookName, 0, 1);
             tblOptions.Controls.Add(lblPrice, 0, 4);
             tblOptions.Controls.Add(btnSave, 0, 0);
-            tblOptions.Controls.Add(lblText, 1, 3);
             tblOptions.Controls.Add(lstUsersName, 1, 2);
             tblOptions.Controls.Add(tblNum, 1, 4);
             tblOptions.Controls.Add(ckActive, 1, 5);
+            tblOptions.Controls.Add(lblText, 1, 3);
             tblOptions.Dock = DockStyle.Fill;
             tblOptions.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             tblOptions.Location = new Point(3, 3);
             tblOptions.Name = "tblOptions";
             tblOptions.RowCount = 6;
-            tblOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 20.1823978F));
+            tblOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 20.1824017F));
             tblOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 20.182394F));
             tblOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 20.182394F));
             tblOptions.RowStyles.Add(new RowStyle());
-            tblOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 19.2704182F));
+            tblOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 19.2704163F));
             tblOptions.RowStyles.Add(new RowStyle(SizeType.Percent, 20.182394F));
             tblOptions.Size = new Size(975, 475);
             tblOptions.TabIndex = 0;
@@ -115,9 +115,10 @@
             // 
             lblUser.AutoSize = true;
             lblUser.Dock = DockStyle.Fill;
-            lblUser.Location = new Point(3, 158);
+            lblUser.Location = new Point(10, 158);
+            lblUser.Margin = new Padding(10, 0, 3, 0);
             lblUser.Name = "lblUser";
-            lblUser.Size = new Size(313, 79);
+            lblUser.Size = new Size(306, 79);
             lblUser.TabIndex = 3;
             lblUser.Text = "User";
             lblUser.TextAlign = ContentAlignment.MiddleLeft;
@@ -126,29 +127,31 @@
             // 
             lblActive.AutoSize = true;
             lblActive.Dock = DockStyle.Fill;
-            lblActive.Location = new Point(3, 394);
+            lblActive.Location = new Point(10, 394);
+            lblActive.Margin = new Padding(10, 0, 3, 0);
             lblActive.Name = "lblActive";
-            lblActive.Size = new Size(313, 81);
+            lblActive.Size = new Size(306, 81);
             lblActive.TabIndex = 5;
             lblActive.Text = "Active";
             lblActive.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // txtCookbookName
             // 
-            txtCookbookName.Dock = DockStyle.Fill;
+            txtCookbookName.BorderStyle = BorderStyle.FixedSingle;
             txtCookbookName.Location = new Point(322, 82);
             txtCookbookName.Multiline = true;
             txtCookbookName.Name = "txtCookbookName";
-            txtCookbookName.Size = new Size(650, 73);
+            txtCookbookName.Size = new Size(629, 73);
             txtCookbookName.TabIndex = 6;
             // 
             // lblCookbookName
             // 
             lblCookbookName.AutoSize = true;
             lblCookbookName.Dock = DockStyle.Fill;
-            lblCookbookName.Location = new Point(3, 79);
+            lblCookbookName.Location = new Point(10, 79);
+            lblCookbookName.Margin = new Padding(10, 0, 3, 0);
             lblCookbookName.Name = "lblCookbookName";
-            lblCookbookName.Size = new Size(313, 79);
+            lblCookbookName.Size = new Size(306, 79);
             lblCookbookName.TabIndex = 2;
             lblCookbookName.Text = "Cookbook Name";
             lblCookbookName.TextAlign = ContentAlignment.MiddleLeft;
@@ -157,9 +160,10 @@
             // 
             lblPrice.AutoSize = true;
             lblPrice.Dock = DockStyle.Fill;
-            lblPrice.Location = new Point(3, 319);
+            lblPrice.Location = new Point(10, 319);
+            lblPrice.Margin = new Padding(10, 0, 3, 0);
             lblPrice.Name = "lblPrice";
-            lblPrice.Size = new Size(313, 75);
+            lblPrice.Size = new Size(306, 75);
             lblPrice.TabIndex = 4;
             lblPrice.Text = "Price";
             lblPrice.TextAlign = ContentAlignment.MiddleLeft;
@@ -173,17 +177,6 @@
             btnSave.TabIndex = 0;
             btnSave.Text = "&Save";
             btnSave.UseVisualStyleBackColor = true;
-            // 
-            // lblText
-            // 
-            lblText.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            lblText.AutoSize = true;
-            lblText.Location = new Point(736, 267);
-            lblText.Margin = new Padding(3, 30, 80, 20);
-            lblText.Name = "lblText";
-            lblText.Size = new Size(159, 32);
-            lblText.TabIndex = 8;
-            lblText.Text = "Date Created:";
             // 
             // lstUsersName
             // 
@@ -210,6 +203,7 @@
             // 
             // txtPrice
             // 
+            txtPrice.BorderStyle = BorderStyle.FixedSingle;
             txtPrice.Dock = DockStyle.Fill;
             txtPrice.Location = new Point(3, 3);
             txtPrice.Multiline = true;
@@ -221,6 +215,7 @@
             // 
             lblDateCreated.AutoSize = true;
             lblDateCreated.BackColor = SystemColors.ControlDark;
+            lblDateCreated.BorderStyle = BorderStyle.FixedSingle;
             lblDateCreated.Dock = DockStyle.Fill;
             lblDateCreated.Location = new Point(328, 0);
             lblDateCreated.Name = "lblDateCreated";
@@ -240,6 +235,17 @@
             ckActive.TabIndex = 11;
             ckActive.UseVisualStyleBackColor = true;
             // 
+            // lblText
+            // 
+            lblText.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            lblText.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblText.Location = new Point(736, 267);
+            lblText.Margin = new Padding(3, 30, 80, 20);
+            lblText.Name = "lblText";
+            lblText.Size = new Size(159, 32);
+            lblText.TabIndex = 8;
+            lblText.Text = "Date Created:";
+            // 
             // btnSaveRecipe
             // 
             btnSaveRecipe.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
@@ -253,6 +259,7 @@
             // 
             // gCookbookRecipe
             // 
+            gCookbookRecipe.BackgroundColor = SystemColors.Control;
             gCookbookRecipe.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gCookbookRecipe.Dock = DockStyle.Fill;
             gCookbookRecipe.GridColor = SystemColors.Control;

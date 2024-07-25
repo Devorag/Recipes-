@@ -19,6 +19,7 @@ begin
     on x.cookbookId = c.CookbookId 
     join users u 
     on u.UsersId = c.UsersId 
+    order by c.CookbookName 
 
     return @return 
 

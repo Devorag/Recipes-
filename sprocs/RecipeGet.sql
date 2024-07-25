@@ -7,7 +7,7 @@ create or alter procedure dbo.RecipeGet(
 )
 as 
 begin 
-	select @RecipeName = nullif(@RecipeName,''), @IncludeBlank = ISNULL(@IncludeBlank,0)
+	select @RecipeName = nullif(@RecipeName,''), @IncludeBlank  = ISNULL(@IncludeBlank,0)
 
 	select r.RecipeId, r.CuisineID, r.UsersId, r.RecipeName, r.Calories, r.Datedrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePicture, IsDeleteAllowed = dbo.IsDeleteAllowed(r.RecipeId)
 	from Recipe r

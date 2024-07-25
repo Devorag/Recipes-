@@ -24,3 +24,5 @@ begin
 end 
 go 
 
+exec MeasurementGet
+

@@ -10,11 +10,11 @@ begin
     
     select @All = ISNULL(@All, 0), @IngredientId = ISNULL(@IngredientId,0), @IncludeBlank = ISNULL(@IncludeBlank,0)
 
-    select i.ingredientId, i.ingredientName
-    from ingredient i 
+    select i.IngredientId, i.IngredientName, i.IngredientPicture
+    FROM ingredient i 
     where i.IngredientId = @IngredientId 
-    or @All =1 
-    union SELECT 0, ''
+    or @All = 1 
+    union SELECT 0, '', ''
     where @IncludeBlank = 1 
     order by i.IngredientName
 
@@ -22,3 +22,5 @@ begin
 
 end 
 go 
+
+exec IngredientGet @All = 1 

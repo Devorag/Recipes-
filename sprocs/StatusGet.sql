@@ -7,7 +7,7 @@ AS
 BEGIN
     SET @RecipeName = NULLIF(@RecipeName, '')
 
-    SELECT r.RecipeId, r.RecipeName, r.RecipeStatus
+    SELECT r.RecipeId, r.RecipeName, r.RecipeStatus, r.DateArchived, r.DateDrafted, r.DatePublished
     FROM Recipe r
     WHERE (@RecipeId IS NULL OR r.RecipeId = @RecipeId)
       AND (@RecipeName IS NULL OR r.RecipeName LIKE '%' + @RecipeName + '%')
@@ -15,3 +15,5 @@ BEGIN
     ORDER BY r.RecipeName
 END
 GO
+
+

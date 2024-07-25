@@ -1,6 +1,7 @@
 create or alter procedure dbo.CourseUpdate(
 	@CourseId int  output,
 	@CourseType varchar (100),
+	@CourseSequence int,
 	@Message varchar(500) = '' output
 )
 as
@@ -11,8 +12,8 @@ begin
 	
 	if @CourseId = 0
 	begin
-		insert Course(CourseType)
-		values(@CourseType)
+		insert Course(CourseType, CourseSequence)
+		values(@CourseType, @CourseSequence)
 
 		select @CourseId= scope_identity()
 	end
@@ -20,7 +21,8 @@ begin
 	begin
 		update Course
 		set
-			CourseType = @CourseType
+			CourseType = @CourseType,
+			CourseSequence = @CourseSequence
 		where CourseId = @CourseId
 	end
 	

@@ -1,6 +1,6 @@
-create or alter procedure dbo.CookbokoRecipeUpdate(
+create or alter procedure dbo.CookbookRecipeUpdate(
     @CookbookRecipeId int output,
-    @RecipeId int ,
+    @CookbookId int ,
     @Message varchar(500) = '' output
 )
 as 
@@ -11,8 +11,8 @@ begin
 
     if @CookbookRecipeId = 0 
     begin 
-        insert CookbookRecipe(RecipeId) 
-        values (@RecipeId)
+        insert CookbookRecipe(CookbookId) 
+        values (@CookbookId)
 
         select @CookbookRecipeId = SCOPE_IDENTITY() 
     end 
@@ -20,7 +20,7 @@ begin
     begin 
         update CookbookRecipe
         set 
-            RecipeId = @RecipeId
+            RecipeId = @CookbookId
         where CookbookRecipeId = @CookbookRecipeId 
     end
 

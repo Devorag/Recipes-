@@ -53,11 +53,11 @@ create table dbo.Recipe(
         constraint u_Recipe_RecipeName unique,
     Calories int not null 
         constraint ck_recipe_calories_must_be_greater_than_zero check(Calories > 0),
-    DateDrafted datetime not null 
+    DateDrafted date not null 
         constraint ck_Recipe_DateDrafted_Cannot_be_future_Date check(DateDrafted <= getdate()),
-    DatePublished datetime null 
+    DatePublished date null 
         constraint ck_Recipe_DatePublished_Cannot_be_future_Date check(DatePublished <= getdate()),
-    DateArchived datetime null 
+    DateArchived date null 
         constraint ck_Recipe_DateArchived_Cannot_be_future_Date check(DateArchived <= getdate()),
     RecipeStatus as 
         case 
@@ -85,7 +85,7 @@ create table dbo.RecipeIngredient(
     UnitOfMeasureId int null 
         constraint f_UnitOfMeasure_RecipeIngredient foreign key references UnitOfMeasure(UnitOfMeasureId),
 -- SM Don't allow 0. 0.5 > 0
-	MeasurementAmount decimal(4,2) not null 
+	MeasurementAmount int not null 
         constraint ck_recipe_MeasurementAmount_cannot_be_a_negative_number check(MeasurementAmount >= 0),
     IngredientSequence int not null 
         constraint ck_RecipeIngredient_IngredientSequence_must_be_greater_than_zero CHECK(IngredientSequence > 0),

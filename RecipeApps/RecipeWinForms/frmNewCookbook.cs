@@ -6,12 +6,14 @@ namespace RecipeWinForms
 {
     public partial class frmNewCookbook : Form
     {
-        BindingSource bindingSource = new BindingSource();
-        int cookbookId = 0;
-        int recipeId = 0;
         DataTable dtCookbook = new();
         DataTable dtCookbookRecipe = new();
+        BindingSource bindingSource = new BindingSource();
+
         string deleteColName = "deletecol";
+        int cookbookId = 0;
+        int recipeId = 0;
+
         public frmNewCookbook()
         {
             InitializeComponent();
@@ -51,10 +53,12 @@ namespace RecipeWinForms
 
         private void LoadCookbookRecipe()
         {
-            dtCookbookRecipe = CookbookRecipe.LoadByRecipeId(recipeId);
+            dtCookbookRecipe = CookbookRecipe.LoadByCookbookId(cookbookId);
             gCookbookRecipe.Columns.Clear();
             gCookbookRecipe.DataSource = dtCookbookRecipe;
-            WindowsFormsUtility.AddComboBoxToGrid(gCookbookRecipe, DataMaintenance.GetDataList("Recipe"), "Recipe", "RecipeName");
+
+            DataTable dtRecipes = Cookbooks.GetRecipesList();
+            WindowsFormsUtility.AddComboBoxToGrid(gCookbookRecipe, dtRecipes, "Recipe", "RecipeName");
             WindowsFormsUtility.AddDeleteButtonToGrid(gCookbookRecipe, deleteColName);
             WindowsFormsUtility.FormatGridForEdit(gCookbookRecipe, "CookbookRecipe");
         }
@@ -73,7 +77,7 @@ namespace RecipeWinForms
 
         private void DeleteCookbookRecipe(int rowIndex)
         {
-            int id = WindowsFormsUtility.GetIdFromGrid(gCookbookRecipe, rowIndex, "PresidentMedalId");
+            int id = WindowsFormsUtility.GetIdFromGrid(gCookbookRecipe, rowIndex, "CookbookRecipeId");
             if (id > 0)
             {
                 try
@@ -131,7 +135,7 @@ namespace RecipeWinForms
             try
             {
                 ValidateForm();
-                Recipes.Save(dtCookbook);
+                Cookbooks.Save(dtCookbook);
                 b = true;
                 bindingSource.ResetBindings(false);
                 cookbookId = SQLUtility.GetValueFromFirstRowAsInt(dtCookbook, "CookbookId");
@@ -161,7 +165,7 @@ namespace RecipeWinForms
             Application.UseWaitCursor = true;
             try
             {
-                Recipes.Delete(dtCookbook, "Can't delete cookbook");
+                Cookbooks.Delete(dtCookbook, "Can't delete cookbook");
                 this.Close();
             }
             catch (Exception ex)

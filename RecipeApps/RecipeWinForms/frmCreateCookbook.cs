@@ -1,14 +1,7 @@
-﻿using CPUFramework;
-using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Windows.Forms;
-
-namespace RecipeWinForms
+﻿namespace RecipeWinForms
 {
     public partial class frmCreateCookbook : Form
     {
-        int usersId;
         int cookbookId;
         public frmCreateCookbook()
         {
@@ -19,33 +12,31 @@ namespace RecipeWinForms
 
         private void LoadForm()
         {
-            DataTable dtUsersName = Recipes.GetUsersList();
-            lstUsersName.DataSource = dtUsersName;
-            lstUsersName.ValueMember = "UsersId";
-            lstUsersName.DisplayMember = "UsersName";
+            DataTable dtUsers = Recipes.GetUsersList();
+            WindowsFormsUtility.SetListBinding(lstUsersName, dtUsers, null, "Users");
         }
+
+        public void CreateCookbook()
+        {
+            int usersId = WindowsFormsUtility.GetIdFromComboBox(lstUsersName);
+            try
+            {
+                int cookbookId = Cookbooks.AutoCreate(usersId);
+                MessageBox.Show("Cookbook created successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+                OpenCookbookList(cookbookId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error creating cookbook: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
 
         private void BtnCreate_Click(object? sender, EventArgs e)
         {
-            if (lstUsersName.SelectedValue != null && int.TryParse(lstUsersName.SelectedValue.ToString(), out int usersId))
-            {
-                DataRowView selectedUser = (DataRowView)lstUsersName.SelectedItem;
-
-                try
-                {
-                    Cookbooks.CreateCookbook(usersId, cookbookId);
-                    MessageBox.Show("Cookbook created successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    OpenCookbookList(cookbookId);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error creating cookbook: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select a valid user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            CreateCookbook();
         }
 
         private void OpenCookbookList(int cookbookId)

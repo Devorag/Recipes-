@@ -2,27 +2,23 @@
 {
     public class Cookbooks
     {
-        public static void CreateCookbook(int usersId, int cookbookId)
+        public static int  AutoCreate(int usersId)
         {
+            int cookbookId;
             SqlCommand cmd = SQLUtility.GetSQLCommand("CreateCookbook");
             SQLUtility.SetParamValue(cmd, "@UsersId", usersId);
-            SQLUtility.SetParamValue(cmd, "@CookbookId", cookbookId);
+            SQLUtility.SetParamValue(cmd, "@CookbookId", 0);
 
-            // Execute the stored procedure
             SQLUtility.ExecuteSQL(cmd);
 
-            // Retrieve the output parameter value
             cookbookId = (int)cmd.Parameters["@CookbookId"].Value;
+            return cookbookId;
         }
 
-        public static void CreateOlympicsBasedOnPrevious(int seasonid, int cityid, int year, int basedonolympicsid)
+        public static DataTable GetRecipesList()
         {
-            SqlCommand cmd = SQLUtility.GetSQLCommand("OlympicsCreateBasedOnPrevious");
-            SQLUtility.SetParamValue(cmd, "@SeasonId", seasonid);
-            SQLUtility.SetParamValue(cmd, "@CityId", cityid);
-            SQLUtility.SetParamValue(cmd, "@OlympicYear", year);
-            SQLUtility.SetParamValue(cmd, "@BaseOlympicsId", basedonolympicsid);
-            SQLUtility.ExecuteSQL(cmd);
+            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeList");
+            return SQLUtility.GetDataTable(cmd);
         }
 
         public static DataTable GetCookbooksList()
@@ -40,5 +36,38 @@
             return dt;
         }
 
+        public static void Save(DataTable dtCookbook)
+        {
+            if (dtCookbook.Rows.Count == 0)
+            {
+                throw new Exception("Cannot call Cookbook save method because there are no rows in the table");
+            }
+            DataRow r = dtCookbook.Rows[0];
+            
+            SQLUtility.SaveDataRow(r, "UpdateCookbook");
+        }
+
+
+        public static void Delete(DataTable dtCookbook, string message)
+        {
+            int id = (int)dtCookbook.Rows[0]["CookbookId"];
+            SqlCommand cmd = SQLUtility.GetSQLCommand("CookbookDelete");
+            SQLUtility.SetParamValue(cmd, "@CookbookId", id);
+            SQLUtility.SetParamValue(cmd, "@Message", message);
+
+            try
+            {
+                SQLUtility.ExecuteSQL(cmd);
+            }
+            catch (SqlException ex)
+            {
+                string userMessage = SQLUtility.ParseConstraintMsg(ex.Message);
+                DisplayMessageToUser(userMessage);
+            }
+        }
+        private static void DisplayMessageToUser(string message)
+        {
+            Console.WriteLine(message);
+        }
     }
 }

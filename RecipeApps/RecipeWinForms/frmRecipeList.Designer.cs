@@ -82,6 +82,8 @@
             // 
             // gRecipes
             // 
+            gRecipes.BackgroundColor = SystemColors.Control;
+            gRecipes.BorderStyle = BorderStyle.None;
             gRecipes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gRecipes.Dock = DockStyle.Fill;
             gRecipes.Location = new Point(10, 136);
