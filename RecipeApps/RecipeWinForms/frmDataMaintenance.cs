@@ -1,13 +1,11 @@
-﻿using CPUFramework;
-
-namespace RecipeWinForms
+﻿namespace RecipeWinForms
 {
     public partial class frmDataMaintenance : Form
     {
 
-        private enum TableTypeEnum { User, Cuisine, Ingredient, Measurement, Course }
+        private enum TableTypeEnum { Users, Cuisine, Ingredient, Measurement, Course }
         DataTable dtList = new();
-        TableTypeEnum currentTableType = TableTypeEnum.User;
+        TableTypeEnum currentTableType = TableTypeEnum.Users;
         string deleteColName = "deletecol";
         public frmDataMaintenance()
         {
@@ -52,7 +50,20 @@ namespace RecipeWinForms
 
         private void Delete(int rowIndex)
         {
-            int id = WindowsFormsUtility.GetIdFromGrid(gDataMaint, rowIndex, currentTableType.ToString());
+            int id = WindowsFormsUtility.GetIdFromGrid(gDataMaint, rowIndex, currentTableType.ToString() + "Id");
+            
+            if (currentTableType == TableTypeEnum.Users)
+            {
+                string confirmMessage = currentTableType == TableTypeEnum.Users 
+                    ? "Are you sure you want to delete this user and all related recipes, meals, and cookbooks?"
+                    : "Are you sure you want to delete?";
+                var response = MessageBox.Show(confirmMessage, "Confirm Delete", MessageBoxButtons.YesNo);
+                if (response == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             if (id != 0)
             {
                 try
@@ -80,7 +91,7 @@ namespace RecipeWinForms
                     c.Click += C_Click;
                 }
             }
-            optUsers.Tag = TableTypeEnum.User;
+            optUsers.Tag = TableTypeEnum.Users;
             optCuisine.Tag = TableTypeEnum.Cuisine;
             optIngredients.Tag = TableTypeEnum.Ingredient;
             optMeasurements.Tag = TableTypeEnum.Measurement;
@@ -92,14 +103,6 @@ namespace RecipeWinForms
             if (sender is Control && ((Control)sender).Tag is TableTypeEnum)
             {
                 BindData((TableTypeEnum)((Control)sender).Tag);
-            }
-        }
-
-        private void GDataMaint_CellContentClick(object? sender, DataGridViewCellEventArgs e)
-        {
-            if (gDataMaint.Columns[e.ColumnIndex].Name == deleteColName)
-            {
-                Delete(e.RowIndex);
             }
         }
 
@@ -123,6 +126,14 @@ namespace RecipeWinForms
                         this.Activate();
                         break;
                 }
+            }
+        }
+
+        private void GDataMaint_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (gDataMaint.Columns[e.ColumnIndex].Name == deleteColName)
+            {
+                Delete(e.RowIndex);
             }
         }
 

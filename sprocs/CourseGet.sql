@@ -19,6 +19,6 @@ begin
     order by c.CourseType
 
     return @return 
-
+ 
 end 
 go 

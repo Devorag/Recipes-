@@ -14,3 +14,7 @@ begin
 
 end 
 go 
+
+declare @id int 
+select top 1 @id = recipestepsid from RecipeSteps
+exec RecipeStepsDelete @RecipeStepsId = @id 

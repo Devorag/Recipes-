@@ -23,7 +23,7 @@ begin
 			IngredientName = @IngredientName
 		where IngredientId = @IngredientId
 	end
-	
+	 
 	return @return
 end
 go

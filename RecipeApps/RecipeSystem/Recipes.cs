@@ -10,6 +10,16 @@
             return dt;
         }
 
+        public static DataTable GetRecipeList()
+        {
+            DataTable dt = new();
+            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeGet");
+            SQLUtility.SetParamValue(cmd, "@All", 1);
+            SQLUtility.SetParamValue(cmd, "@IncludeBlank", 1);
+            dt = SQLUtility.GetDataTable(cmd);
+            return dt;
+        }
+
         public static DataTable Load(int recipeId)
         {
             DataTable dt = new();
@@ -39,7 +49,31 @@
             return dt;
         }
 
-        public static void Save(DataTable dtRecipes)
+        public static DataTable RecipeStatusGet(int recipeId = 0, string recipeName = null, bool all = false)
+        {
+            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeStatusGet");
+
+            SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
+            SQLUtility.SetParamValue(cmd, "@RecipeName", recipeName);
+            SQLUtility.SetParamValue(cmd, "@All", 1);
+            return SQLUtility.GetDataTable(cmd);
+        }
+
+        public static string ChangeRecipeStatus(int recipeId, string newStatus)
+        {
+            using (SqlCommand cmd = SQLUtility.GetSQLCommand("ChangeRecipeStatus"))
+            {
+                SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
+                SQLUtility.SetParamValue(cmd, "@NewStatus", newStatus);
+                SQLUtility.SetParamValue(cmd, "@Message", DBNull.Value); 
+
+                SQLUtility.ExecuteSQL(cmd);
+                string message = Convert.ToString(cmd.Parameters["@Message"].Value);
+                return message;
+            }
+        }
+
+            public static void Save(DataTable dtRecipes)
         {
             if (dtRecipes.Rows.Count == 0)
             {
@@ -54,7 +88,7 @@
             int id = (int)dtRecipes.Rows[0]["RecipeId"];
             SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeDelete");
             SQLUtility.SetParamValue(cmd, "@RecipeId", id);
-            SQLUtility.SetParamValue(cmd, "@Message", message); 
+            SQLUtility.SetParamValue(cmd, "@Message", message);
 
             try
             {

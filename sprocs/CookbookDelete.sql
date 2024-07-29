@@ -13,7 +13,7 @@ begin
         DELETE FROM CookbookRecipe WHERE CookbookId = @CookbookId
 
         -- Delete recipe
-        DELETE FROM Recipe WHERE RecipeId = @CookbookId;
+        DELETE FROM Cookbook WHERE CookbookId = @CookbookId;
 
         COMMIT;
 
@@ -28,3 +28,7 @@ begin
     END CATCH
 end
 go
+
+declare @id int 
+select top 1 @id = CookbookId from Cookbook 
+exec CookbookDelete @CookbookId = @id 

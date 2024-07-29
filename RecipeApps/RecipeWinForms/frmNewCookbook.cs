@@ -1,6 +1,4 @@
-﻿using CPUFramework;
-using RecipeSystem;
-using System.Windows.Forms;
+﻿using RecipeSystem;
 
 namespace RecipeWinForms
 {
@@ -21,6 +19,14 @@ namespace RecipeWinForms
             btnDelete.Click += BtnDelete_Click;
             btnSaveRecipe.Click += BtnSaveRecipe_Click;
             this.FormClosing += FrmNewCookbook_FormClosing;
+            gCookbookRecipe.CellContentClick += GCookbookRecipe_CellContentClick;
+            lstUsersName.SelectedIndexChanged += LstUsersName_SelectedIndexChanged;
+            this.Shown += FrmNewCookbook_Shown;
+        }
+
+        private void FrmNewCookbook_Shown(object? sender, EventArgs e)
+        {
+            LoadCookbookRecipe();
         }
 
         public void LoadForm(int cookbookidval)
@@ -36,7 +42,7 @@ namespace RecipeWinForms
                 dtCookbook.Rows.Add(newRow);
             }
 
-;           DataTable dtUsers = Recipes.GetUsersList();
+            DataTable dtUsers = Recipes.GetUsersList();
             WindowsFormsUtility.SetListBinding(lstUsersName, dtUsers, dtCookbook, "Users");
 
             WindowsFormsUtility.SetControlBinding(txtCookbookName, bindingSource);
@@ -48,7 +54,7 @@ namespace RecipeWinForms
             LoadCookbookRecipe();
             SetButtonsEnabledBasedOnNewRecord();
 
-            this.Show();
+            dtCookbook.AcceptChanges();
         }
 
         private void LoadCookbookRecipe()
@@ -61,13 +67,14 @@ namespace RecipeWinForms
             WindowsFormsUtility.AddComboBoxToGrid(gCookbookRecipe, dtRecipes, "Recipe", "RecipeName");
             WindowsFormsUtility.AddDeleteButtonToGrid(gCookbookRecipe, deleteColName);
             WindowsFormsUtility.FormatGridForEdit(gCookbookRecipe, "CookbookRecipe");
+
         }
 
         private void SaveCookbookRecipe()
         {
             try
             {
-                CookbookRecipe.SaveDataTable(dtCookbookRecipe, recipeId);
+                CookbookRecipe.SaveDataTable(dtCookbookRecipe, cookbookId);
             }
             catch (Exception ex)
             {
@@ -98,7 +105,7 @@ namespace RecipeWinForms
 
         private void SetButtonsEnabledBasedOnNewRecord()
         {
-            bool b = recipeId == 0 ? false : true;
+            bool b = cookbookId == 0 ? false : true;
             btnDelete.Enabled = b;
             btnSaveRecipe.Enabled = b;
         }
@@ -109,7 +116,7 @@ namespace RecipeWinForms
             int pkValue = SQLUtility.GetValueFromFirstRowAsInt(dtCookbook, "CookbookId");
             if (pkValue > 0)
             {
-                value = "Cookbook -" + SQLUtility.GetValueFromFirstRowAsString(dtCookbook, "CookbookName");
+                value = "Cookbook - " + SQLUtility.GetValueFromFirstRowAsString(dtCookbook, "CookbookName");
             }
             return value;
         }
@@ -128,6 +135,18 @@ namespace RecipeWinForms
             }
         }
 
+        private void ClearUserError()
+        {
+            DataRow row = dtCookbook.Rows[0];
+            bool isUserSelected = row["UsersId"] != DBNull.Value;
+
+            if (isUserSelected)
+            {
+                errorProvider.SetError(lstUsersName, string.Empty);
+            }
+        }
+
+
         private bool Save()
         {
             bool b = false;
@@ -135,7 +154,10 @@ namespace RecipeWinForms
             try
             {
                 ValidateForm();
-                Cookbooks.Save(dtCookbook);
+                DataRow row = dtCookbook.Rows[0];
+                bool isActive = ckActive.Checked;
+
+                Cookbooks.Save(dtCookbook, isActive);
                 b = true;
                 bindingSource.ResetBindings(false);
                 cookbookId = SQLUtility.GetValueFromFirstRowAsInt(dtCookbook, "CookbookId");
@@ -157,7 +179,7 @@ namespace RecipeWinForms
         private void Delete()
         {
 
-            var response = MessageBox.Show("Are you sure you want to delete this recipe?", "Recipes", MessageBoxButtons.YesNo);
+            var response = MessageBox.Show("Are you sure you want to delete this cookbook?", "Recipes", MessageBoxButtons.YesNo);
             if (response == DialogResult.No)
             {
                 return;
@@ -207,6 +229,12 @@ namespace RecipeWinForms
             }
         }
 
+        private void LstUsersName_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            ClearUserError();
+        }
+
+
         private void BtnSaveRecipe_Click(object? sender, EventArgs e)
         {
             SaveCookbookRecipe();
@@ -233,6 +261,14 @@ namespace RecipeWinForms
                         this.Activate();
                         break;
                 }
+            }
+        }
+
+        private void GCookbookRecipe_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == gCookbookRecipe.Columns[deleteColName].Index && e.RowIndex >= 0)
+            {
+                DeleteCookbookRecipe(e.RowIndex);
             }
         }
     }

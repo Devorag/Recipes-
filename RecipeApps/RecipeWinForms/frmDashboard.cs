@@ -25,7 +25,7 @@
 
         private void OpenForm(Type frmType)
         {
-            if(this.MdiParent != null && this.MdiParent is frmMain)
+            if (this.MdiParent != null && this.MdiParent is frmMain)
             {
                 ((frmMain)this.MdiParent).OpenForm(frmType);
             }
@@ -45,5 +45,6 @@
         {
             OpenForm(typeof(frmMealList));
         }
+
     }
 }

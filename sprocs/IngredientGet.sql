@@ -10,11 +10,11 @@ begin
     
     select @All = ISNULL(@All, 0), @IngredientId = ISNULL(@IngredientId,0), @IncludeBlank = ISNULL(@IncludeBlank,0)
 
-    select i.IngredientId, i.IngredientName, i.IngredientPicture
+    select i.IngredientId, i.IngredientName
     FROM ingredient i 
     where i.IngredientId = @IngredientId 
     or @All = 1 
-    union SELECT 0, '', ''
+    union SELECT 0, ''
     where @IncludeBlank = 1 
     order by i.IngredientName
 

@@ -3,21 +3,26 @@ as
 begin 
 
     declare @return int = 0 
- 
     ;
     with x as (
-        select cr.cookbookId, NumRecipes = count(distinct cr.recipeID) 
-        from recipe r 
-        join CookbookRecipe cr 
-        on cr.RecipeId = r.RecipeId 
-        group by cr.CookbookId
+        SELECT 
+            c.CookbookId,
+            c.CookbookName, 
+            NumRecipes = COUNT(cr.RecipeId)
+        FROM 
+            Cookbook c
+        LEFT JOIN 
+            CookbookRecipe cr ON c.CookbookId = cr.CookbookId
+        GROUP BY 
+            c.CookbookId,
+            c.CookbookName
     )
-    
-    select c.CookbookId, c.CookbookName, Author = u.UsersName, x.NumRecipes, c.Price 
+
+    select c.CookbookId, c.CookbookName, Author = u.UsersName, NumRecipes = ISNULL(x.NumRecipes,0), c.Price
     from x 
     join Cookbook c 
-    on x.cookbookId = c.CookbookId 
-    join users u 
+    on x.cookbookName = c.CookbookName
+    left join users u 
     on u.UsersId = c.UsersId 
     order by c.CookbookName 
 

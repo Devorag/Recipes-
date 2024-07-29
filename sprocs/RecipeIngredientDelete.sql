@@ -14,3 +14,7 @@ begin
 
 end 
 go 
+
+declare @id int 
+select top 1 @id = RecipeIngredientId from RecipeIngredient
+exec RecipeIngredientDelete @RecipeIngredientId = @id 

@@ -23,7 +23,7 @@ begin
 			CuisineName = @CuisineName
 		where CuisineId = @CuisineId
 	end
-	
+ 	
 	return @return
 end
 go

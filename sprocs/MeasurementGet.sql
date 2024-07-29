@@ -24,5 +24,5 @@ begin
 end 
 go 
 
-exec MeasurementGet
+exec MeasurementGet @All = 1
 

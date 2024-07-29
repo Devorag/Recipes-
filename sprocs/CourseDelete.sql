@@ -7,13 +7,32 @@ begin
     declare @return int = 0 
 
     BEGIN TRY
-        BEGIN TRANSACTION;
+        BEGIN TRANSACTION
 
-        -- Delete related data
-        delete from MealCourseRecipe where MealCourseId = @CourseId
-        DELETE FROM MealCourse WHERE CourseId = @CourseId
+        DECLARE @MealCourseId INT;
+        DECLARE MealCourseCursor CURSOR FOR 
+        SELECT MealCourseId 
+        FROM MealCourse 
+        WHERE CourseId = @CourseId;
 
-        -- Delete recipe
+        OPEN MealCourseCursor;
+        FETCH NEXT FROM MealCourseCursor INTO @MealCourseId;
+
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            -- Delete related MealCourseRecipes
+            DELETE FROM MealCourseRecipe WHERE MealCourseId = @MealCourseId;
+
+            -- Delete the MealCourse itself
+            DELETE FROM MealCourse WHERE MealCourseId = @MealCourseId;
+
+            FETCH NEXT FROM MealCourseCursor INTO @MealCourseId;
+        END
+
+        CLOSE MealCourseCursor;
+        DEALLOCATE MealCourseCursor;
+
+        -- Delete the Course itself
         DELETE FROM Course WHERE CourseId = @CourseId;
 
         COMMIT;
@@ -28,3 +47,11 @@ begin
     end catch
 END 
 GO
+
+DECLARE @id INT;
+SELECT TOP 1 @id = CourseId FROM Course;
+DECLARE @Message VARCHAR(500);
+
+EXEC dbo.CourseDelete @CourseId = @id--, @Message = @Message OUTPUT;
+
+SELECT @Message;

@@ -20,7 +20,7 @@ begin
         left join users u 
         on u.usersid = r.usersid 
         order by r.RecipeStatus desc 
-        
+         
         return @return
 end 
 go

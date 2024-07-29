@@ -13,7 +13,7 @@ begin
     select r.RecipeStepsId, r.Instructions
     from RecipeSteps r
     where r.RecipeStepsId = @StepsId 
-    or @All =1 
+    or @All = 1 
     union SELECT 0, ''
     where @IncludeBlank = 1 
     order by r.Instructions
@@ -23,4 +23,4 @@ begin
 end 
 go 
 
-exec StepsGet
+exec StepsGet @All = 1 

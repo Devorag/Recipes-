@@ -7,17 +7,14 @@ AS
 BEGIN
     DECLARE @CurrentDate DATE = CAST(GETDATE() as date)
 
-    -- Initialize message
     SET @Message = ''
 
-    -- Check if the recipe exists
     IF NOT EXISTS (SELECT 1 FROM Recipe WHERE RecipeId = @RecipeId)
     BEGIN
         SET @Message = 'Recipe not found.'
         RETURN
     END
 
-    -- Update the corresponding date field based on the new status
     IF @NewStatus = 'Drafted'
     BEGIN
         UPDATE Recipe

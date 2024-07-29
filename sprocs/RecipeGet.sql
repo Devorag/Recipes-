@@ -20,7 +20,6 @@ begin
 end
 go
 
-
 exec RecipeGet @All = 1
 
 declare @id int

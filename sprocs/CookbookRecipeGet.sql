@@ -1,24 +1,30 @@
-create or alter procedure dbo.CookbookRecipeGet(
-    @CookbookRecipeId int = 0,
-    @CookbookId int = 0,
-    @All bit = 0, 
-    @Message varchar(500) = '' output
+CREATE OR ALTER PROCEDURE dbo.CookbookRecipeGet(
+    @CookbookRecipeId INT = 0,
+    @CookbookId INT = 0,
+    @All BIT = 0, 
+    @Message VARCHAR(500) = '' OUTPUT
 )
-as 
-begin 
-    declare @return int = 0 
+AS 
+BEGIN 
+    DECLARE @return INT = 0;
 
-    select @All = isnull(@All,0), @CookbookRecipeId = ISNULL(@CookbookRecipeId,0), @CookbookId = ISNULL(@CookbookId,0)
+    SELECT @All = ISNULL(@All, 0), 
+           @CookbookRecipeId = ISNULL(@CookbookRecipeId, 0), 
+           @CookbookId = ISNULL(@CookbookId, 0);
 
-    select cr.CookbookRecipeId, cr.CookbookId, Sequence = cr.RecipeSequence
-    from CookbookRecipe cr 
-    where cr.CookbookRecipeId = @CookbookRecipeId
-    or @All = 1 
-    or cr.CookbookId = @CookbookId
+    SELECT cr.CookbookRecipeId, 
+           cr.CookbookId, 
+           cr.RecipeId, 
+           cr.RecipeSequence
+    FROM CookbookRecipe cr 
+    WHERE (@All = 1) OR 
+          (cr.CookbookRecipeId = @CookbookRecipeId) OR 
+          (cr.CookbookId = @CookbookId)
+    ORDER BY cr.recipeSequence 
 
-    return @return 
+    RETURN @return;
+END 
+GO
 
-end 
-go 
 
-exec CookbookRecipeGet  @All = 1 
+exec CookbookRecipeGet @All = 1 

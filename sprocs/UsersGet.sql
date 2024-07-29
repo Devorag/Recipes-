@@ -1,5 +1,5 @@
 
-create or alter procedure dbo.UserGet(@UsersId int = 0, @UsersName varchar(100) = '', @All bit = 0, @IncludeBlank bit = 0)
+create or alter procedure dbo.UsersGet(@UsersId int = 0, @UsersName varchar(100) = '', @All bit = 0, @IncludeBlank bit = 0)
 as  
 begin 
 
@@ -16,11 +16,11 @@ begin
 end
 go
 
-exec UserGet @UsersName = '' 
-exec UserGet @UsersName = 'a'
+exec UsersGet @UsersName = '' 
+exec UsersGet @UsersName = 'a'
 
-exec UserGet @All = 1
+exec UsersGet @All = 1
 
 declare @id int 
 select top 1 @id = u.UsersId from Users u 
-exec UserGet @UsersId = @id
+exec UsersGet @UsersId = @id

@@ -25,7 +25,7 @@ begin
 			CourseSequence = @CourseSequence
 		where CourseId = @CourseId
 	end
-	
+	 
 	return @return
 end
 go

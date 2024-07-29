@@ -5,7 +5,7 @@ create or alter procedure dbo.RecipeStepsGet(
     @Message varchar(500) = '' output
 )
 as 
-begin 
+begin  
     declare @return int = 0 
 
     select @All = isnull(@All,0), @RecipeStepsId = ISNULL(@RecipestepsId,0), @RecipeId = ISNULL(@RecipeId,0)
@@ -15,6 +15,7 @@ begin
     where rs.RecipeStepsId = @RecipeStepsId 
     or @All = 1 
     or rs.recipeid = @RecipeId 
+    order by rs.stepsequence
 
     return @return 
 

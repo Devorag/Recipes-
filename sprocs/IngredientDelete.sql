@@ -28,3 +28,7 @@ begin
     
 END 
 GO
+
+declare @id int 
+select top 1 @id = ingredientid from ingredient 
+exec IngredientDelete @IngredientId = @id 

@@ -1,19 +1,21 @@
 ﻿using CPUFramework;
+using RecipeSystem;
 
 namespace RecipeWinForms
 {
     public partial class frmCloneRecipe : Form
     {
+        int newRecipeId; 
+
         public frmCloneRecipe()
         {
             InitializeComponent();
             LoadForm();
             btnClone.Click += btnClone_Click;
         }
-
         public void LoadForm()
         {
-            DataTable dtRecipeName = GetRecipeList();
+            DataTable dtRecipeName = Recipes.GetRecipeList();
 
             lstRecipe.DataSource = dtRecipeName;
             lstRecipe.ValueMember = "RecipeId";
@@ -26,21 +28,18 @@ namespace RecipeWinForms
                 SqlCommand cmd = SQLUtility.GetSQLCommand("CloneRecipe");
 
                 SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
-                SQLUtility.SetParamValue(cmd, "@NewRecipeId", DBNull.Value); // Output parameter
-                SQLUtility.SetParamValue(cmd, "@Message", DBNull.Value); // Output parameter
-
-                // Execute the stored procedure
+                SQLUtility.SetParamValue(cmd, "@NewRecipeId", DBNull.Value); 
+                SQLUtility.SetParamValue(cmd, "@Message", DBNull.Value);
                 SQLUtility.ExecuteSQL(cmd);
 
-                // Retrieve output parameter values
-                int newRecipeId = Convert.ToInt32(cmd.Parameters["@NewRecipeId"].Value);
-                string message = Convert.ToString(cmd.Parameters["@Message"].Value);
+                newRecipeId = (int)(cmd.Parameters["@NewRecipeId"].Value);
+                string message = (cmd.Parameters["@Message"].Value).ToString();
 
                 if (newRecipeId > 0)
                 {
                     MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    OpenRecipeForm(newRecipeId);
                     this.Close();
-                    OpenRecipeList(newRecipeId);
                 }
                 else
                 {
@@ -53,29 +52,13 @@ namespace RecipeWinForms
             }
         }
 
-        public static DataTable GetRecipeList()
-        {
-            DataTable dt = new();
-            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeGet");
-            SQLUtility.SetParamValue(cmd, "@All", 1);
-            SQLUtility.SetParamValue(cmd, "@IncludeBlank", 1);
-            dt = SQLUtility.GetDataTable(cmd);
-            return dt;
-
-        }
-
-
-        private void OpenRecipeList(int recipeId)
-        {
-            OpenForm(typeof(frmRecipeList));
-        }
-
-        private void OpenForm(Type frmType)
+        private void OpenRecipeForm(int newRecipeId)
         {
             if (this.MdiParent != null && this.MdiParent is frmMain)
             {
-                ((frmMain)this.MdiParent).OpenForm(frmType);
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmRecipeList), newRecipeId);
             }
+            this.Close();
         }
 
         private void btnClone_Click(object sender, EventArgs e)

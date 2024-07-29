@@ -8,12 +8,6 @@ namespace RecipeWinForms
         int recipeId = 0;
         string currentRecipe;
         string currentStatus;
-        public void LoadForm(int recipeIdVal)
-        {
-            LoadRecipeForm(recipeIdVal);
-            LoadCurrentStatus();
-        }
-
         public frmChangeStatus()
         {
             InitializeComponent();
@@ -23,27 +17,24 @@ namespace RecipeWinForms
             btnArchive.Click += BtnArchive_Click;
         }
 
-        private DataTable RecipeStatusGet(int recipeId = 0, string recipeName = null, bool all = false)
+        public void LoadForm(int recipeIdVal)
         {
-            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeStatusGet");
-
-            SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
-            SQLUtility.SetParamValue(cmd, "@RecipeName", recipeName);
-            SQLUtility.SetParamValue(cmd, "@All", 1);
-            return SQLUtility.GetDataTable(cmd);
+            this.recipeId = recipeIdVal;
+            LoadRecipeForm(recipeIdVal);
+            LoadCurrentStatus();
         }
 
         private void LoadCurrentStatus()
         {
             try
             {
-                DataTable dtStatus = RecipeStatusGet(recipeId);
+                DataTable dtStatus = Recipes.RecipeStatusGet(recipeId);
                 if (dtStatus.Rows.Count > 0)
                 {
                     DataRow row = dtStatus.Rows[0];
                     lblRecipe.Text = row["RecipeName"].ToString();
-                    currentStatus = "Current Status: " + row["RecipeStatus"].ToString();
-                    lblCurrentStatus.Text = currentStatus;
+                    currentStatus = row["RecipeStatus"].ToString();
+                    lblCurrentStatus.Text = "Current Status: " + currentStatus;
                     UpdateStatusDate(currentStatus);
                     DisableCurrentStatusButton();
                 }
@@ -58,27 +49,19 @@ namespace RecipeWinForms
         {
             try
             {
-                using (SqlCommand cmd = SQLUtility.GetSQLCommand("dbo.ChangeRecipeStatus"))
+                string message = Recipes.ChangeRecipeStatus(recipeId, newStatus);
+                MessageBox.Show(message);
+                OpenRecipeForm();
+                this.Close();
+
+                if (message.Contains("changed"))
                 {
-                    SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
-                    SQLUtility.SetParamValue(cmd, "@NewStatus", newStatus);
-                    SQLUtility.SetParamValue(cmd, "@Message", DBNull.Value); // Output parameter
-
-                    SQLUtility.ExecuteSQL(cmd);
-                    string message = Convert.ToString(cmd.Parameters["@Message"].Value);
-
-                    MessageBox.Show(message);
-                    this.Close();
-                    OpenRecipeForm(typeof(frmNewRecipe));
-
-                    if (message.Contains("changed"))
-                    {
-                        currentStatus = newStatus;
-                        lblCurrentStatus.Text = currentStatus;
-                        UpdateStatusDate(newStatus);
-                        DisableCurrentStatusButton();
-                    }
+                    currentStatus = newStatus;
+                    lblCurrentStatus.Text = currentStatus;
+                    UpdateStatusDate(newStatus);
+                    DisableCurrentStatusButton();
                 }
+
             }
             catch (Exception ex)
             {
@@ -103,7 +86,6 @@ namespace RecipeWinForms
                     break;
             }
         }
-
         private void LoadRecipeForm(int recipeIdval)
         {
             recipeId = recipeIdval;
@@ -118,12 +100,11 @@ namespace RecipeWinForms
             WindowsFormsUtility.SetControlBinding(lblDatePublished, bindingSource);
             WindowsFormsUtility.SetControlBinding(lblDateArchived, bindingSource);
         }
-
         private void DisableCurrentStatusButton()
         {
-            btnDraft.Enabled = lblCurrentStatus.Text != "Drafted";
-            btnPublish.Enabled = lblCurrentStatus.Text != "Published";
-            btnArchive.Enabled = lblCurrentStatus.Text != "Archived";
+            btnDraft.Enabled = currentStatus != "Drafted";
+            btnPublish.Enabled = currentStatus != "Published";
+            btnArchive.Enabled = currentStatus != "Archived";
         }
 
         private bool ConfirmStatusChange(string status)
@@ -131,11 +112,11 @@ namespace RecipeWinForms
             return MessageBox.Show($"Are you sure you want to change this recipe to {status}?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes;
         }
 
-        private void OpenRecipeForm(Type frmType)
+        private void OpenRecipeForm()
         {
             if (this.MdiParent != null && this.MdiParent is frmMain)
             {
-                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewRecipe));
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewRecipe), recipeId);
             }
         }
 
@@ -145,7 +126,6 @@ namespace RecipeWinForms
             {
                 ChangeStatus("Archived");
             }
-
         }
 
         private void BtnPublish_Click(object? sender, EventArgs e)
@@ -154,7 +134,6 @@ namespace RecipeWinForms
             {
                 ChangeStatus("Published");
             }
-
         }
 
         private void BtnDraft_Click(object? sender, EventArgs e)

@@ -11,20 +11,20 @@ begin
 
     if @RecipeStepsId = 0 
     begin 
-        insert RecipeIngredient(RecipeId) 
+        insert RecipeSteps(RecipeId) 
         values (@RecipeId)
 
         select @RecipeStepsId = SCOPE_IDENTITY() 
     end 
     else 
     begin 
-        update RecipeIngredient 
+        update RecipeSteps 
         set 
             RecipeId = @RecipeId 
-        where RecipeIngredientId = @RecipeStepsId 
+        where RecipeStepsId = @RecipeStepsId 
     end
 
     return @return 
-
+ 
 end 
 go 

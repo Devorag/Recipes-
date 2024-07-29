@@ -13,7 +13,7 @@ begin
     union select 'Cookbooks', count(distinct c.cookbookId)
     from Cookbook c  
     order by Type desc 
-
+ 
 end
 go 
 

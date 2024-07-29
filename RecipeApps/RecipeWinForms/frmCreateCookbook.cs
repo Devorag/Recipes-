@@ -21,34 +21,43 @@
             int usersId = WindowsFormsUtility.GetIdFromComboBox(lstUsersName);
             try
             {
-                int cookbookId = Cookbooks.AutoCreate(usersId);
+                object result = Cookbooks.AutoCreate(usersId);
+                if (result == DBNull.Value || result == null)
+                {
+                    throw new InvalidOperationException("Cookbook creation failed: No valid ID returned.");
+                }
+
+                int cookbookId;
+                if (!int.TryParse(result.ToString(), out cookbookId))
+                {
+                    throw new InvalidOperationException("Cookbook creation failed: Invalid ID returned.");
+                }
+
                 MessageBox.Show("Cookbook created successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                OpenForm();
                 this.Close();
-                OpenCookbookList(cookbookId);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error creating cookbook: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
+            finally
+            {
+                btnCreate.Enabled = true;
+            }
         }
-
 
         private void BtnCreate_Click(object? sender, EventArgs e)
         {
+            btnCreate.Enabled = false;
             CreateCookbook();
         }
 
-        private void OpenCookbookList(int cookbookId)
-        {
-            OpenForm(typeof(frmCookbookList));
-        }
-
-        private void OpenForm(Type frmType)
+        private void OpenForm()
         {
             if (this.MdiParent != null && this.MdiParent is frmMain)
             {
-                ((frmMain)this.MdiParent).OpenForm(frmType);
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmCookbookList), cookbookId);
             }
         }
     }

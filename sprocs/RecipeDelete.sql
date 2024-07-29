@@ -7,8 +7,6 @@ BEGIN
 
     DECLARE @return INT = 0;
 
-
-    -- Check if the recipe can be deleted based on business rules
     IF not EXISTS (
         SELECT 1
         FROM Recipe r 
@@ -31,15 +29,12 @@ BEGIN
         RETURN @return;
     END
 
-    -- Proceed with deletion
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- Delete related data
         DELETE FROM RecipeIngredient WHERE RecipeId = @RecipeId;
         DELETE FROM RecipeSteps WHERE RecipeId = @RecipeId;
 
-        -- Delete recipe
         DELETE FROM Recipe WHERE RecipeId = @RecipeId;
 
         COMMIT;
@@ -50,9 +45,6 @@ BEGIN
     BEGIN CATCH
         ROLLBACK;
 
-        -- -- Handle error message
-        -- SET @return = -1; -- Set a distinct value for errors
-        -- SET @Message = ERROR_MESSAGE();
  END CATCH
     RETURN @return;
 END

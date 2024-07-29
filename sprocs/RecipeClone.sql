@@ -15,7 +15,6 @@ BEGIN
             @DatePublished DATETIME2,
             @DateArchived DATETIME2;
 
-    -- Retrieve the existing recipe details
     SELECT @CuisineId = CuisineId,
            @UsersId = UsersId,
            @RecipeName = RecipeName,
@@ -32,14 +31,11 @@ BEGIN
         RETURN;
     END
 
-    -- Append " - clone" to the RecipeName
     SET @RecipeName = @RecipeName + ' - clone';
 
-    -- Insert the new recipe
     INSERT INTO Recipe (CuisineId, UsersId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived)
     VALUES (@CuisineId, @UsersId, @RecipeName, @Calories, @DateDrafted, @DatePublished, @DateArchived);
 
-    -- Retrieve the new RecipeId
     SET @NewRecipeId = SCOPE_IDENTITY();
 
     SET @Message = 'Recipe cloned successfully';

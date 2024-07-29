@@ -3,7 +3,7 @@ create or alter proc dbo.UpdateCookbook(
     @UsersId int, 
     @CookbookName varchar(100), 
     @Price int, 
-    @Active int, 
+    @Active bit = 1,
     @DateCreated DATETIME2, 
     @Message varchar(500) = ' ' output
 )
@@ -27,7 +27,7 @@ begin
         UsersId = @UsersId, 
         CookbookName = @CookbookName, 
         Price = @Price, 
-        Active = @Active, 
+        Active = @Active,
         DateCreated = @DateCreated
     where CookbookId = @CookbookId
 end 
@@ -35,4 +35,4 @@ end
     return @return 
     
 end
-go 
+go  

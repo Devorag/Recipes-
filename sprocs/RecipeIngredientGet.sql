@@ -1,24 +1,53 @@
-create or alter procedure dbo.RecipeIngredientGet(
-    @RecipeIngredientId int = 0,
-    @RecipeId int = 0,
-    @All bit = 0, 
-    @Message varchar(500) = '' output
+CREATE OR ALTER PROCEDURE dbo.RecipeIngredientGet(
+    @RecipeIngredientId INT = 0,
+    @RecipeId INT = 0,
+    @All BIT = 0, 
+    @Message VARCHAR(500) = '' OUTPUT
 )
-as 
-begin 
-    declare @return int = 0 
+AS 
+BEGIN 
+    DECLARE @return INT = 0 
 
-    select @All = isnull(@All,0), @RecipeIngredientId = ISNULL(@RecipeIngredientId,0), @RecipeId = ISNULL(@RecipeId,0)
+    SELECT @All = ISNULL(@All, 0), 
+           @RecipeIngredientId = ISNULL(@RecipeIngredientId, 0), 
+           @RecipeId = ISNULL(@RecipeId, 0)
 
-    select ri.RecipeIngredientId, ri.RecipeId, Quantity = ri.MeasurementAmount, Sequence = ri.IngredientSequence
-    from RecipeIngredient ri 
-    where ri.RecipeIngredientId = @RecipeIngredientId 
-    or @All = 1 
-    or ri.RecipeId = @RecipeId
+    IF @All = 1
+    BEGIN
+        SELECT ri.RecipeIngredientId, 
+               ri.RecipeId, 
+               ri.IngredientId, 
+               ri.UnitOfMeasureId, 
+               ri.MeasurementAmount, 
+               ri.IngredientSequence
+        FROM RecipeIngredient ri 
+        order by ri.ingredientsequence
+    END
+    ELSE IF @RecipeIngredientId > 0
+    BEGIN
+        SELECT ri.RecipeIngredientId, 
+               ri.RecipeId, 
+               ri.IngredientId, 
+               ri.UnitOfMeasureId, 
+               ri.MeasurementAmount, 
+               ri.IngredientSequence
+        FROM RecipeIngredient ri 
+        WHERE ri.RecipeIngredientId = @RecipeIngredientId 
+        order by ri.ingredientsequence
+    END
+    ELSE IF @RecipeId > 0
+    BEGIN
+        SELECT ri.RecipeIngredientId, 
+               ri.RecipeId, 
+               ri.IngredientId, 
+               ri.UnitOfMeasureId, 
+               ri.MeasurementAmount, 
+               ri.IngredientSequence
+        FROM RecipeIngredient ri 
+        WHERE ri.RecipeId = @RecipeId
+        order by ri.ingredientsequence 
+    END
 
-    return @return 
-
-end 
-go 
-
-exec RecipeIngredientGet @All = 1 
+    RETURN @return 
+END 
+GO

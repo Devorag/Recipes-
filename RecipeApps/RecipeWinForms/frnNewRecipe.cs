@@ -1,7 +1,4 @@
-﻿
-using CPUFramework;
-using System.Diagnostics;
-using System.Diagnostics.Tracing;
+﻿using System.Diagnostics;
 
 namespace RecipeWinForms
 {
@@ -28,8 +25,14 @@ namespace RecipeWinForms
             gIngredient.CellContentClick += GIngredient_CellContentClick;
             this.FormClosing += frmNewRecipe_FormClosing;
             tbChildRecords.SelectedIndexChanged += TbChildRecords_SelectedIndexChanged;
+            this.Shown += FrmNewRecipe_Shown;
         }
 
+        private void FrmNewRecipe_Shown(object? sender, EventArgs e)
+        {
+            LoadRecipeIngredients();
+            LoadRecipeSteps();
+        }
 
         public void LoadForm(int recipeidval)
         {
@@ -60,22 +63,26 @@ namespace RecipeWinForms
             WindowsFormsUtility.SetControlBinding(lblDateArchived, bindingSource);
 
             this.Text = GetRecipeDesc();
-            LoadRecipeIngredients();
-            SetButtonsEnabledBasedOnNewRecord();
 
-            this.Show();
+            SetButtonsEnabledBasedOnNewRecord();
+            LoadRecipeIngredients();
+
+            dtRecipes.AcceptChanges();
         }
 
         private void LoadRecipeIngredients()
         {
             dtRecipeIngredient = RecipeIngredient.LoadByRecipeId(recipeId);
             gIngredient.Columns.Clear();
-            gIngredient.DataSource = dtRecipeIngredient;
-            WindowsFormsUtility.AddComboBoxToGrid(gIngredient, DataMaintenance.GetDataList("Measurement"), "RecipeIngredient", "MeasurementType");
+
+            WindowsFormsUtility.AddComboBoxToGrid(gIngredient, DataMaintenance.GetDataList("Measurement"), "UnitOfMeasure", "MeasurementType");
             WindowsFormsUtility.AddComboBoxToGrid(gIngredient, DataMaintenance.GetDataList("Ingredient"), "Ingredient", "IngredientName");
+
+            gIngredient.DataSource = dtRecipeIngredient;
             WindowsFormsUtility.AddDeleteButtonToGrid(gIngredient, deleteColName);
             WindowsFormsUtility.FormatGridForEdit(gIngredient, "RecipeIngredient");
         }
+
 
         private void LoadRecipeSteps()
         {
@@ -323,7 +330,7 @@ namespace RecipeWinForms
             {
                 LoadRecipeSteps();
             }
-            if(tbChildRecords.SelectedTab == tbIngredients)
+            if (tbChildRecords.SelectedTab == tbIngredients)
             {
                 LoadRecipeIngredients();
             }
@@ -377,6 +384,7 @@ namespace RecipeWinForms
         private void frmNewRecipe_FormClosing(object? sender, FormClosingEventArgs e)
         {
             bindingSource.EndEdit();
+
             if (SQLUtility.TableHasChanges(dtRecipes))
             {
                 var res = MessageBox.Show($"Do you want to save changes to {this.Text} before closing the form?", Application.ProductName, MessageBoxButtons.YesNoCancel);

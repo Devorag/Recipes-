@@ -6,7 +6,7 @@ create or alter procedure dbo.MeasurementUpdate(
 as
 begin
 	declare @return int = 0
-
+ 
 	select @UnitOfMeasureId = isnull(@UnitOfMeasureId,0)
 	
 	if @UnitOfMeasureId = 0

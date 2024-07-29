@@ -6,7 +6,7 @@ CREATE OR ALTER PROCEDURE dbo.RecipeStatusGet(
 AS
 BEGIN
     SET @RecipeName = NULLIF(@RecipeName, '')
-
+ 
     SELECT r.RecipeId, r.RecipeName, r.RecipeStatus, r.DateArchived, r.DateDrafted, r.DatePublished
     FROM Recipe r
     WHERE (@RecipeId IS NULL OR r.RecipeId = @RecipeId)

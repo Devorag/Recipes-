@@ -9,12 +9,39 @@ begin
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- Delete related data
-        delete from RecipeSteps where RecipeId = @CuisineId
-        delete from RecipeIngredient where RecipeId = @CuisineId
-        DELETE FROM Recipe WHERE CuisineId = @CuisineId
+ DECLARE @RecipeId INT;
+        DECLARE RecipeCursor CURSOR FOR 
+        SELECT RecipeId 
+        FROM Recipe 
+        WHERE CuisineId = @CuisineId;
 
-        -- Delete recipe
+        OPEN RecipeCursor;
+        FETCH NEXT FROM RecipeCursor INTO @RecipeId;
+
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            -- Delete related RecipeSteps
+            DELETE FROM RecipeSteps WHERE RecipeId = @RecipeId;
+
+            -- Delete related RecipeIngredients
+            DELETE FROM RecipeIngredient WHERE RecipeId = @RecipeId;
+
+            -- Delete related CookbookRecipes
+            DELETE FROM CookbookRecipe WHERE RecipeId = @RecipeId;
+
+            -- Delete related MealCourseRecipes
+            DELETE FROM MealCourseRecipe WHERE RecipeId = @RecipeId;
+
+            -- Delete the recipe itself
+            DELETE FROM Recipe WHERE RecipeId = @RecipeId;
+
+            FETCH NEXT FROM RecipeCursor INTO @RecipeId;
+        END
+
+        CLOSE RecipeCursor;
+        DEALLOCATE RecipeCursor;
+
+        -- Delete the Cuisine itself
         DELETE FROM Cuisine WHERE CuisineId = @CuisineId;
 
         COMMIT;
@@ -30,3 +57,12 @@ begin
     
 END 
 GO
+
+DECLARE @id INT;
+SELECT TOP 1 @id = CuisineId FROM Cuisine;
+DECLARE @Message VARCHAR(500);
+
+EXEC dbo.CuisineDelete @CuisineId = @id, @Message = @Message OUTPUT;
+
+SELECT @Message;
+

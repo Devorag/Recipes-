@@ -1,30 +1,41 @@
-create or alter procedure dbo.CookbookRecipeUpdate(
-    @CookbookRecipeId int output,
-    @CookbookId int ,
-    @Message varchar(500) = '' output
+CREATE OR ALTER PROCEDURE dbo.CookbookRecipeUpdate(
+    @CookbookRecipeId INT OUTPUT,
+    @CookbookId INT,    
+    @RecipeId INT, 
+    @RecipeSequence INT, 
+    @Message VARCHAR(500) = '' OUTPUT
 )
-as 
-begin 
-    declare @return int = 0 
+AS
+BEGIN
+    SET NOCOUNT ON;
 
-    select @CookbookRecipeId = ISNULL(@CookbookRecipeId,0) 
+    DECLARE @return INT = 0;
 
-    if @CookbookRecipeId = 0 
-    begin 
-        insert CookbookRecipe(CookbookId) 
-        values (@CookbookId)
+    IF @RecipeSequence <= 0
+    BEGIN
+        SET @Message = 'Invalid RecipeSequence.';
+        SET @return = -1;
+        RETURN @return;
+    END
 
-        select @CookbookRecipeId = SCOPE_IDENTITY() 
-    end 
-    else 
-    begin 
-        update CookbookRecipe
-        set 
-            RecipeId = @CookbookId
-        where CookbookRecipeId = @CookbookRecipeId 
-    end
+    SELECT @CookbookRecipeId = ISNULL(@CookbookRecipeId, 0), @RecipeId = ISNULL(@RecipeId,0), @RecipeSequence = ISNULL(@RecipeSequence,0);
 
-    return @return 
+    IF @CookbookRecipeId = 0
+    BEGIN
+        INSERT INTO CookbookRecipe (CookbookId, RecipeId, RecipeSequence)
+        VALUES (@CookbookId, @RecipeId, @RecipeSequence);
 
-end 
-go 
+        SET @CookbookRecipeId = SCOPE_IDENTITY();
+    END
+    ELSE
+    BEGIN
+        UPDATE CookbookRecipe
+        SET CookbookId = @CookbookId,
+            RecipeId = @RecipeId, 
+            RecipeSequence = @RecipeSequence
+        WHERE CookbookRecipeId = @CookbookRecipeId;
+    END
+
+    RETURN @return;
+END
+GO

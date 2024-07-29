@@ -2,7 +2,7 @@
 {
     public class Cookbooks
     {
-        public static int  AutoCreate(int usersId)
+        public static int AutoCreate(int usersId)
         {
             int cookbookId;
             SqlCommand cmd = SQLUtility.GetSQLCommand("CreateCookbook");
@@ -36,7 +36,7 @@
             return dt;
         }
 
-        public static void Save(DataTable dtCookbook)
+        public static void Save(DataTable dtCookbook, bool isActive)
         {
             if (dtCookbook.Rows.Count == 0)
             {
@@ -44,6 +44,8 @@
             }
             DataRow r = dtCookbook.Rows[0];
             
+            r["Active"] = isActive;
+
             SQLUtility.SaveDataRow(r, "UpdateCookbook");
         }
 

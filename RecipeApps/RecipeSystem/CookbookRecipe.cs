@@ -12,11 +12,11 @@ namespace RecipeSystem
             return dt;
         }
 
-        public static void SaveDataTable(DataTable dt, int recipeId)
+        public static void SaveDataTable(DataTable dt, int cookbookId)
         {
             foreach (DataRow r in dt.Select("", "", DataViewRowState.Added))
             {
-                r["RecipeId"] = recipeId;
+                r["CookbookId"] = cookbookId;
             }
             SQLUtility.SaveDataTable(dt, "CookbookRecipeUpdate");
         }

@@ -5,7 +5,7 @@ create or alter proc dbo.MealGet(
 )
 as 
 begin 
-
+ 
     declare @return int = 0 
     
     select @All = ISNULL(@All,0), @MealId = ISNULL(@MealId, 0) 
