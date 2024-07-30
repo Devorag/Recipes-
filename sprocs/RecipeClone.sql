@@ -38,6 +38,19 @@ BEGIN
 
     SET @NewRecipeId = SCOPE_IDENTITY();
 
+    INSERT INTO RecipeIngredient (RecipeId, IngredientId, UnitOfMeasureId, MeasurementAmount, IngredientSequence)
+    SELECT @NewRecipeId, IngredientId, UnitOfMeasureId, MeasurementAmount, IngredientSequence
+    FROM RecipeIngredient
+    WHERE RecipeId = @RecipeId;
+
+    -- Step 3: Clone the steps
+    INSERT INTO RecipeSteps (RecipeId, Instructions, StepSequence)
+    SELECT @NewRecipeId, Instructions, StepSequence
+    FROM RecipeSteps 
+    WHERE RecipeId = @RecipeId;
+
+    SET @NewRecipeId = SCOPE_IDENTITY();
+
     SET @Message = 'Recipe cloned successfully';
 
     RETURN;

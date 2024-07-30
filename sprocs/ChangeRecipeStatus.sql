@@ -6,6 +6,7 @@ CREATE OR ALTER PROCEDURE dbo.ChangeRecipeStatus(
 AS
 BEGIN
     DECLARE @CurrentDate DATE = CAST(GETDATE() as date)
+    DECLARE @CurrentStatus VARCHAR(50)
 
     SET @Message = ''
 
@@ -15,31 +16,67 @@ BEGIN
         RETURN
     END
 
+    SELECT @CurrentStatus = 
+        CASE 
+            WHEN DateArchived IS NOT NULL THEN 'Archived'
+            WHEN DatePublished IS NOT NULL THEN 'Published'
+            WHEN DateDrafted IS NOT NULL THEN 'Drafted'
+            ELSE 'Unspecified'
+        END
+    FROM Recipe
+    WHERE RecipeId = @RecipeId
+
+
     IF @NewStatus = 'Drafted'
     BEGIN
-        UPDATE Recipe
-        SET DateDrafted = @CurrentDate
-        WHERE RecipeId = @RecipeId
-        SET @Message = 'Recipe status changed to Drafted.'
+        IF @CurrentStatus = 'Published' OR @CurrentStatus = 'Archived'
+        BEGIN
+            UPDATE Recipe
+            SET DateDrafted = @CurrentDate,
+                DatePublished = CASE WHEN @CurrentStatus = 'Published' THEN NULL ELSE DatePublished END,
+                DateArchived = CASE WHEN @CurrentStatus = 'Archived' THEN NULL ELSE DateArchived END
+            WHERE RecipeId = @RecipeId
+            SET @Message = 'Recipe status changed to Drafted.'
+        END
+        ELSE
+        BEGIN
+            SET @Message = 'Cannot change to Drafted from the current status.'
+            RETURN
+        END
     END
     ELSE IF @NewStatus = 'Published'
     BEGIN
-        UPDATE Recipe
-        SET DatePublished = @CurrentDate
-        WHERE RecipeId = @RecipeId
-        SET @Message = 'Recipe status changed to Published.'
+        IF @CurrentStatus = 'Archived' OR @CurrentStatus = 'Drafted'
+        BEGIN
+            UPDATE Recipe
+            SET DatePublished = @CurrentDate,
+                DateArchived = CASE WHEN @CurrentStatus = 'Archived' THEN NULL ELSE DateArchived END,
+                DateDrafted = CASE WHEN @CurrentStatus = 'Drafted' THEN NULL ELSE DateDrafted END
+            WHERE RecipeId = @RecipeId
+            SET @Message = 'Recipe status changed to Published.'
+        END
+        ELSE
+        BEGIN
+            SET @Message = 'Cannot change to Published from the current status.'
+            RETURN
+        END
     END
     ELSE IF @NewStatus = 'Archived'
     BEGIN
-        UPDATE Recipe
-        SET DateArchived = @CurrentDate
-        WHERE RecipeId = @RecipeId
-        SET @Message = 'Recipe status changed to Archived.'
-    END
-    ELSE
-    BEGIN
-        SET @Message = 'Invalid status provided.'
-        RETURN
+        IF @CurrentStatus <> 'Archived'
+        BEGIN
+            UPDATE Recipe
+            SET DateArchived = @CurrentDate,
+                DatePublished = CASE WHEN @CurrentStatus = 'Published' THEN NULL ELSE DatePublished END,
+                DateDrafted = CASE WHEN @CurrentStatus = 'Drafted' THEN NULL ELSE DateDrafted END
+            WHERE RecipeId = @RecipeId
+            SET @Message = 'Recipe status changed to Archived.'
+        END
+        ELSE
+        BEGIN
+            SET @Message = 'Recipe is already Archived.'
+            RETURN
+        END
     END
 END
 GO

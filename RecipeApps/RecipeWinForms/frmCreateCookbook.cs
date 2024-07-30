@@ -33,7 +33,6 @@
                     throw new InvalidOperationException("Cookbook creation failed: Invalid ID returned.");
                 }
 
-                MessageBox.Show("Cookbook created successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 OpenForm();
                 this.Close();
             }

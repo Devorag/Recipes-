@@ -51,8 +51,6 @@ namespace RecipeWinForms
             {
                 string message = Recipes.ChangeRecipeStatus(recipeId, newStatus);
                 MessageBox.Show(message);
-                OpenRecipeForm();
-                this.Close();
 
                 if (message.Contains("changed"))
                 {
@@ -61,7 +59,6 @@ namespace RecipeWinForms
                     UpdateStatusDate(newStatus);
                     DisableCurrentStatusButton();
                 }
-
             }
             catch (Exception ex)
             {

@@ -20,8 +20,14 @@ namespace RecipeWinForms
             btnSaveRecipe.Click += BtnSaveRecipe_Click;
             this.FormClosing += FrmNewCookbook_FormClosing;
             gCookbookRecipe.CellContentClick += GCookbookRecipe_CellContentClick;
+            gCookbookRecipe.DataError += GCookbookRecipe_DataError;
             lstUsersName.SelectedIndexChanged += LstUsersName_SelectedIndexChanged;
             this.Shown += FrmNewCookbook_Shown;
+        }
+
+        private void GCookbookRecipe_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Wrong Data Type", Application.ProductName);
         }
 
         private void FrmNewCookbook_Shown(object? sender, EventArgs e)
@@ -35,10 +41,11 @@ namespace RecipeWinForms
             this.Tag = cookbookId;
             dtCookbook = Cookbooks.Load(cookbookId);
             bindingSource.DataSource = dtCookbook;
+
             if (cookbookId == 0)
             {
                 DataRow newRow = dtCookbook.NewRow();
-                newRow["DateCreated"] = DateTime.Now.ToString("dd MMM yyyy");
+                newRow["DateCreated"] = DBNull.Value;
                 dtCookbook.Rows.Add(newRow);
             }
 
@@ -133,7 +140,9 @@ namespace RecipeWinForms
                 errorProvider.SetError(lstUsersName, "Please select a user.");
                 throw new Exception("Please select a user.");
             }
+
         }
+
 
         private void ClearUserError()
         {
@@ -154,9 +163,13 @@ namespace RecipeWinForms
             try
             {
                 ValidateForm();
-                DataRow row = dtCookbook.Rows[0];
-                bool isActive = ckActive.Checked;
 
+                if (dtCookbook.Rows[0]["DateCreated"] == DBNull.Value)
+                {
+                    dtCookbook.Rows[0]["DateCreated"] = DateTime.Now.ToString("dd MMM yyyy");
+                }
+
+                bool isActive = ckActive.Checked;
                 Cookbooks.Save(dtCookbook, isActive);
                 b = true;
                 bindingSource.ResetBindings(false);
@@ -222,6 +235,7 @@ namespace RecipeWinForms
             {
                 ValidateForm();
                 Save();
+
             }
             catch (Exception ex)
             {
