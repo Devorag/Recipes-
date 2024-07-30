@@ -88,7 +88,7 @@ order by rs.stepSequence
 Meal list page:
     For all active meals, show the meal name, user that created the meal, number of calories for the meal, number of courses, and number of recipes per each meal, sorted by name of meal
 */
-select m.MealName, u.Username, TotalCalories = sum(r.calories), NumCourses = count(distinct c.courseID), NumRecipes = count(distinct r.recipeId)
+select m.MealName, u.Usersname, TotalCalories = sum(r.calories), NumCourses = count(distinct c.courseID), NumRecipes = count(distinct r.recipeId)
 from meal m 
 join users u 
 on u.usersId = m.UsersId 
@@ -101,7 +101,7 @@ on r.recipeID = mcr.recipeId
 join course c 
 on c.CourseId = mc.CourseId 
 where m.Active = '1'
-group by m.mealname, u.UserName
+group by m.mealname, u.UsersName
 order by m.mealname
 /*
 Meal details page:
@@ -116,7 +116,7 @@ Meal details page:
                     <b>Main: Main dish - Onion Pastrami Chicken</b>
 					Main: Side dish - Roasted cucumbers with mustard
 */
-select m.mealname, u.username, m.DateCreated
+select m.mealname, u.usersname, m.DateCreated
 from meal m 
 join users u 
 on u.UsersId = m.UsersId 
@@ -140,7 +140,7 @@ where m.mealname = 'Supper Crunch'
 Cookbook list page:
     Show all active cookbooks with author and number of recipes per book. Sorted by book name.
 */
-select c.CookbookName, u.username, NumRecipes = count(distinct r.recipeID)
+select c.CookbookName, u.usersname, NumRecipes = count(distinct r.recipeID)
 from cookbook c 
 join users u 
 on u.UsersId = c.UsersId 
@@ -149,7 +149,7 @@ on cr.CookbookId = c.CookbookId
 join recipe r 
 on r.RecipeId = cr.RecipeId 
 where c.Active = 1
-group by c.CookbookName, u.UserName
+group by c.CookbookName, u.UsersName
 order by c.CookbookName 
 
 /*
@@ -159,7 +159,7 @@ Cookbook details page:
     b) List of all recipes in the correct order. Include recipe name, cuisine and number of ingredients and steps.  
         Note: User will click on recipe to see all ingredients and steps.
 */
-Select c.CookbookName, u.username, c.DateCreated, c.price, NumRecipes = count(distinct r.recipeId)
+Select c.CookbookName, u.usersname, c.DateCreated, c.price, NumRecipes = count(distinct r.recipeId)
 from cookbook c 
 join users u 
 on u.UsersId = c.usersID 
@@ -168,9 +168,9 @@ on cr.CookbookId = c.cookbookId
 join recipe r 
 on r.RecipeId = cr.RecipeId 
 where c.CookbookName = 'Taste It'
-group by c.CookbookName, u.username, c.DateCreated, c.Price
+group by c.CookbookName, u.usersname, c.DateCreated, c.Price
 
-select r.RecipeName, cu.cuisineType, NumIngredients = count( distinct i.ingredientId), NumSteps = count( distinct rs.instructions), cr.RecipeSequence
+select r.RecipeName, cu.CuisineName, NumIngredients = count( distinct i.ingredientId), NumSteps = count( distinct rs.instructions), cr.RecipeSequence
 from Ingredient i 
 join RecipeIngredient ri
 on ri.ingredientID = i.IngredientId
@@ -185,7 +185,7 @@ on cr.recipeID = r.RecipeId
 join cookbook c 
 on c.CookbookId = cr.CookbookId 
 where c.CookbookName = 'Taste It'
-group by r.RecipeName, cu.CuisineType, cr.RecipeSequence 
+group by r.RecipeName, cu.CuisineName, cr.RecipeSequence 
 order by cr.recipesequence 
 
 /*
@@ -232,30 +232,30 @@ For site administration page:
         Hint: For active/inactive columns, use SUM function with CASE to only include in sum if active/inactive 
     e) List of archived recipes that were never published, and how long it took for them to be archived.
 */
-select u.username, RecipeStatus = isnull(r.recipestatus, ' '), TotalRecipesCreated = count(distinct r.RecipeId)
+select u.usersname, RecipeStatus = isnull(r.recipestatus, ' '), TotalRecipesCreated = count(distinct r.RecipeId)
 from users u 
 left join recipe r 
 on r.UsersId  = u.UsersId 
-group by r.RecipeStatus, u.UserName
+group by r.RecipeStatus, u.UsersName
 
-select u.username, TotalRecipesCreated = count(distinct r.RecipeId), AvgTimeToBePublished = avg(DATEDIFF(day, r.datedrafted, r.DatePublished))
+select u.usersname, TotalRecipesCreated = count(distinct r.RecipeId), AvgTimeToBePublished = avg(DATEDIFF(day, r.datedrafted, r.DatePublished))
 from users u 
 left join recipe r 
 on r.UsersId  = u.UsersId 
 where r.datepublished is not null 
-group by u.username
+group by u.usersname
 
-select u.userName, TotalNumMeals = count(m.mealId), TotalActiveMeals = sum(case when m.active = 1 then 1 else 0 end), TotalInactiveMeals = sum(case when m.active = 0 then 1 else 0 end)
+select u.usersName, TotalNumMeals = count(m.mealId), TotalActiveMeals = sum(case when m.active = 1 then 1 else 0 end), TotalInactiveMeals = sum(case when m.active = 0 then 1 else 0 end)
 from users u 
 join meal m 
 on m.UsersId = u.UsersID 
-group by u.UserName
+group by u.UsersName
 
-select u.userName, TotalNumCookbooks = count(distinct c.cookbookId), TotalActiveCookbooks = sum(case when c.active = 1 then 1 else 0 end), TotalInactiveCookbooks = sum(case when c.active = 0 then 1 else 0 end)
+select u.usersName, TotalNumCookbooks = count(distinct c.cookbookId), TotalActiveCookbooks = sum(case when c.active = 1 then 1 else 0 end), TotalInactiveCookbooks = sum(case when c.active = 0 then 1 else 0 end)
 from users u 
 join cookbook c 
 on c.usersId = u.usersId
-group by u.UserName
+group by u.UsersName
 
 select r.recipeName, TimeToBeArchived = datediff(day, r.DateDrafted, r.datearchived)
 from recipe r 
@@ -272,20 +272,20 @@ select ItemName = 'Recipes', Total = count(r.recipeId)
 from recipe r 
 join users u 
 on r.UsersId = u.UsersId 
-where u.username = 'Msvei'
+where u.usersname = 'Msvei'
 union select 'Meals', count(m.mealId) 
 from meal m 
 join users u 
 on m.usersId = u.usersId 
-where u.username = 'Msvei'
+where u.usersname = 'Msvei'
 union select 'Cookbooks', count(c.cookbookId) 
 from Cookbook c 
 join users u 
 on c.UsersId = u.usersId 
-where u.UserName = 'Msvei'
+where u.UsersName = 'Msvei'
 
 -- SM Tip: Use one datediff() with multiple case statements in it, like that you'll be able to do isnull()
-select u.UserName, r.RecipeName, r.RecipeStatus, NumHoursbetweenstatuses = case when r.recipestatus = 'Published' then DATEDIFF(hour, r.datedrafted, r.DatePublished) 
+select u.UsersName, r.RecipeName, r.RecipeStatus, NumHoursbetweenstatuses = case when r.recipestatus = 'Published' then DATEDIFF(hour, r.datedrafted, r.DatePublished) 
 when r.recipestatus = 'Archived' and r.DatePublished is not null then DATEDIFF(hour, r.DatePublished, r.DateArchived)
 when r.recipeStatus = 'Archived' and r.datepublished is null then datediff(hour, r.datedrafted, r.datearchived) 
 end 
@@ -293,7 +293,7 @@ from recipe r
 join users u 
 on u.UsersId = r.UsersId 
 where r.RecipeStatus in ('Published', 'Archived')
-and u.userName = 'Msvei'
+and u.usersName = 'Msvei'
 
 /*
     OPTIONAL CHALLENGE QUESTION
