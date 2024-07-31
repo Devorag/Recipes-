@@ -42,7 +42,7 @@
         public static DataTable GetUsersList()
         {
             DataTable dt = new();
-            SqlCommand cmd = SQLUtility.GetSQLCommand("UserGet");
+            SqlCommand cmd = SQLUtility.GetSQLCommand("UsersGet");
             SQLUtility.SetParamValue(cmd, "@All", 1);
             SQLUtility.SetParamValue(cmd, "@IncludeBlank", 1);
             dt = SQLUtility.GetDataTable(cmd);

@@ -12,6 +12,7 @@
 
 #secret files
 *create-login.sql
+*secret.config
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
