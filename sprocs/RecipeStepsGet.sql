@@ -10,7 +10,7 @@ begin
 
     select @All = isnull(@All,0), @RecipeStepsId = ISNULL(@RecipestepsId,0), @RecipeId = ISNULL(@RecipeId,0)
 
-    select  rs.RecipeStepsId, rs.RecipeId, Sequence = rs.StepSequence
+    select  rs.RecipeStepsId, rs.RecipeId, rs.Instructions, rs.StepSequence
     from RecipeSteps rs
     where rs.RecipeStepsId = @RecipeStepsId 
     or @All = 1 

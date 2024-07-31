@@ -91,7 +91,6 @@ namespace RecipeWinForms
             dtRecipeSteps = RecipeSteps.LoadByRecipeId(recipeId);
             gSteps.Columns.Clear();
             gSteps.DataSource = dtRecipeSteps;
-            WindowsFormsUtility.AddComboBoxToGrid(gSteps, DataMaintenance.GetDataList("Steps"), "RecipeSteps", "Instructions");
             WindowsFormsUtility.AddDeleteButtonToGrid(gSteps, deleteColName);
             WindowsFormsUtility.FormatGridForEdit(gSteps, "RecipeSteps");
         }
@@ -201,11 +200,14 @@ namespace RecipeWinForms
 
         private void Delete()
         {
-            string allowedDelete = SQLUtility.GetValueFromFirstRowAsString(dtRecipes, "IsDeleteAllowed");
-            if (allowedDelete != "")
+            if (dtRecipes.Rows.Count > 0)
             {
-                MessageBox.Show(allowedDelete, Application.ProductName);
-                return;
+                string allowedDelete = SQLUtility.GetValueFromFirstRowAsString(dtRecipes, "IsDeleteAllowed");
+                if (!string.IsNullOrEmpty(allowedDelete))
+                {
+                    MessageBox.Show(allowedDelete, Application.ProductName);
+                    return;
+                }
             }
 
             var response = MessageBox.Show("Are you sure you want to delete this recipe?", "Recipes", MessageBoxButtons.YesNo);
@@ -213,10 +215,11 @@ namespace RecipeWinForms
             {
                 return;
             }
+
             Application.UseWaitCursor = true;
             try
             {
-                Recipes.Delete(dtRecipes, "Can't delete recipe with current date drafted or that has not been archived in over 30 days");
+                Recipes.Delete(dtRecipes);
                 this.Close();
             }
             catch (Exception ex)
@@ -228,6 +231,7 @@ namespace RecipeWinForms
                 Application.UseWaitCursor = false;
             }
         }
+
 
         private void ClearCuisineError()
         {

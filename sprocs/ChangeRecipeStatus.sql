@@ -33,8 +33,8 @@ BEGIN
         BEGIN
             UPDATE Recipe
             SET DateDrafted = @CurrentDate,
-                DatePublished = CASE WHEN @CurrentStatus = 'Published' THEN NULL ELSE DatePublished END,
-                DateArchived = CASE WHEN @CurrentStatus = 'Archived' THEN NULL ELSE DateArchived END
+                DatePublished = null,
+                DateArchived = null
             WHERE RecipeId = @RecipeId
             SET @Message = 'Recipe status changed to Drafted.'
         END
@@ -51,7 +51,7 @@ BEGIN
             UPDATE Recipe
             SET DatePublished = @CurrentDate,
                 DateArchived = CASE WHEN @CurrentStatus = 'Archived' THEN NULL ELSE DateArchived END,
-                DateDrafted = CASE WHEN @CurrentStatus = 'Drafted' THEN NULL ELSE DateDrafted END
+                DateDrafted = DateDrafted
             WHERE RecipeId = @RecipeId
             SET @Message = 'Recipe status changed to Published.'
         END
@@ -67,8 +67,8 @@ BEGIN
         BEGIN
             UPDATE Recipe
             SET DateArchived = @CurrentDate,
-                DatePublished = CASE WHEN @CurrentStatus = 'Published' THEN NULL ELSE DatePublished END,
-                DateDrafted = CASE WHEN @CurrentStatus = 'Drafted' THEN NULL ELSE DateDrafted END
+                DatePublished = DatePublished,
+                DateDrafted = DateDrafted
             WHERE RecipeId = @RecipeId
             SET @Message = 'Recipe status changed to Archived.'
         END

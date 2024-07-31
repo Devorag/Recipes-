@@ -1,6 +1,8 @@
 create or alter procedure dbo.RecipeStepsUpdate(
     @RecipestepsId int output,
     @RecipeId int,
+    @Instructions varchar(300),
+    @StepSequence int,
     @Message varchar(500) = '' output
 )
 as 
@@ -11,8 +13,8 @@ begin
 
     if @RecipeStepsId = 0 
     begin 
-        insert RecipeSteps(RecipeId) 
-        values (@RecipeId)
+        insert RecipeSteps(RecipeId, Instructions, StepSequence) 
+        values (@RecipeId, @Instructions, @StepSequence)
 
         select @RecipeStepsId = SCOPE_IDENTITY() 
     end 
@@ -20,7 +22,9 @@ begin
     begin 
         update RecipeSteps 
         set 
-            RecipeId = @RecipeId 
+            RecipeId = @RecipeId,
+            Instructions = @Instructions, 
+            StepSequence = @StepSequence
         where RecipeStepsId = @RecipeStepsId 
     end
 

@@ -33,7 +33,7 @@
                     throw new InvalidOperationException("Cookbook creation failed: Invalid ID returned.");
                 }
 
-                OpenForm();
+                OpenForm(cookbookId);
                 this.Close();
             }
             catch (Exception ex)
@@ -52,11 +52,11 @@
             CreateCookbook();
         }
 
-        private void OpenForm()
+        private void OpenForm(int cookbookId)
         {
             if (this.MdiParent != null && this.MdiParent is frmMain)
             {
-                ((frmMain)this.MdiParent).OpenForm(typeof(frmCookbookList), cookbookId);
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewCookbook), cookbookId);
             }
         }
     }
