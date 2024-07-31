@@ -12,7 +12,7 @@ namespace RecipeWinForms
             gRecipes.KeyDown += GRecipes_KeyDown;
             btnNew.Click += BtnNew_Click;
         }
-
+        s
         private void FrmRecipeList_Activated(object? sender, EventArgs e)
         {
             BindData();

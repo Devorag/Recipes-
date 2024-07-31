@@ -9,7 +9,7 @@ namespace RecipeWinForms
         DataTable dtRecipeSteps = new DataTable();
         BindingSource bindingSource = new BindingSource();
         string deleteColName = "deletecol";
-        int recipeId = 0;
+        int recipeId;
 
         public frmNewRecipe()
         {
