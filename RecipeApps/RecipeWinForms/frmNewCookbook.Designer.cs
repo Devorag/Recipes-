@@ -44,14 +44,14 @@
             lblDateCreated = new Label();
             ckActive = new CheckBox();
             lblText = new Label();
-            errorProvider = new ErrorProvider(components);
             btnSaveRecipe = new Button();
             gCookbookRecipe = new DataGridView();
+            errorProvider = new ErrorProvider(components);
             tblMain.SuspendLayout();
             tblOptions.SuspendLayout();
             tblNum.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gCookbookRecipe).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).BeginInit();
             SuspendLayout();
             // 
             // tblMain
@@ -239,7 +239,7 @@
             // 
             // lblText
             // 
-            lblText.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            lblText.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblText.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             lblText.Location = new Point(614, 261);
             lblText.Margin = new Padding(3, 30, 80, 20);
@@ -247,10 +247,6 @@
             lblText.Size = new Size(159, 32);
             lblText.TabIndex = 8;
             lblText.Text = "Date Created:";
-            // 
-            // errorProvider
-            // 
-            errorProvider.ContainerControl = this;
             // 
             // btnSaveRecipe
             // 
@@ -274,6 +270,10 @@
             gCookbookRecipe.Size = new Size(853, 500);
             gCookbookRecipe.TabIndex = 2;
             // 
+            // errorProvider
+            // 
+            errorProvider.ContainerControl = this;
+            // 
             // frmNewCookbook
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -288,8 +288,8 @@
             tblOptions.PerformLayout();
             tblNum.ResumeLayout(false);
             tblNum.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             ((System.ComponentModel.ISupportInitialize)gCookbookRecipe).EndInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider).EndInit();
             ResumeLayout(false);
         }
 

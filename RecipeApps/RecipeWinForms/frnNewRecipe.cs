@@ -22,7 +22,9 @@ namespace RecipeWinForms
             btnSaveIngredient.Click += BtnSaveIngredient_Click;
             btnSaveStep.Click += BtnSaveStep_Click;
             gSteps.CellContentClick += GSteps_CellContentClick;
+            gSteps.DataError += GSteps_DataError;
             gIngredient.CellContentClick += GIngredient_CellContentClick;
+            gIngredient.DataError += GIngredient_DataError;
             this.FormClosing += frmNewRecipe_FormClosing;
             tbChildRecords.SelectedIndexChanged += TbChildRecords_SelectedIndexChanged;
             this.Shown += FrmNewRecipe_Shown;
@@ -43,11 +45,11 @@ namespace RecipeWinForms
             if (recipeId == 0)
             {
                 DataRow newRow = dtRecipes.NewRow();
-                newRow["DateDrafted"] = DateTime.Now.ToString("dd MMM, yyyy");
-                newRow["RecipeStatus"] = "Drafted";
+                newRow["DateDrafted"] = DBNull.Value;
+                newRow["RecipeStatus"] = DBNull.Value;
                 dtRecipes.Rows.Add(newRow);
-                
             }
+
             DataTable dtCuisine = Recipes.GetCuisineList();
             WindowsFormsUtility.SetListBinding(lstCuisineName, dtCuisine, dtRecipes, "Cuisine");
 
@@ -89,7 +91,6 @@ namespace RecipeWinForms
             dtRecipeSteps = RecipeSteps.LoadByRecipeId(recipeId);
             gSteps.Columns.Clear();
             gSteps.DataSource = dtRecipeSteps;
-            WindowsFormsUtility.AddComboBoxToGrid(gSteps, DataMaintenance.GetDataList("Steps"), "RecipeSteps", "Instructions");
             WindowsFormsUtility.AddDeleteButtonToGrid(gSteps, deleteColName);
             WindowsFormsUtility.FormatGridForEdit(gSteps, "RecipeSteps");
         }
@@ -100,7 +101,7 @@ namespace RecipeWinForms
             {
                 RecipeIngredient.SaveDataTable(dtRecipeIngredient, recipeId);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, Application.ProductName);
             }
@@ -112,7 +113,7 @@ namespace RecipeWinForms
             {
                 RecipeSteps.SaveDataTable(dtRecipeSteps, recipeId);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, Application.ProductName);
             }
@@ -142,19 +143,19 @@ namespace RecipeWinForms
         private void DeleteRecipeSteps(int rowIndex)
         {
             int id = WindowsFormsUtility.GetIdFromGrid(gSteps, rowIndex, "RecipeStepsId");
-            if(id > 0)
+            if (id > 0)
             {
                 try
                 {
                     RecipeSteps.Delete(id);
                     LoadRecipeSteps();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, Application.ProductName);
                 }
             }
-            else if(id < gSteps.Rows.Count)
+            else if (id < gSteps.Rows.Count)
             {
                 gSteps.Rows.RemoveAt(rowIndex);
             }
@@ -167,6 +168,17 @@ namespace RecipeWinForms
             try
             {
                 ValidateForm();
+
+                if (dtRecipes.Rows[0]["DateDrafted"] == DBNull.Value)
+                {
+                    dtRecipes.Rows[0]["DateDrafted"] = DateTime.Now.ToString("dd MMM yyyy");
+                }
+
+                if (dtRecipes.Rows[0]["RecipeStatus"] == DBNull.Value)
+                {
+                    dtRecipes.Rows[0]["RecipeStatus"] = "Drafted";
+                }
+
                 Recipes.Save(dtRecipes);
                 b = true;
                 bindingSource.ResetBindings(false);
@@ -188,11 +200,14 @@ namespace RecipeWinForms
 
         private void Delete()
         {
-            string allowedDelete = SQLUtility.GetValueFromFirstRowAsString(dtRecipes, "IsDeleteAllowed");
-            if (allowedDelete != "")
+            if (dtRecipes.Rows.Count > 0)
             {
-                MessageBox.Show(allowedDelete, Application.ProductName);
-                return;
+                string allowedDelete = SQLUtility.GetValueFromFirstRowAsString(dtRecipes, "IsDeleteAllowed");
+                if (!string.IsNullOrEmpty(allowedDelete))
+                {
+                    MessageBox.Show(allowedDelete, Application.ProductName);
+                    return;
+                }
             }
 
             var response = MessageBox.Show("Are you sure you want to delete this recipe?", "Recipes", MessageBoxButtons.YesNo);
@@ -200,10 +215,11 @@ namespace RecipeWinForms
             {
                 return;
             }
+
             Application.UseWaitCursor = true;
             try
             {
-                Recipes.Delete(dtRecipes, "Can't delete recipe with current date drafted or that has not been archived in over 30 days");
+                Recipes.Delete(dtRecipes);
                 this.Close();
             }
             catch (Exception ex)
@@ -215,6 +231,7 @@ namespace RecipeWinForms
                 Application.UseWaitCursor = false;
             }
         }
+
 
         private void ClearCuisineError()
         {
@@ -258,18 +275,6 @@ namespace RecipeWinForms
             {
                 errorProvider.SetError(lstUsersName, "Please select a user.");
                 throw new Exception("Please select a user.");
-            }
-
-            DateTime dateDrafted = Convert.ToDateTime(row["DateDrafted"]);
-            DateTime currentDate = DateTime.Now;
-
-            if (dateDrafted.Date > currentDate.Date)
-            {
-                throw new Exception("Date Drafted cannot be future date");
-            }
-            else if (dateDrafted.Date == currentDate.Date && dateDrafted.TimeOfDay > currentDate.TimeOfDay)
-            {
-                throw new Exception("Date Drafted cannot be a future time");
             }
         }
 
@@ -379,6 +384,15 @@ namespace RecipeWinForms
             {
                 DeleteRecipeSteps(e.RowIndex);
             }
+        }
+        private void GSteps_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Wrong Data Type", Application.ProductName);
+        }
+
+        private void GIngredient_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Wrong Data Type", Application.ProductName);
         }
 
         private void frmNewRecipe_FormClosing(object? sender, FormClosingEventArgs e)

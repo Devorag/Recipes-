@@ -1,19 +1,23 @@
-create or alter function dbo.IsDeleteAllowed(@RecipeId int) 
-returns varchar(60) 
+CREATE OR ALTER FUNCTION dbo.IsDeleteAllowed(@RecipeId INT)
+RETURNS VARCHAR(100)
+AS
+BEGIN
+    DECLARE @value VARCHAR(100)
 
-as 
-begin   
-   declare @value varchar(60) = ' '
-       IF not EXISTS (
-        SELECT 1 FROM Recipe r WHERE R.RecipeId = @RecipeId AND
-         (r.RecipeStatus = 'Drafted' 
-               OR DATEDIFF(day, r.DateArchived, GETDATE()) >= 30 ))
-        begin 
-            select @value = 'Cannot delete recipe that is not currently drafted or that has not been archived in the past 30 days'
-        end 
-        return @value 
-end 
-go 
+    IF NOT EXISTS (
+        SELECT *
+        FROM Recipe r 
+        WHERE r.RecipeId = @RecipeId AND
+              (r.RecipeStatus = 'Drafted' or DATEDIFF(day, r.DateArchived, GETDATE()) <= 30)
+    )
+    BEGIN
+        SET @value = 'Can only delete a recipe that is currently drafted or that has been archived in the past 30 days.'
+    END
+    ELSE
+    BEGIN
+        SET @value = ''
+    END
 
-select dbo.IsDeleteAllowed(r.recipeid) 
-from recipe r 
+    RETURN @value
+END
+GO

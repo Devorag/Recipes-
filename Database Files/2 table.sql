@@ -112,7 +112,7 @@ create table dbo.Course(
 -- SM Should be unique.
     CourseSequence int not null 
         constraint u_Course_CourseSequence unique(CourseSequence)
-        constraint ck_Course_CourseSequence_must_be_greater_than_Zero check(CourseSequence > 0),
+        constraint ck_Course_CourseSequence_must_be_greater_than_Zero check(CourseSequence > 0)
 )
 go
 create table dbo.Meal(
@@ -134,7 +134,7 @@ create table dbo.MealCourse(
         constraint f_MealCourse_Meal foreign key references Meal(MealId),
     CourseId int not null 
         constraint f_MealCourse_Course foreign key references Course(CourseId),
-    constraint u_MealCourse_MealId_CourseID unique(MealId, CourseID),
+    constraint u_MealCourse_MealId_CourseID unique(MealId, CourseID)
 
 )
 go 

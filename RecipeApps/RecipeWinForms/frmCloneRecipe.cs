@@ -37,7 +37,6 @@ namespace RecipeWinForms
 
                 if (newRecipeId > 0)
                 {
-                    MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     OpenRecipeForm(newRecipeId);
                     this.Close();
                 }
@@ -56,7 +55,7 @@ namespace RecipeWinForms
         {
             if (this.MdiParent != null && this.MdiParent is frmMain)
             {
-                ((frmMain)this.MdiParent).OpenForm(typeof(frmRecipeList), newRecipeId);
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewRecipe), newRecipeId);
             }
             this.Close();
         }

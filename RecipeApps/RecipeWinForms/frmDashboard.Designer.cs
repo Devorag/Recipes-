@@ -81,18 +81,18 @@
             // 
             tblButtons.ColumnCount = 3;
             tblButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 36.3636322F));
-            tblButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.272728F));
+            tblButtons.ColumnStyles.Add(new ColumnStyle());
             tblButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 36.36364F));
             tblButtons.Controls.Add(btnRecipeList, 0, 0);
             tblButtons.Controls.Add(btnMealList, 1, 0);
             tblButtons.Controls.Add(btnCookbookList, 2, 0);
             tblButtons.Dock = DockStyle.Fill;
-            tblButtons.Location = new Point(3, 604);
+            tblButtons.Location = new Point(3, 602);
             tblButtons.Name = "tblButtons";
             tblButtons.RowCount = 1;
             tblMain.SetRowSpan(tblButtons, 2);
             tblButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tblButtons.Size = new Size(1081, 252);
+            tblButtons.Size = new Size(1081, 254);
             tblButtons.TabIndex = 3;
             // 
             // btnRecipeList
@@ -114,6 +114,7 @@
             btnMealList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             btnMealList.AutoSize = true;
             btnMealList.BackColor = SystemColors.ButtonHighlight;
+            btnMealList.DialogResult = DialogResult.Yes;
             btnMealList.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnMealList.Location = new Point(396, 3);
             btnMealList.Name = "btnMealList";
@@ -142,7 +143,7 @@
             lblDesc.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
             lblDesc.Location = new Point(3, 74);
             lblDesc.Name = "lblDesc";
-            lblDesc.Size = new Size(1081, 187);
+            lblDesc.Size = new Size(1081, 186);
             lblDesc.TabIndex = 2;
             lblDesc.Text = "Welcome to the Hearty Hearth desktop app. In this app you can \r\ncreate recipes and cookbooks. You can also......";
             lblDesc.TextAlign = ContentAlignment.MiddleCenter;
@@ -156,12 +157,12 @@
             tblGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tblGrid.Controls.Add(gDashboard, 1, 0);
             tblGrid.Dock = DockStyle.Fill;
-            tblGrid.Location = new Point(3, 264);
+            tblGrid.Location = new Point(3, 263);
             tblGrid.Name = "tblGrid";
             tblGrid.RowCount = 2;
             tblGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tblGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tblGrid.Size = new Size(1081, 334);
+            tblGrid.Size = new Size(1081, 333);
             tblGrid.TabIndex = 4;
             // 
             // gDashboard
@@ -179,7 +180,7 @@
             gDashboard.RowHeadersWidth = 62;
             tblGrid.SetRowSpan(gDashboard, 2);
             gDashboard.RowTemplate.Height = 33;
-            gDashboard.Size = new Size(590, 328);
+            gDashboard.Size = new Size(590, 327);
             gDashboard.TabIndex = 0;
             // 
             // frmDashboard

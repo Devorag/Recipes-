@@ -12,9 +12,15 @@
             InitializeComponent();
             btnSave.Click += BtnSave_Click;
             this.FormClosing += FrmDataMaintenance_FormClosing;
+            gDataMaint.DataError += GDataMaint_DataError;
             gDataMaint.CellContentClick += GDataMaint_CellContentClick;
             SetUpRadioButtons();
             BindData(currentTableType);
+        }
+
+        private void GDataMaint_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show("Wrong data type", Application.ProductName);
         }
 
         private void BindData(TableTypeEnum tableType)
@@ -51,18 +57,16 @@
         private void Delete(int rowIndex)
         {
             int id = WindowsFormsUtility.GetIdFromGrid(gDataMaint, rowIndex, currentTableType.ToString() + "Id");
-            
-            if (currentTableType == TableTypeEnum.Users)
+
+            string confirmMessage = currentTableType == TableTypeEnum.Users
+                ? "Are you sure you want to delete this user and all related recipes, meals, and cookbooks?"
+                : "Are you sure you want to delete?";
+            var response = MessageBox.Show(confirmMessage, "Confirm Delete", MessageBoxButtons.YesNo);
+            if (response == DialogResult.No)
             {
-                string confirmMessage = currentTableType == TableTypeEnum.Users 
-                    ? "Are you sure you want to delete this user and all related recipes, meals, and cookbooks?"
-                    : "Are you sure you want to delete?";
-                var response = MessageBox.Show(confirmMessage, "Confirm Delete", MessageBoxButtons.YesNo);
-                if (response == DialogResult.No)
-                {
-                    return;
-                }
+                return;
             }
+
 
             if (id != 0)
             {

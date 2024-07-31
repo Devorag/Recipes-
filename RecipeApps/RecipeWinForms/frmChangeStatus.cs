@@ -8,6 +8,7 @@ namespace RecipeWinForms
         int recipeId = 0;
         string currentRecipe;
         string currentStatus;
+        string newStatus;
         public frmChangeStatus()
         {
             InitializeComponent();
@@ -35,7 +36,7 @@ namespace RecipeWinForms
                     lblRecipe.Text = row["RecipeName"].ToString();
                     currentStatus = row["RecipeStatus"].ToString();
                     lblCurrentStatus.Text = "Current Status: " + currentStatus;
-                    UpdateStatusDate(currentStatus);
+                    UpdateStatusDate(row);
                     DisableCurrentStatusButton();
                 }
             }
@@ -51,17 +52,19 @@ namespace RecipeWinForms
             {
                 string message = Recipes.ChangeRecipeStatus(recipeId, newStatus);
                 MessageBox.Show(message);
-                OpenRecipeForm();
-                this.Close();
 
                 if (message.Contains("changed"))
                 {
-                    currentStatus = newStatus;
-                    lblCurrentStatus.Text = currentStatus;
-                    UpdateStatusDate(newStatus);
-                    DisableCurrentStatusButton();
+                    DataTable dtStatus = Recipes.RecipeStatusGet(recipeId);
+                    if (dtStatus.Rows.Count > 0)
+                    {
+                        DataRow row = dtStatus.Rows[0];
+                        currentStatus = newStatus;
+                        lblCurrentStatus.Text = "Current Status: " + currentStatus;
+                        UpdateStatusDate(row); 
+                        DisableCurrentStatusButton();
+                    }
                 }
-
             }
             catch (Exception ex)
             {
@@ -69,23 +72,43 @@ namespace RecipeWinForms
             }
         }
 
-        private void UpdateStatusDate(string status)
+        private bool IsBackwardStatusChange(string currentStatus, string newStatus)
         {
-            string dateFormatted = DateTime.Now.ToString("dd MMM, yyyy");
+            return (currentStatus == "Archived" && newStatus == "Published") ||
+                   (currentStatus == "Archived" && newStatus == "Drafted") ||
+                   (currentStatus == "Published" && newStatus == "Drafted");
+        }
 
-            switch (status)
+        private string ConvertDateToString(object date)
+        {
+            return date == DBNull.Value ? string.Empty : Convert.ToDateTime(date).ToString("M/d/yyyy");
+        }
+
+        private void SetLabelText(Label label, string date, bool clearIfBackward)
+        {
+            if (clearIfBackward && string.IsNullOrEmpty(date))
             {
-                case "Drafted":
-                    lblDateDrafted.Text = dateFormatted;
-                    break;
-                case "Published":
-                    lblDatePublished.Text = dateFormatted;
-                    break;
-                case "Archived":
-                    lblDateArchived.Text = dateFormatted;
-                    break;
+                label.Text = string.Empty;
+            }
+            else
+            {
+                label.Text = date;
             }
         }
+
+        private void UpdateStatusDate(DataRow row)
+        {
+            string dateDrafted = ConvertDateToString(row["DateDrafted"]);
+            string datePublished = ConvertDateToString(row["DatePublished"]);
+            string dateArchived = ConvertDateToString(row["DateArchived"]);
+
+            bool clearIfBackward = IsBackwardStatusChange(currentStatus, newStatus);
+
+            SetLabelText(lblDateDrafted, dateDrafted, clearIfBackward);
+            SetLabelText(lblDatePublished, datePublished, clearIfBackward);
+            SetLabelText(lblDateArchived, dateArchived, clearIfBackward);
+        }
+
         private void LoadRecipeForm(int recipeIdval)
         {
             recipeId = recipeIdval;

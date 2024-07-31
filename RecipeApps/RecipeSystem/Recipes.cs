@@ -65,7 +65,7 @@
             {
                 SQLUtility.SetParamValue(cmd, "@RecipeId", recipeId);
                 SQLUtility.SetParamValue(cmd, "@NewStatus", newStatus);
-                SQLUtility.SetParamValue(cmd, "@Message", DBNull.Value); 
+                SQLUtility.SetParamValue(cmd, "@Message", DBNull.Value);
 
                 SQLUtility.ExecuteSQL(cmd);
                 string message = Convert.ToString(cmd.Parameters["@Message"].Value);
@@ -73,7 +73,7 @@
             }
         }
 
-            public static void Save(DataTable dtRecipes)
+        public static void Save(DataTable dtRecipes)
         {
             if (dtRecipes.Rows.Count == 0)
             {
@@ -83,22 +83,13 @@
             SQLUtility.SaveDataRow(r, "UpdateRecipe");
         }
 
-        public static void Delete(DataTable dtRecipes, string message)
+        public static void Delete(DataTable dtRecipes)
         {
             int id = (int)dtRecipes.Rows[0]["RecipeId"];
             SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeDelete");
             SQLUtility.SetParamValue(cmd, "@RecipeId", id);
-            SQLUtility.SetParamValue(cmd, "@Message", message);
-
-            try
-            {
-                SQLUtility.ExecuteSQL(cmd);
-            }
-            catch (SqlException ex)
-            {
-                string userMessage = SQLUtility.ParseConstraintMsg(ex.Message);
-                DisplayMessageToUser(userMessage);
-            }
+            SQLUtility.SetParamValue(cmd, "@Message", id);
+            SQLUtility.ExecuteSQL(cmd);
         }
 
         private static void DisplayMessageToUser(string message)
