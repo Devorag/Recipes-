@@ -1,3 +1,4 @@
+--AS This does not need to be it's own sproc, whatever you are trying to accomplish can go straight into the recipeget sproc
 CREATE OR ALTER PROCEDURE dbo.RecipeStatusGet(
     @RecipeId INT = NULL, 
     @RecipeName VARCHAR(100) = NULL, 

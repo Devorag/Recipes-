@@ -11,6 +11,7 @@ as
 begin 
     declare @return int = 0 
 
+--AS This is handled in the front end. Same for the next if statement.
     IF @MeasurementAmount <= 0
     BEGIN
         SET @Message = 'Invalid MeasurementAmount.';

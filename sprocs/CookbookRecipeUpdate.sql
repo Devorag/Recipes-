@@ -11,6 +11,7 @@ BEGIN
 
     DECLARE @return INT = 0;
 
+--AS This will be blocked from error handling in the front end.
     IF @RecipeSequence <= 0
     BEGIN
         SET @Message = 'Invalid RecipeSequence.';

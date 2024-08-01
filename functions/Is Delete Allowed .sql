@@ -1,3 +1,4 @@
+--AS It's not necessary to have this in a separate function, it can go straight into the sproc and in the front end it should only be calling the sproc and not the function.
 CREATE OR ALTER FUNCTION dbo.IsDeleteAllowed(@RecipeId INT)
 RETURNS VARCHAR(100)
 AS

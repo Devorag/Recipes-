@@ -1,3 +1,4 @@
+--AS This should be combined with the regular RecipeGet sproc
 create or alter procedure dbo.RecipeList 
 as 
 begin 

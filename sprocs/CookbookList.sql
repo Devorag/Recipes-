@@ -1,3 +1,4 @@
+--AS Combine this sproc with cookbookget using if statement.
 create or alter proc dbo.CookbookList
 as 
 begin 
