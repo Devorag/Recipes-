@@ -9,10 +9,10 @@ BEGIN
         SELECT *
         FROM Recipe r 
         WHERE r.RecipeId = @RecipeId AND
-              (r.RecipeStatus = 'Drafted' or DATEDIFF(day, r.DateArchived, GETDATE()) <= 30)
+              (r.RecipeStatus = 'Drafted' or DATEDIFF(day, r.DateArchived, GETDATE()) >= 30)
     )
     BEGIN
-        SET @value = 'Can only delete a recipe that is currently drafted or that has been archived in the past 30 days.'
+        SET @value = 'Can only delete a recipe that is currently drafted or that has been archived in over 30 days.'
     END
     ELSE
     BEGIN

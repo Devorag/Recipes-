@@ -37,7 +37,7 @@ namespace RecipeWinForms
 
                 if (newRecipeId > 0)
                 {
-                    OpenRecipeForm(newRecipeId);
+                    ShowRecipesForm(newRecipeId);
                     this.Close();
                 }
                 else
@@ -51,14 +51,15 @@ namespace RecipeWinForms
             }
         }
 
-        private void OpenRecipeForm(int newRecipeId)
+        private void ShowRecipesForm(int newRecipeId)
         {
+            int id = newRecipeId;
             if (this.MdiParent != null && this.MdiParent is frmMain)
             {
-                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewRecipe), newRecipeId);
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewRecipe), id);
             }
-            this.Close();
         }
+
 
         private void btnClone_Click(object sender, EventArgs e)
         {
