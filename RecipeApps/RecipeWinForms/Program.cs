@@ -15,9 +15,9 @@ namespace RecipeWinForms
             ApplicationConfiguration.Initialize();
             frmMain f = new frmMain();
 #if DEBUG
-            f.Text = f.Text + "- DEV";
+            f.Text = f.Text + " - DEV";
 #endif 
-            Application.Run();
+            Application.Run(f);
         }
     }
 }

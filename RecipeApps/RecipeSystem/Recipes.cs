@@ -5,7 +5,8 @@
         public static DataTable SearchRecipes()
         {
             DataTable dt = new();
-            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeList");
+            SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeGet");
+            SQLUtility.SetParamValue(cmd, "@All", 1);
             dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
@@ -80,16 +81,19 @@
                 throw new Exception("Cannot call Recipe save method because there are no rows in the table");
             }
             DataRow r = dtRecipes.Rows[0];
-            SQLUtility.SaveDataRow(r, "UpdateRecipe");
+            SQLUtility.SaveDataRow(r, "RecipeUpdate");
         }
 
-        public static void Delete(DataTable dtRecipes)
+        public static string Delete(DataTable dtRecipes)
         {
             int id = (int)dtRecipes.Rows[0]["RecipeId"];
             SqlCommand cmd = SQLUtility.GetSQLCommand("RecipeDelete");
             SQLUtility.SetParamValue(cmd, "@RecipeId", id);
-            SQLUtility.SetParamValue(cmd, "@Message", id);
+            SQLUtility.SetParamValue(cmd, "@Message", DBNull.Value);
             SQLUtility.ExecuteSQL(cmd);
+
+            string message = Convert.ToString(cmd.Parameters["@Message"].Value);
+            return message;
         }
 
         private static void DisplayMessageToUser(string message)

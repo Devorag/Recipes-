@@ -20,10 +20,9 @@ begin
 
         WHILE @@FETCH_STATUS = 0
         BEGIN
-            -- Delete related MealCourseRecipes
+
             DELETE FROM MealCourseRecipe WHERE MealCourseId = @MealCourseId;
 
-            -- Delete the MealCourse itself
             DELETE FROM MealCourse WHERE MealCourseId = @MealCourseId;
 
             FETCH NEXT FROM MealCourseCursor INTO @MealCourseId;
@@ -32,7 +31,6 @@ begin
         CLOSE MealCourseCursor;
         DEALLOCATE MealCourseCursor;
 
-        -- Delete the Course itself
         DELETE FROM Course WHERE CourseId = @CourseId;
 
         COMMIT;

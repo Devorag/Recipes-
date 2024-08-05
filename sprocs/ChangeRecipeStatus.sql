@@ -22,7 +22,6 @@ BEGIN
             WHEN DatePublished IS NOT NULL THEN 'Published'
             WHEN DateDrafted IS NOT NULL THEN 'Drafted'
 --AS No need for this else, it will never happen
-            ELSE 'Unspecified'
         END
     FROM Recipe
     WHERE RecipeId = @RecipeId

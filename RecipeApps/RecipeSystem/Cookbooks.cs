@@ -23,7 +23,8 @@
 
         public static DataTable GetCookbooksList()
         {
-            SqlCommand cmd = SQLUtility.GetSQLCommand("CookbookList");
+            SqlCommand cmd = SQLUtility.GetSQLCommand("CookbookGet");
+            SQLUtility.SetParamValue(cmd, "@All", 1);
             return SQLUtility.GetDataTable(cmd);
         }
 
@@ -46,7 +47,7 @@
             
             r["Active"] = isActive;
 
-            SQLUtility.SaveDataRow(r, "UpdateCookbook");
+            SQLUtility.SaveDataRow(r, "CookbookUpdate");
         }
 
 

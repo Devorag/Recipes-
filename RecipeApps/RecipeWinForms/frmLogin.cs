@@ -30,10 +30,12 @@ namespace RecipeWinForms
                 string connStringKey = "";
 #if DEBUG
                 connStringKey = "devconn";
+                
 #else
                 connStringKey = "liveconn";
+              
 #endif
-                string connString = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
+                string connString = ConfigurationManager.ConnectionStrings[connStringKey].ConnectionString;
                 DBManager.SetConnectionString(connString, true, txtUserId.Text, txtPassword.Text);
                 loginSuccess = true;
                 Settings.Default.userid = txtUserId.Text;

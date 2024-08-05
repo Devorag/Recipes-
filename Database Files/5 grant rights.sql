@@ -13,6 +13,9 @@ grant execute on CookbookList to approle
 grant execute on CookbookGet to approle
 grant execute on CookbookDelete to approle
 grant execute on ChangeRecipeStatus to approle
+grant execute on RecipeUpdate to approle
+grant execute on CookbookCombined to approle
+grant execute on CookbookUpdate to approle
 grant execute on TotalCaloriesPerMeal to approle
 grant execute on RecipeInfoInSpecifiedFormat to approle
 grant execute on UsersUpdate to approle
