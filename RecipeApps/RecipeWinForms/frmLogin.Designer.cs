@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             tblMain = new TableLayoutPanel();
-            lblUserName = new Label();
             lblPassword = new Label();
             txtUserId = new TextBox();
             txtPassword = new TextBox();
             tblButtons = new TableLayoutPanel();
             btnLogin = new Button();
             btnCancel = new Button();
+            lblUserName = new Label();
             tblMain.SuspendLayout();
             tblButtons.SuspendLayout();
             SuspendLayout();
@@ -58,17 +58,8 @@
             tblMain.RowStyles.Add(new RowStyle());
             tblMain.RowStyles.Add(new RowStyle());
             tblMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tblMain.Size = new Size(906, 240);
+            tblMain.Size = new Size(831, 184);
             tblMain.TabIndex = 0;
-            // 
-            // lblUserName
-            // 
-            lblUserName.AutoSize = true;
-            lblUserName.Location = new Point(3, 0);
-            lblUserName.Name = "lblUserName";
-            lblUserName.Size = new Size(132, 32);
-            lblUserName.TabIndex = 0;
-            lblUserName.Text = "User Name";
             // 
             // lblPassword
             // 
@@ -84,7 +75,7 @@
             txtUserId.Dock = DockStyle.Fill;
             txtUserId.Location = new Point(141, 3);
             txtUserId.Name = "txtUserId";
-            txtUserId.Size = new Size(762, 39);
+            txtUserId.Size = new Size(687, 39);
             txtUserId.TabIndex = 2;
             // 
             // txtPassword
@@ -92,7 +83,8 @@
             txtPassword.Dock = DockStyle.Fill;
             txtPassword.Location = new Point(141, 48);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(762, 39);
+            txtPassword.PasswordChar = '*';
+            txtPassword.Size = new Size(687, 39);
             txtPassword.TabIndex = 3;
             // 
             // tblButtons
@@ -103,7 +95,7 @@
             tblButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tblButtons.Controls.Add(btnLogin, 0, 0);
             tblButtons.Controls.Add(btnCancel, 1, 0);
-            tblButtons.Location = new Point(603, 93);
+            tblButtons.Location = new Point(528, 93);
             tblButtons.Name = "tblButtons";
             tblButtons.RowCount = 1;
             tblButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -130,18 +122,29 @@
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
             // 
+            // lblUserName
+            // 
+            lblUserName.AutoSize = true;
+            lblUserName.Location = new Point(3, 0);
+            lblUserName.Name = "lblUserName";
+            lblUserName.Size = new Size(132, 32);
+            lblUserName.TabIndex = 0;
+            lblUserName.Text = "User Name";
+            // 
             // frmLogin
             // 
+            AcceptButton = btnLogin;
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(906, 240);
+            CancelButton = btnCancel;
+            ClientSize = new Size(831, 184);
             Controls.Add(tblMain);
             Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmLogin";
-            Text = "frmLogin";
+            Text = "Recipe Login";
             tblMain.ResumeLayout(false);
             tblMain.PerformLayout();
             tblButtons.ResumeLayout(false);

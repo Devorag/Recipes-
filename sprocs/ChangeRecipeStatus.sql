@@ -21,7 +21,7 @@ BEGIN
             WHEN DateArchived IS NOT NULL THEN 'Archived'
             WHEN DatePublished IS NOT NULL THEN 'Published'
             WHEN DateDrafted IS NOT NULL THEN 'Drafted'
-            ELSE 'Unspecified'
+--AS No need for this else, it will never happen
         END
     FROM Recipe
     WHERE RecipeId = @RecipeId

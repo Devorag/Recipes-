@@ -200,27 +200,24 @@ namespace RecipeWinForms
 
         private void Delete()
         {
-            if (dtRecipes.Rows.Count > 0)
-            {
-                string allowedDelete = SQLUtility.GetValueFromFirstRowAsString(dtRecipes, "IsDeleteAllowed");
-                if (!string.IsNullOrEmpty(allowedDelete))
-                {
-                    MessageBox.Show(allowedDelete, Application.ProductName);
-                    return;
-                }
-            }
-
             var response = MessageBox.Show("Are you sure you want to delete this recipe?", "Recipes", MessageBoxButtons.YesNo);
             if (response == DialogResult.No)
             {
                 return;
             }
-
+            
             Application.UseWaitCursor = true;
             try
             {
-                Recipes.Delete(dtRecipes);
-                this.Close();
+                string message = Recipes.Delete(dtRecipes);
+                if (!string.IsNullOrEmpty(message) && !message.Contains("successfully"))
+                {
+                    MessageBox.Show(message, Application.ProductName);
+                }
+                else
+                {
+                    this.Close();
+                }
             }
             catch (Exception ex)
             {

@@ -7,21 +7,46 @@ create or alter procedure dbo.RecipeGet(
 )
 as 
 begin 
-	select @RecipeName = nullif(@RecipeName,''), @IncludeBlank  = ISNULL(@IncludeBlank,0)
+	declare @return int = 0; 
 
+	if @All = 1 and @IncludeBlank = 0
+	begin 
+
+	    ;
+        with x as
+        ( 
+        select r.RecipeId, r.RecipeName, NumIngredients = count(ri.IngredientId) 
+        from recipe r 
+        left join RecipeIngredient ri 
+        on ri.RecipeId = r.RecipeId
+        group by r.RecipeName, r.recipeId
+        )
+
+        select r.RecipeId, r.RecipeName, Status = r.recipestatus, u.UsersName, r.Calories, x.NumIngredients
+        from x 
+        join recipe r 
+        on r.RecipeId = x.RecipeId
+        left join users u 
+        on u.usersid = r.usersid 
+        order by r.RecipeStatus desc 
+         
+        return @return
+	end 
+	else
+	begin
+
+	select @RecipeName = nullif(@RecipeName,''), @IncludeBlank  = ISNULL(@IncludeBlank,0)
+	
 	select r.RecipeId, r.CuisineID, r.UsersId, r.RecipeName, r.Calories, r.Datedrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePicture, IsDeleteAllowed = dbo.IsDeleteAllowed(r.RecipeId)
 	from Recipe r
 	where r.RecipeId = @RecipeId 
-	or @All = 1
 	or r.RecipeName like '%' + @RecipeName + '%'
-		union select 0,0,0,'',0,'','','','','',''
+	or @IncludeBlank = 1
+	union select 0,0,0,'',0,'','','','','',''
 	where @IncludeBlank = 1 
 	order by r.recipename, r.datedrafted, r.datepublished, r.datearchived, r.recipestatus, r.calories, r.recipepicture
 end
+	return @return
+end
 go
 
-exec RecipeGet @All = 1
-
-declare @id int
-select top 1 @id = r.recipeId from Recipe r 
-exec RecipeGet @recipeId = @id

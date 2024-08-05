@@ -43,7 +43,6 @@ BEGIN
     FROM RecipeIngredient
     WHERE RecipeId = @RecipeId;
 
-    -- Step 3: Clone the steps
     INSERT INTO RecipeSteps (RecipeId, Instructions, StepSequence)
     SELECT @NewRecipeId, Instructions, StepSequence
     FROM RecipeSteps 

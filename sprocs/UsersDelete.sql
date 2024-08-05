@@ -19,10 +19,8 @@ BEGIN
         DELETE FROM RecipeIngredient WHERE RecipeId IN (SELECT RecipeId FROM Recipe WHERE UsersId = @UsersId);
         DELETE FROM Recipe WHERE UsersId = @UsersId;
 
-        -- Finally, delete the user
         DELETE FROM Users WHERE UsersId = @UsersId;
 
-        -- Commit transaction
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH

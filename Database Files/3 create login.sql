@@ -1,6 +1,6 @@
 use master
 go 
-drop login if exists appaddmin 
+drop login appadmin 
 go 
 create login appadmin with PASSWORD = 'ABC123!!!'
 go 

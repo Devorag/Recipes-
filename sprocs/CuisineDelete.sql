@@ -20,19 +20,14 @@ begin
 
         WHILE @@FETCH_STATUS = 0
         BEGIN
-            -- Delete related RecipeSteps
             DELETE FROM RecipeSteps WHERE RecipeId = @RecipeId;
 
-            -- Delete related RecipeIngredients
             DELETE FROM RecipeIngredient WHERE RecipeId = @RecipeId;
 
-            -- Delete related CookbookRecipes
             DELETE FROM CookbookRecipe WHERE RecipeId = @RecipeId;
 
-            -- Delete related MealCourseRecipes
             DELETE FROM MealCourseRecipe WHERE RecipeId = @RecipeId;
 
-            -- Delete the recipe itself
             DELETE FROM Recipe WHERE RecipeId = @RecipeId;
 
             FETCH NEXT FROM RecipeCursor INTO @RecipeId;
@@ -41,7 +36,6 @@ begin
         CLOSE RecipeCursor;
         DEALLOCATE RecipeCursor;
 
-        -- Delete the Cuisine itself
         DELETE FROM Cuisine WHERE CuisineId = @CuisineId;
 
         COMMIT;

@@ -11,11 +11,8 @@ BEGIN
     SELECT @All = ISNULL(@All, 0), 
            @CookbookRecipeId = ISNULL(@CookbookRecipeId, 0), 
            @CookbookId = ISNULL(@CookbookId, 0);
-
-    SELECT cr.CookbookRecipeId, 
-           cr.CookbookId, 
-           cr.RecipeId, 
-           cr.RecipeSequence
+--AS Formatting tip: line up the whole select statement without indenting, looks much nicer.
+    SELECT cr.CookbookRecipeId, cr.CookbookId, cr.RecipeId, cr.RecipeSequence
     FROM CookbookRecipe cr 
     WHERE (@All = 1) OR 
           (cr.CookbookRecipeId = @CookbookRecipeId) OR 

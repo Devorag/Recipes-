@@ -1,4 +1,4 @@
-use RecipeDB 
+use RecipeDb
 go 
 drop role if exists approle 
 go 

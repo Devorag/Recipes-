@@ -11,12 +11,7 @@ BEGIN
 
     DECLARE @return INT = 0;
 
-    IF @RecipeSequence <= 0
-    BEGIN
-        SET @Message = 'Invalid RecipeSequence.';
-        SET @return = -1;
-        RETURN @return;
-    END
+--AS This will be blocked from error handling in the front end.
 
     SELECT @CookbookRecipeId = ISNULL(@CookbookRecipeId, 0), @RecipeId = ISNULL(@RecipeId,0), @RecipeSequence = ISNULL(@RecipeSequence,0);
 

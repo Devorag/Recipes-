@@ -9,10 +9,8 @@ begin
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- Delete related data
         DELETE FROM RecipeIngredient WHERE IngredientId = @IngredientId
 
-        -- Delete recipe
         DELETE FROM ingredient WHERE IngredientId = @IngredientId
 
         COMMIT;

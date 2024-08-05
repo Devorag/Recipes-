@@ -29,7 +29,7 @@ namespace RecipeWinForms
         {
             try
             {
-                DataTable dtStatus = Recipes.RecipeStatusGet(recipeId);
+                DataTable dtStatus = Recipes.GetRecipeList();
                 if (dtStatus.Rows.Count > 0)
                 {
                     DataRow row = dtStatus.Rows[0];

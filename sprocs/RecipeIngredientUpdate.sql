@@ -11,19 +11,7 @@ as
 begin 
     declare @return int = 0 
 
-    IF @MeasurementAmount <= 0
-    BEGIN
-        SET @Message = 'Invalid MeasurementAmount.';
-        SET @return = -1;
-        RETURN @return;
-    END
-
-    IF @IngredientSequence <= 0
-    BEGIN
-        SET @Message = 'Invalid IngredientSequence.';
-        SET @return = -1;
-        RETURN @return;
-    END
+--AS This is handled in the front end. Same for the next if statement.
 
     select @RecipeIngredientId = ISNULL(@RecipeIngredientId,0) 
 
