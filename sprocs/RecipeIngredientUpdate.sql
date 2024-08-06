@@ -11,7 +11,6 @@ as
 begin 
     declare @return int = 0 
 
---AS This is handled in the front end. Same for the next if statement.
 
     select @RecipeIngredientId = ISNULL(@RecipeIngredientId,0) 
 

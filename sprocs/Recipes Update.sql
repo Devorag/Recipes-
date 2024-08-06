@@ -1,4 +1,3 @@
---AS Keep to the same naming convention: RecipeUpdate.
 create or alter proc dbo.RecipeUpdate( 
     @RecipeId int output, 
     @CuisineId int, 

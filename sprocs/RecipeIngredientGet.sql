@@ -11,7 +11,6 @@ BEGIN
     SELECT @All = ISNULL(@All, 0), 
            @RecipeIngredientId = ISNULL(@RecipeIngredientId, 0), 
            @RecipeId = ISNULL(@RecipeId, 0)
---AS This should go into one select statement without the if statements. Have a where clause with or's (the same way it was done in most sprocs)
     BEGIN
         SELECT ri.RecipeIngredientId, 
                ri.RecipeId, 
