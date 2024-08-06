@@ -8,7 +8,7 @@ join recipe r
 on r.RecipeId = ri.recipeId 
 join users u 
 on u.UsersId = r.UsersId 
-where u.UserName = 'Dmozes'
+where u.UsersName = 'Dmozes'
 
 delete rs 
 from RecipeSteps rs 
@@ -16,7 +16,7 @@ join recipe r
 on r.RecipeId = rs.RecipeId 
 join users u 
 on u.UsersId = r.UsersId 
-where u.UserName = 'Dmozes'
+where u.UsersName = 'Dmozes'
 
 delete mcr 
 from mealcourserecipe mcr 
@@ -24,7 +24,7 @@ join recipe r
 on r.recipeId = mcr.recipeId
 join users u 
 on u.UsersId = r.UsersId  
-where u.userName = 'Dmozes'
+where u.usersName = 'Dmozes'
 
 delete cr 
 from CookbookRecipe cr 
@@ -32,13 +32,13 @@ join recipe r
 on r.recipeId = cr.recipeId 
 join users u 
 on u.UsersId = r.usersId 
-where u.userName = 'Dmozes'
+where u.usersName = 'Dmozes'
 
 delete r 
 from recipe r 
 join users u 
 on u.usersID = r.usersId 
-where u.username = 'Dmozes'
+where u.usersname = 'Dmozes'
 
 
 delete mcr 
@@ -49,7 +49,7 @@ join meal m
 on m.mealId = mc.mealId  
 join users u 
 on u.UsersId = m.UsersId 
-where u.UserName = 'Dmozes'
+where u.UsersName = 'Dmozes'
 
 
 delete mc 
@@ -58,23 +58,23 @@ join meal m
 on m.MealId = mc.MealId 
 join users u 
 on u.usersID = m.UsersId 
-where u.UserName = 'Dmozes'
+where u.UsersName = 'Dmozes'
 
 delete m 
 from meal m 
 join users u  
 on u.usersID = m.usersId 
-where u.username = 'Dmozes'  
+where u.usersname = 'Dmozes'  
 
 delete c 
 from cookbook c 
 join users u 
 on u.usersID = c.usersID 
-where u.username = 'Dmozes'
+where u.usersname = 'Dmozes'
 
 delete u 
 from users u 
-where u.username = 'Dmozes'
+where u.usersname = 'Dmozes'
 --2) Sometimes we want to clone a recipe as a starting point and then edit it. For example we have a complex recipe (steps and ingredients) and want to make a modified version. Write the SQL that clones a specific recipe, add " - clone" to its name.
 
 insert Recipe(CuisineID, UsersId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived)
