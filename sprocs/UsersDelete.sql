@@ -8,18 +8,88 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-   DELETE FROM CookbookRecipe WHERE CookbookId IN (SELECT CookbookId FROM Cookbook WHERE UsersId = @UsersId);
-        DELETE FROM Cookbook WHERE UsersId = @UsersId;
+	delete Ri 
+	from recipeIngredient ri
+	join recipe r 
+	on r.RecipeId = ri.recipeId 
+	join users u 
+	on u.UsersId = r.UsersId 
+	where u.UsersId = @UsersId
 
-        DELETE FROM MealCourseRecipe WHERE MealCourseId IN (SELECT MealCourseId FROM MealCourse WHERE MealId IN (SELECT MealId FROM Meal WHERE UsersId = @UsersId));
-        DELETE FROM MealCourse WHERE MealId IN (SELECT MealId FROM Meal WHERE UsersId = @UsersId);
-        DELETE FROM Meal WHERE UsersId = @UsersId;
+	delete rs 
+	from RecipeSteps rs 
+	join recipe r 
+	on r.RecipeId = rs.RecipeId 
+	join users u 
+	on u.UsersId = r.UsersId 
+	where u.UsersId = @UsersId
 
-        DELETE FROM RecipeSteps WHERE RecipeId IN (SELECT RecipeId FROM Recipe WHERE UsersId = @UsersId);
-        DELETE FROM RecipeIngredient WHERE RecipeId IN (SELECT RecipeId FROM Recipe WHERE UsersId = @UsersId);
-        DELETE FROM Recipe WHERE UsersId = @UsersId;
 
-        DELETE FROM Users WHERE UsersId = @UsersId;
+	delete mcr 
+	from mealcourserecipe mcr 
+	join recipe r 
+	on r.recipeId = mcr.recipeId
+	join users u 
+	on u.UsersId = r.UsersId  
+	where u.UsersId = @UsersId
+
+
+	delete cr 
+	from CookbookRecipe cr 
+	join recipe r 
+	on r.recipeId = cr.recipeId 
+	join users u 
+	on u.UsersId = r.usersId 
+	where u.UsersId = @UsersId
+
+
+	delete r 
+	from recipe r 
+	join users u 
+	on u.usersID = r.usersId 
+	where u.UsersId = @UsersId
+
+
+
+	delete mcr 
+	from MealCourseRecipe mcr 
+	join mealcourse mc 
+	on mc.mealCourseId = mcr.mealcourseID 
+	join meal m 
+	on m.mealId = mc.mealId  
+	join users u 
+	on u.UsersId = m.UsersId 
+	where u.UsersId = @UsersId
+
+
+
+	delete mc 
+	from MealCourse mc 
+	join meal m 
+	on m.MealId = mc.MealId 
+	join users u 
+	on u.usersID = m.UsersId 
+	where u.UsersId = @UsersId
+
+
+	delete m 
+	from meal m 
+	join users u  
+	on u.usersID = m.usersId 
+	where u.UsersId = @UsersId
+  
+
+	delete c 
+	from cookbook c 
+	join users u 
+	on u.usersID = c.usersID 
+	where u.UsersId = @UsersId
+
+
+	delete u 
+	from users u 
+	where u.UsersId = @UsersId
+
 
         COMMIT TRANSACTION;
     END TRY

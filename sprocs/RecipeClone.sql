@@ -48,8 +48,6 @@ BEGIN
     FROM RecipeSteps 
     WHERE RecipeId = @RecipeId;
 
-    SET @NewRecipeId = SCOPE_IDENTITY();
-
     SET @Message = 'Recipe cloned successfully';
 
     RETURN;

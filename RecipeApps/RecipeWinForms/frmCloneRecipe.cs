@@ -1,5 +1,4 @@
-﻿using CPUFramework;
-using RecipeSystem;
+﻿using RecipeSystem;
 
 namespace RecipeWinForms
 {
@@ -37,7 +36,11 @@ namespace RecipeWinForms
 
                 if (newRecipeId > 0)
                 {
-                    ShowRecipesForm(newRecipeId);
+                    int id = newRecipeId;
+                    if (this.MdiParent != null && this.MdiParent is frmMain)
+                    {
+                        ((frmMain)this.MdiParent).OpenForm(typeof(frmNewRecipe), id);
+                    }
                     this.Close();
                 }
                 else
@@ -48,15 +51,6 @@ namespace RecipeWinForms
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void ShowRecipesForm(int newRecipeId)
-        {
-            int id = newRecipeId;
-            if (this.MdiParent != null && this.MdiParent is frmMain)
-            {
-                ((frmMain)this.MdiParent).OpenForm(typeof(frmNewRecipe), id);
             }
         }
 

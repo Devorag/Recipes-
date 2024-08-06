@@ -1,4 +1,3 @@
---AS Name it CookbookUpdate to keep to the same naming convention.
 create or alter proc dbo.CookbookUpdate( 
     @CookbookId int output, 
     @UsersId int, 
