@@ -1,7 +1,4 @@
-﻿using CPUFramework;
-using RecipeSystem;
-
-namespace RecipeWinForms
+﻿namespace RecipeWinForms
 {
     public partial class frmCloneRecipe : Form
     {
