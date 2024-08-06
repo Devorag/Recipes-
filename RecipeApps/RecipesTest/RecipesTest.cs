@@ -11,7 +11,6 @@ namespace RecipesTest
         public void Setup()
         {
             DBManager.SetConnectionString(connString, true);
-            //DBManager.SetConnectionString("Server=tcp:dev-devorag.database.windows.net,1433;Initial Catalog=RecipeDB;Persist Security Info=False;User ID=devorag;Password=DEVO5401!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30");
         }
 
         private DataTable GetDataTable(string sql)
@@ -219,7 +218,6 @@ WHERE
                 recipeDesc = dt.Rows[0]["RecipeName"] + " " + dt.Rows[0]["RecipeStatus"];
             }
 
-            // Assuming that a recipeId was found that should not be deletable
             Assume.That(recipeId > 0, "No recipes in DB that are non-deletable based on the business rules, can't run test");
 
             TestContext.WriteLine($"Existing non-deletable recipe in DB with id = {recipeId}, {recipeDesc}");
