@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="RecipeMAUI.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:RecipeMAUI"
+    Shell.FlyoutBehavior="Disabled"
+    Title="RecipeMAUI">
+    <TabBar>
+        <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:Home}"
+        Route="Home" />
+
+        <ShellContent
+        Title="Recipe List"
+        ContentTemplate="{DataTemplate local:RecipeList}"
+        Route="RecipeList" />
+    </TabBar>
+
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate local:Login}"
+        Route="Login" />
+</Shell>

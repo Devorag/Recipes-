@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeMAUI.Login"
+             Title="Login">
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+        <Label 
+            Text="Login"
+            FontSize="Header"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Border Padding="10">
+            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                <Label x:Name="Messagelbl" FontSize="Medium" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                <Label Text="User Name" Grid.Row="1" Grid.Column="0"/>
+                <Entry x:Name="UserNameTxt" Grid.Row="1" Grid.Column="1"/>
+                <Label Text="Password" Grid.Row="2" Grid.Column="0"/>
+                <Entry x:Name="PasswordTxt" Grid.Row="2" Grid.Column="1"/>
+                <Button x:Name="Loginbtn" Text="Login" Grid.Row="3" Grid.Column="0" Clicked="Loginbtn_Clicked"/>
+                <Button x:Name="Cancelbtn" Text="Cancel" Grid.Row="3" Grid.Column="1" Clicked="Cancelbtn_Clicked"/>
+            </Grid>
+        </Border>
+    </VerticalStackLayout>
+</ContentPage>
