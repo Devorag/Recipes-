@@ -3,21 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecipeMAUI.Login"
              Title="Login">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Entry">
+                <Setter Property="MinimumWidthRequest" Value="200"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
         <Label 
             Text="Login"
             FontSize="Header"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Label x:Name="Messagelbl" FontSize="Medium" TextColor="{StaticResource Danger}"/>
         <Border Padding="10">
-            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
-                <Label x:Name="Messagelbl" FontSize="Medium" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto" HorizontalOptions="Center" ColumnSpacing="10" RowSpacing="10">
                 <Label Text="User Name" Grid.Row="1" Grid.Column="0"/>
-                <Entry x:Name="UserNameTxt" Grid.Row="1" Grid.Column="1"/>
+                <Entry x:Name="UserNameTxt" Grid.Row="1" Grid.Column="1" Text="appadmin"/>
                 <Label Text="Password" Grid.Row="2" Grid.Column="0"/>
-                <Entry x:Name="PasswordTxt" Grid.Row="2" Grid.Column="1"/>
+                <Entry x:Name="PasswordTxt" Grid.Row="2" Grid.Column="1" IsPassword="True"/>
                 <Button x:Name="Loginbtn" Text="Login" Grid.Row="3" Grid.Column="0" Clicked="Loginbtn_Clicked"/>
-                <Button x:Name="Cancelbtn" Text="Cancel" Grid.Row="3" Grid.Column="1" Clicked="Cancelbtn_Clicked"/>
+                <Button x:Name="Cancelbtn" Text="Cancel" Grid.Row="3" Grid.Column="1" Clicked="Cancelbtn_Clicked"
+                        BackgroundColor="{StaticResource Warning}" />
             </Grid>
         </Border>
     </VerticalStackLayout>
