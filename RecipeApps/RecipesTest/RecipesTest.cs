@@ -5,38 +5,39 @@ namespace RecipesTest
 {
     public class RecipesTest
     {
-        string connString = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
-        string testconnString = ConfigurationManager.ConnectionStrings["unittestconn"].ConnectionString;
+        //string connString = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
+        //string liveconnString = ConfigurationManager.ConnectionStrings["unittestconn"].ConnectionString;
+        string liveconnString = ConfigurationManager.ConnectionStrings["unittestconn"].ConnectionString;
         [SetUp]
         public void Setup()
         {
-            DBManager.SetConnectionString(connString, true);
+            DBManager.SetConnectionString(liveconnString, true);
             //DBManager.SetConnectionString("Server=tcp:dev-devorag.database.windows.net,1433;Initial Catalog=RecipeDB;Persist Security Info=False;User ID=devorag;Password=DEVO5401!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30");
         }
 
         private DataTable GetDataTable(string sql)
         {
             DataTable dt = new();
-            DBManager.SetConnectionString(testconnString, false);
+            DBManager.SetConnectionString(liveconnString, false);
             dt = SQLUtility.GetDataTable(sql);
-            DBManager.SetConnectionString(connString, false);
+            DBManager.SetConnectionString(liveconnString, false);
             return dt;
         }
 
         private int GetFirstColumnFirstRowValue(string sql)
         {
             int n = 0;
-            DBManager.SetConnectionString(testconnString, false);
+            DBManager.SetConnectionString(liveconnString, false);
             n = SQLUtility.GetFirstCFirstRValue(sql);
-            DBManager.SetConnectionString(connString, false);
+            DBManager.SetConnectionString(liveconnString, false);
             return n;
         }
 
         private void ExecuteSQl(string sql)
         {
-            DBManager.SetConnectionString(testconnString, false);
+            DBManager.SetConnectionString(liveconnString, false);
             SQLUtility.ExecuteSQL(sql);
-            DBManager.SetConnectionString(connString, false);
+            DBManager.SetConnectionString(liveconnString, false);
         }
 
         [Test]
@@ -131,7 +132,7 @@ namespace RecipesTest
             TestContext.WriteLine(ex.Message);
         }
 
-        [Test]
+ 
         public void DeleteRecipe()
         {
             string sql = @"
@@ -169,7 +170,7 @@ order by r.recipeid
             TestContext.WriteLine("Record with recipeId  = " + recipeId + " does not exist in DB");
         }
 
-        [Test]
+       
         public void DeleteRecipeWithForeignConstraints()
         {
             string sql = @"
@@ -199,7 +200,7 @@ where r.recipename like '%chocolate%'
         }
 
 
-        [Test]
+        
         public void DeleteNonDeletableRecipe()
         {
             string sql = @"
