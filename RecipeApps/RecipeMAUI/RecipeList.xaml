@@ -4,18 +4,18 @@
              x:Class="RecipeMAUI.RecipeList"
              Title="RecipeList">
     <Grid RowDefinitions="Auto,*" HorizontalOptions="Center" RowSpacing="10">
-        <Button x:Name="SearchBtn" Text="Search" Grid.Row="0" Clicked="SearchBtn_Clicked"/>
+        <Button x:Name="SearchBtn" Text="Search" Grid.Row="0" Clicked="SearchBtn_Clicked" HorizontalOptions="Center"/>
         <ListView x:Name="RecipeLst" Grid.Row="1">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                        <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                    <Label Grid.Row="0" Grid.Column="0" Text="{Binding Path=[RecipeName]}"/>
-                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Path=[RecipeStatus]}"/>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" ColumnSpacing="10" HorizontalOptions="Center">
+                            <Image Grid.Row="0" Grid.Column="0" WidthRequest="65" HeightRequest="65" Source="{Binding Path=[RecipePicture]}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Path=[RecipeName]}" HorizontalOptions="StartAndExpand"/>
                         </Grid>
                     </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </ContentPage>

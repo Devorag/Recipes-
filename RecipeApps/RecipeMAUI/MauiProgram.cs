@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace RecipeMAUI
 {
@@ -7,6 +9,13 @@ namespace RecipeMAUI
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
+            var a = Assembly.GetExecutingAssembly();
+            var stream = a.GetManifestResourceStream($"{typeof(Settings).Namespace}.secret-appsettings.json");
+            IConfigurationRoot config = new ConfigurationBuilder()
+                .AddJsonStream(stream)
+                .Build();
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -15,11 +24,18 @@ namespace RecipeMAUI
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
+            builder.Configuration.AddConfiguration(config);
 
-            return builder.Build();
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
+            var app = builder.Build();
+
+            IConfiguration configval = app.Services.GetService<IConfiguration>();
+            var settingsval = configval.GetRequiredSection("Settings").Get<Settings>();
+
+            App.ConnStringSetting = settingsval.liveconn.ToString();
+            return app;
         }
     }
 }

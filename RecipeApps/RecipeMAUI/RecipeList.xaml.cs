@@ -20,4 +20,5 @@ public partial class RecipeList : ContentPage
     {
 		SearchRecipes();
     }
+
 }

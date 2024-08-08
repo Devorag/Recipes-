@@ -22,7 +22,7 @@ begin
         group by r.RecipeName, r.recipeId
         )
 
-        select r.RecipeId, r.RecipeName, Status = r.recipestatus, u.UsersName, r.Calories, x.NumIngredients
+        select r.RecipeId, r.RecipeName, Status = r.recipestatus, u.UsersName, r.Calories, x.NumIngredients, r.RecipePicture
         from x 
         join recipe r 
         on r.RecipeId = x.RecipeId

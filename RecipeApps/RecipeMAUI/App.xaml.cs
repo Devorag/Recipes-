@@ -5,7 +5,7 @@ namespace RecipeMAUI
     public partial class App : Application
     {
         public static bool LoggedIn = false;
-        public static string ConnStringSetting = "Server =.\\SQLExpress;Database=RecipeDB";
+        public static string ConnStringSetting = "";
         public App()
         {
             InitializeComponent();

@@ -57,6 +57,27 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\recipe_apple_yogurt_smoothie.jpg" />
+	  <None Remove="Resources\Images\recipe_butter_muffins.jpg" />
+	  <None Remove="Resources\Images\recipe_cheese_bread.jpg" />
+	  <None Remove="Resources\Images\recipe_chocolate_chip_cookies.jpg" />
+	  <None Remove="Resources\Images\recipe_falafel_balls.jpg" />
+	  <None Remove="Resources\Images\recipe_ministroni_soup.jpg" />
+	  <None Remove="Resources\Images\recipe_muddy_buddies.jpg" />
+	  <None Remove="Resources\Images\recipe_roasted_vegetables.jpg" />
+	  <None Remove="Resources\Images\recipe_sesame_chicken.jpg" />
+	  <None Remove="secret-appsettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="secret-appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
