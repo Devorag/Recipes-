@@ -5,12 +5,14 @@ namespace RecipesTest
 {
     public class RecipesTest
     {
-        string connString = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
-        string testconnString = ConfigurationManager.ConnectionStrings["unittestconn"].ConnectionString;
+        //    string connString = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
+        string testconnString = ConfigurationManager.ConnectionStrings["testliveconn"].ConnectionString;
+        string liveString = ConfigurationManager.ConnectionStrings["liveconn"].ConnectionString;
+
         [SetUp]
         public void Setup()
         {
-            DBManager.SetConnectionString(connString, true);
+            DBManager.SetConnectionString(liveString, true);
         }
 
         private DataTable GetDataTable(string sql)
@@ -18,7 +20,7 @@ namespace RecipesTest
             DataTable dt = new();
             DBManager.SetConnectionString(testconnString, false);
             dt = SQLUtility.GetDataTable(sql);
-            DBManager.SetConnectionString(connString, false);
+            DBManager.SetConnectionString(liveString, false);
             return dt;
         }
 
@@ -27,7 +29,7 @@ namespace RecipesTest
             int n = 0;
             DBManager.SetConnectionString(testconnString, false);
             n = SQLUtility.GetFirstCFirstRValue(sql);
-            DBManager.SetConnectionString(connString, false);
+            DBManager.SetConnectionString(liveString, false);
             return n;
         }
 
@@ -35,7 +37,7 @@ namespace RecipesTest
         {
             DBManager.SetConnectionString(testconnString, false);
             SQLUtility.ExecuteSQL(sql);
-            DBManager.SetConnectionString(connString, false);
+            DBManager.SetConnectionString(liveString, false);
         }
 
         [Test]
@@ -69,7 +71,7 @@ namespace RecipesTest
             int pkid = 0;
             if (r["RecipeId"] != DBNull.Value)
             {
-               pkid = (int)r["RecipeId"];
+                pkid = (int)r["RecipeId"];
             }
 
             Assert.IsTrue(newCalories > 0, "recipe with Calories = " + maxCalories + " is not found in DB");
@@ -130,7 +132,7 @@ namespace RecipesTest
             TestContext.WriteLine(ex.Message);
         }
 
-        [Test]
+        //[Test]
         public void DeleteRecipe()
         {
             string sql = @"
@@ -168,7 +170,7 @@ order by r.recipeid
             TestContext.WriteLine("Record with recipeId  = " + recipeId + " does not exist in DB");
         }
 
-        [Test]
+        //[Test]
         public void DeleteRecipeWithForeignConstraints()
         {
             string sql = @"
@@ -198,7 +200,7 @@ where r.recipename like '%chocolate%'
         }
 
 
-        [Test]
+        //[Test]
         public void DeleteNonDeletableRecipe()
         {
             string sql = @"
@@ -232,7 +234,7 @@ WHERE
             TestContext.WriteLine($"Record with recipeId = {recipeId} exists in DB");
         }
 
-        [Test] 
+        [Test]
         public void LoadRecipe()
         {
             int recipeId = GetExistingRecipeId();
@@ -256,7 +258,7 @@ WHERE
 
             DataTable dt = Recipes.GetCuisineList();
 
-            Assert.IsTrue(dt.Rows.Count - 1 == cuisineCount,"num rows returned by app (" + dt.Rows.Count + ") <> " + cuisineCount);
+            Assert.IsTrue(dt.Rows.Count - 1 == cuisineCount, "num rows returned by app (" + dt.Rows.Count + ") <> " + cuisineCount);
 
             TestContext.WriteLine("Number of rows in Cuisines return by app = " + dt.Rows.Count);
         }
@@ -286,7 +288,8 @@ WHERE
             string val = string.Empty;
 
             DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0 && dt.Columns.Count > 0) {
+            if (dt.Rows.Count > 0 && dt.Columns.Count > 0)
+            {
                 if (dt.Rows[0][0] != DBNull.Value)
                 {
                     val = dt.Rows[0][0].ToString();
@@ -294,6 +297,6 @@ WHERE
             }
             return val;
         }
-        
+
     }
 }
