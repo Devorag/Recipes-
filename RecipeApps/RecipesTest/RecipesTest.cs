@@ -5,7 +5,6 @@ namespace RecipesTest
 {
     public class RecipesTest
     {
-        //    string connString = ConfigurationManager.ConnectionStrings["devconn"].ConnectionString;
         string testconnString = ConfigurationManager.ConnectionStrings["testliveconn"].ConnectionString;
         string liveString = ConfigurationManager.ConnectionStrings["liveconn"].ConnectionString;
 
@@ -133,7 +132,7 @@ namespace RecipesTest
             TestContext.WriteLine(ex.Message);
         }
 
-        //[Test]
+        [Test]
         public void DeleteRecipe()
         {
             string sql = @"
@@ -147,8 +146,9 @@ left join mealcourserecipe mc
 on mc.recipeid = r.recipeid
 left join cookbookrecipe cr 
 on cr.recipeid = r.recipeid 
-and r.recipestatus <> 'Drafted'
+where r.recipestatus = 'Drafted'
 order by r.recipeid
+
 ";
             DataTable dt = GetDataTable(sql);
             int recipeId = 0;
@@ -159,14 +159,14 @@ order by r.recipeid
                 recipeId = (int)dt.Rows[0]["recipeid"];
                 recipeDesc = dt.Rows[0]["RecipeName"] + " " + dt.Rows[0]["RecipeStatus"];
             }
-            Assume.That(dt.Rows.Count > 0, "There are no recipes in DB, can't run test");
+            Assume.That(recipeId > 0, "There are no recipes in DB, can't run test");
 
             TestContext.WriteLine($"Existing deletable recipe in DB with id = {recipeId}, {recipeDesc}");
             TestContext.WriteLine($"Ensure that app can delete recipe with id = {recipeId}");
             bizRecipe recipe = new();
             recipe.Delete(dt);
             DataTable dtAfterDelete = GetDataTable("select * from recipe r where r.recipeId = " + recipeId);
-            Assert.IsTrue(dtAfterDelete.Rows.Count > 0, "record with recipeid " + recipeId + " exists in DB");
+            Assert.IsTrue(dtAfterDelete.Rows.Count == 0, "record with recipeid " + recipeId + " exists in DB");
             TestContext.WriteLine("Record with recipeId  = " + recipeId + " does not exist in DB");
         }
 
@@ -176,7 +176,7 @@ order by r.recipeid
             string sql = @"
 select r.recipeid, r.recipename, r.recipestatus
 from recipe r 
-where r.recipename like '%chocolate%'
+where r.recipename like '%butter%'
 ";
             DataTable dt = GetDataTable(sql);
             int recipeId = 0;
@@ -191,8 +191,8 @@ where r.recipename like '%chocolate%'
 
             TestContext.WriteLine($"Existing deletable recipe in DB with id = {recipeId}, {recipeDesc}");
             TestContext.WriteLine($"Ensure that app can delete recipe with id = {recipeId}");
-
-            Exception ex = Assert.Throws<Exception>(() => Recipes.Delete(dt));
+            bizRecipe recipe = new();
+            recipe.Delete(dt);
 
             DataTable dtAfterDelete = GetDataTable("select * from recipe r where r.recipeId = " + recipeId);
             Assert.IsTrue(dtAfterDelete.Rows.Count > 0, "record with recipeid " + recipeId + " exists in DB");
