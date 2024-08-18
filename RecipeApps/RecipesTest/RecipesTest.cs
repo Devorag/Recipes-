@@ -5,7 +5,7 @@ namespace RecipesTest
 {
     public class RecipesTest
     {
-        string testconnString = ConfigurationManager.ConnectionStrings["testliveconn"].ConnectionString;
+        string testliveString = ConfigurationManager.ConnectionStrings["testliveconn"].ConnectionString;
         string liveString = ConfigurationManager.ConnectionStrings["liveconn"].ConnectionString;
 
         [SetUp]
@@ -17,7 +17,7 @@ namespace RecipesTest
         private DataTable GetDataTable(string sql)
         {
             DataTable dt = new();
-            DBManager.SetConnectionString(testconnString, false);
+            DBManager.SetConnectionString(testliveString, false);
             dt = SQLUtility.GetDataTable(sql);
             DBManager.SetConnectionString(liveString, false);
             return dt;
@@ -26,7 +26,7 @@ namespace RecipesTest
         private int GetFirstColumnFirstRowValue(string sql)
         {
             int n = 0;
-            DBManager.SetConnectionString(testconnString, false);
+            DBManager.SetConnectionString(testliveString, false);
             n = SQLUtility.GetFirstCFirstRValue(sql);
             DBManager.SetConnectionString(liveString, false);
             return n;
@@ -34,7 +34,7 @@ namespace RecipesTest
 
         private void ExecuteSQl(string sql)
         {
-            DBManager.SetConnectionString(testconnString, false);
+            DBManager.SetConnectionString(testliveString, false);
             SQLUtility.ExecuteSQL(sql);
             DBManager.SetConnectionString(liveString, false);
         }
