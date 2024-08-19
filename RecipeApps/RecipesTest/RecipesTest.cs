@@ -44,9 +44,6 @@ namespace RecipesTest
         [TestCase("Steak", "2019-01-01", "2019-12-24", "2020-01-01")]
         public void InsertNewRecipe(String recipename, DateTime datedrafted, DateTime datepublished, DateTime datearchived)
         {
-            DataTable dt = GetDataTable("select * from recipe where recipeid = 0");
-            DataRow r = dt.Rows.Add();
-            Assume.That(dt.Rows.Count == 1);
             int cuisineId = GetFirstColumnFirstRowValue("select top 1 cuisineId from cuisine");
             Assume.That(cuisineId > 0, "Can't run test, no cuisines in the DB");
             int usersId = GetFirstColumnFirstRowValue("select top 1 usersId from users");
@@ -56,23 +53,19 @@ namespace RecipesTest
             maxCalories = maxCalories + 100;
 
             TestContext.WriteLine("insert recipe with Calories = " + maxCalories);
-
-            r["CuisineId"] = cuisineId;
-            r["UsersId"] = usersId;
-            r["Recipename"] = recipename + " " + DateTime.Now;
-            r["Calories"] = maxCalories;
-            r["DateDrafted"] = datedrafted;
-            r["DatePublished"] = datepublished;
-            r["DateArchived"] = datearchived;
             bizRecipe recipe = new();
-            recipe.Save(dt);
+            recipe.CuisineId = cuisineId;
+            recipe.UsersId = usersId;
+            recipe.RecipeName = recipename + " " + DateTime.Now;
+            recipe.Calories = maxCalories;
+            recipe.DateDrafted = datedrafted;
+            recipe.DatePublished = datepublished;
+            recipe.DateArchived = datearchived;
+
+            recipe.Save();
 
             int newCalories = GetFirstColumnFirstRowValue("select * from recipe where calories = " + maxCalories);
-            int pkid = 0;
-            if (r["RecipeId"] != DBNull.Value)
-            {
-                pkid = (int)r["RecipeId"];
-            }
+            int pkid = recipe.RecipeId;
 
             Assert.IsTrue(newCalories > 0, "recipe with Calories = " + maxCalories + " is not found in DB");
             Assert.IsTrue(pkid > 0, "primary key is not updated in datatable");
@@ -132,8 +125,7 @@ namespace RecipesTest
             TestContext.WriteLine(ex.Message);
         }
 
-        [Test]
-        public void DeleteRecipe()
+        private DataTable GetRecipeForDelete()
         {
             string sql = @"
 select top 1 r.recipeid, r.recipename, r.recipestatus
@@ -151,6 +143,60 @@ order by r.recipeid
 
 ";
             DataTable dt = GetDataTable(sql);
+            return dt;
+        }
+
+        [Test]
+        public void DeleteRecipe()
+        {
+            DataTable dt = GetRecipeForDelete();
+            int recipeId = 0;
+            string recipeDesc = "";
+
+            if (dt.Rows.Count > 0)
+            {
+                recipeId = (int)dt.Rows[0]["recipeid"];
+                recipeDesc = dt.Rows[0]["RecipeName"] + " " + dt.Rows[0]["RecipeStatus"];
+            }
+            Assume.That(recipeId > 0, "There are no recipes in DB, can't run test");
+
+            TestContext.WriteLine($"Existing deletable recipe in DB with id = {recipeId}, {recipeDesc}");
+            TestContext.WriteLine($"Ensure that app can delete recipe with id = {recipeId}");
+            bizRecipe recipe = new();
+            recipe.Load(recipeId);
+            recipe.Delete();
+            DataTable dtAfterDelete = GetDataTable("select * from recipe r where r.recipeId = " + recipeId);
+            Assert.IsTrue(dtAfterDelete.Rows.Count == 0, "record with recipeid " + recipeId + " exists in DB");
+            TestContext.WriteLine("Record with recipeId  = " + recipeId + " does not exist in DB");
+        }
+
+        [Test]
+        public void DeleteRecipeById()
+        {
+            DataTable dt = GetRecipeForDelete();
+            int recipeId = 0;
+            string recipeDesc = "";
+
+            if (dt.Rows.Count > 0)
+            {
+                recipeId = (int)dt.Rows[0]["recipeid"];
+                recipeDesc = dt.Rows[0]["RecipeName"] + " " + dt.Rows[0]["RecipeStatus"];
+            }
+            Assume.That(recipeId > 0, "There are no recipes in DB, can't run test");
+
+            TestContext.WriteLine($"Existing deletable recipe in DB with id = {recipeId}, {recipeDesc}");
+            TestContext.WriteLine($"Ensure that app can delete recipe with id = {recipeId}");
+            bizRecipe recipe = new();
+            recipe.Delete(recipeId);
+            DataTable dtAfterDelete = GetDataTable("select * from recipe r where r.recipeId = " + recipeId);
+            Assert.IsTrue(dtAfterDelete.Rows.Count == 0, "record with recipeid " + recipeId + " exists in DB");
+            TestContext.WriteLine("Record with recipeId  = " + recipeId + " does not exist in DB");
+        }
+
+        [Test]
+        public void DeleteRecipeByDataTable()
+        {
+            DataTable dt = GetRecipeForDelete();
             int recipeId = 0;
             string recipeDesc = "";
 
@@ -242,10 +288,11 @@ WHERE
             TestContext.WriteLine("existing recipe with id = " + recipeId);
             TestContext.WriteLine("Ensure that app loads recipe " + recipeId);
             bizRecipe recipe = new();
-            DataTable dt = recipe.Load(recipeId);
-            int loadedId = (int)dt.Rows[0]["RecipeId"];
-            Assert.IsTrue(loadedId == recipeId, (int)dt.Rows[0]["RecipeId"] + " <> " + recipeId);
-            TestContext.WriteLine("Loaded recipe (" + loadedId + ") = " + recipeId);
+            recipe.Load(recipeId);
+            int loadedId = recipe.RecipeId;
+            string RecipeName = recipe.RecipeName;
+            Assert.IsTrue(loadedId == recipeId && RecipeName != "", loadedId + " <> " + recipeId + " RecipeName = " + RecipeName);
+            TestContext.WriteLine("Loaded recipe (" + loadedId + ") = " + recipeId + " RecipeName = " + RecipeName);
         }
 
 
@@ -281,7 +328,7 @@ WHERE
 
         private int GetExistingRecipeId()
         {
-            return GetFirstColumnFirstRowValue("select top 1 recipeid from recipe");
+            return GetFirstColumnFirstRowValue("select top 1 recipeid from recipe where DateArchived is null");
         }
 
         public string GetFirstRowFirstColumnValue(string sql)

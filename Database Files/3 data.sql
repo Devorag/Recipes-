@@ -85,7 +85,7 @@ union select (select c.cuisineId from Cuisine c where c.CuisineName = 'English')
 union select (select c.CuisineId from cuisine c where c.CuisineName = 'American'), u.usersId, 'Butter muffins', 375, '01-01-2016', null , null from users u where u.LastName = 'Svei'
 union select (select c.cuisineId from Cuisine C where c.CuisineName = 'American'), u.usersId, 'Muddy Buddies', 300, '01-01-2019', '04-04-2019', '05-05-2020' from users u where u.lastname = 'Svei'
 union select (select c.cuisineId from cuisine c where c.CuisineName = 'French'), u.usersId, 'Ministroni soup', 200, '08-12-2023', null, '01-03-2024' from users u where u.lastname = 'Korb'
-union select (select c.cuisineId from cuisine c where c.CuisineName = 'Indian'), u.usersId, 'Roasted Vegetables', 150, '07-06-2015', '06-06-2016', null from users u where u.lastname = 'Mozes'
+union select (select c.cuisineId from cuisine c where c.CuisineName = 'Indian'), u.usersId, 'Roasted Vegetables', 150, '07-06-2015', null, null from users u where u.lastname = 'Mozes'
 union select (select c.cuisineId from cuisine c where c.CuisineName = 'Chinese'), u.usersId, 'Sesame Chicken', 325, '01-01-2021', '03-04-2021', '11-11-2021' from users u where u.lastname = 'Katz'
 union select (select c.cuisineId from cuisine c where c.CuisineName = 'Chinese'), u.usersId, 'Falafel balls', 450, '01-01-2021', '06-14-2021', '06-20-2021' from users u where u.lastname = 'Katz'
 ;
