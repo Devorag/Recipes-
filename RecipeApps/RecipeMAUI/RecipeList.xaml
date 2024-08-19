@@ -5,13 +5,13 @@
              Title="RecipeList">
     <Grid RowDefinitions="Auto,*" HorizontalOptions="Center" RowSpacing="10">
         <Button x:Name="SearchBtn" Text="Search" Grid.Row="0" Clicked="SearchBtn_Clicked" HorizontalOptions="Center"/>
-        <ListView x:Name="RecipeLst" Grid.Row="1">
+        <ListView x:Name="RecipeLst" Grid.Row="1" ItemTapped="RecipeLst_ItemTapped">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" ColumnSpacing="10" HorizontalOptions="Center">
-                            <Image Grid.Row="0" Grid.Column="0" WidthRequest="65" HeightRequest="65" Source="{Binding Path=[RecipePicture]}"/>
-                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Path=[RecipeName]}" HorizontalOptions="StartAndExpand"/>
+                            <Image Grid.Row="0" Grid.Column="0" WidthRequest="65" HeightRequest="65" Source="{Binding RecipePicture}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding RecipeName}" HorizontalOptions="StartAndExpand"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

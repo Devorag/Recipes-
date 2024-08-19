@@ -12,8 +12,9 @@ public partial class RecipeList : ContentPage
 
 	private void SearchRecipes()
 	{
-		DataTable dt = Recipes.SearchRecipes();
-		RecipeLst.ItemsSource = dt.Rows;
+		bizRecipe recipe = new();
+		var lstRecipe = recipe.Search();
+		RecipeLst.ItemsSource = lstRecipe;
 	}
 
     private void SearchBtn_Clicked(object sender, EventArgs e)
@@ -21,4 +22,8 @@ public partial class RecipeList : ContentPage
 		SearchRecipes();
     }
 
+    private void RecipeLst_ItemTapped(object sender, ItemTappedEventArgs e)
+    {
+
+    }
 }

@@ -12,12 +12,12 @@ namespace RecipeSystem
         {
 
         }
-        public List<bizRecipe> Search(string recipenameval)
+        public List<bizRecipe> Search(string recipenameval = "")
         {
             SqlCommand cmd = SQLUtility.GetSQLCommand(this.GetSprocName);
             SQLUtility.SetParamValue(cmd, "RecipeName", recipenameval);
             DataTable dt = SQLUtility.GetDataTable(cmd);
-            return this.GetListFromDataTable(dt);
+            return this.GetListFromDataTable(dt); 
         }
 
         private int _recipeId;
