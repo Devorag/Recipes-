@@ -22,8 +22,14 @@ public partial class RecipeList : ContentPage
 		SearchRecipes();
     }
 
-    private void RecipeLst_ItemTapped(object sender, ItemTappedEventArgs e)
+    private async void RecipeLst_ItemTapped(object sender, ItemTappedEventArgs e)
     {
+		bizRecipe recipe = (bizRecipe)e.Item;
+		await Navigation.PushAsync(new RecipeDetail(recipe.RecipeId));
+    }
 
+    private async void NewBtn_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new RecipeDetail(0));
     }
 }

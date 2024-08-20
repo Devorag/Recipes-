@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecipeMAUI.RecipeList"
              Title="RecipeList">
-    <Grid RowDefinitions="Auto,*" HorizontalOptions="Center" RowSpacing="10">
+    <Grid RowDefinitions="Auto,*" HorizontalOptions="Center" RowSpacing="10" ColumnDefinitions="Auto,*">
         <Button x:Name="SearchBtn" Text="Search" Grid.Row="0" Clicked="SearchBtn_Clicked" HorizontalOptions="Center"/>
-        <ListView x:Name="RecipeLst" Grid.Row="1" ItemTapped="RecipeLst_ItemTapped">
+        <Button x:Name="NewBtn" Text="New Recipe" Grid.Column="3" Grid.Row="0" Clicked="NewBtn_Clicked"/>
+        <ListView x:Name="RecipeLst" Grid.Row="2" Grid.ColumnSpan="2" ItemTapped="RecipeLst_ItemTapped">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

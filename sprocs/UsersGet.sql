@@ -10,7 +10,7 @@ begin
 	where u.UsersId = @UsersId 
 	or @All = 1
 	or u.UsersName like '%' + @UsersName + '%'
-	union select 0, '', '', ''
+	union select 0, ' ', '', ''
 	where @IncludeBlank = 1 
 	order by u.LastName, u.FirstName, u.UsersName
 end

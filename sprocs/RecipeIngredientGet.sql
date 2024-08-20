@@ -17,8 +17,11 @@ BEGIN
                ri.IngredientId, 
                ri.UnitOfMeasureId, 
                ri.MeasurementAmount, 
-               ri.IngredientSequence
+               ri.IngredientSequence,
+               i.IngredientName
         FROM RecipeIngredient ri 
+        join Ingredient I 
+        on i.ingredientId = ri.IngredientId 
 		where @All = 1 
 		or ri.RecipeIngredientId = @RecipeIngredientId 
 		or ri.RecipeId = @RecipeId
@@ -28,3 +31,5 @@ BEGIN
     RETURN @return 
 END 
 GO
+
+exec RecipeIngredientGet @All =  1

@@ -23,12 +23,12 @@
     </ContentPage.Resources>
     <Border Padding="10" MaximumWidthRequest="500">
         <Grid ColumnDefinitions="Auto,*,Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,*,*" ColumnSpacing="5" RowSpacing="10">
-            <Label x:Name="lblmessage" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" TextColor="{StaticResource Key=Danger}" />
+            <Label x:Name="MessageLbl" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" TextColor="{StaticResource Key=Danger}" />
 
             <Label Grid.Column="0" Grid.Row="1" Text="User" />
-            <Picker Grid.Column="1" Grid.Row="1"   />
+            <Picker Grid.Column="1" Grid.Row="1" ItemsSource="{Binding UsersList}" ItemDisplayBinding="{Binding UsersName}" />
             <Label Grid.Column="2" Grid.Row="1" Text="Cuisine" />
-            <Picker Grid.Column="3" Grid.Row="1"   />
+            <Picker Grid.Column="3" Grid.Row="1" ItemsSource="{Binding CuisineList}" ItemDisplayBinding="{Binding CuisineName}" SelectedItem="{Binding Cuisine}" />
 
             <Label Grid.Column="0" Grid.Row="2" Text="Recipe Name" />
             <Entry Text="{Binding Path=RecipeName}" Grid.Column="1" Grid.Row="2" Placeholder="RecipeName"/>
@@ -43,21 +43,29 @@
             <Label Grid.Column="2" Grid.Row="4" Text="Date Published" />
             <Entry Grid.Column="3" Grid.Row="4" Text="{Binding DatePublished, StringFormat='{0:d}'}" />
             <HorizontalStackLayout Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="4" Spacing="10" HorizontalOptions="Center">
-                <Button x:Name="SaveBtn" Text="Save" />
-                <Button x:Name="DeleteBtn" Text="Delete" BackgroundColor="{StaticResource Key=Danger}"/>
-                <Button x:Name="CancelBtn" Text="Close" BackgroundColor="{StaticResource Key=Warning}"/>
+                <Button x:Name="SaveBtn" Text="Save" Clicked="SaveBtn_Clicked_1"/>
+                <Button x:Name="DeleteBtn" Text="Delete" BackgroundColor="{StaticResource Key=Danger}" Clicked="DeleteBtn_Clicked"/>
+                <Button x:Name="CancelBtn" Text="Close" BackgroundColor="{StaticResource Key=Warning}" Clicked="CancelBtn_Clicked"/>
             </HorizontalStackLayout>
 
             <VerticalStackLayout Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4">
-                <Label Text="Executive Orders" FontSize="Subtitle"/>
-                <VerticalStackLayout>
-
+                <Label Text="Ingredients" FontSize="Subtitle"/>
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding RecipeIngredientList}" BindableLayout.EmptyView="No ingredients for this Recipe">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Reference}"/>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
             </VerticalStackLayout>
             <VerticalStackLayout Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4">
-                <Label Text="Medals" FontSize="Subtitle"/>
-                <VerticalStackLayout>
-
+                <Label Text="Steps" FontSize="Subtitle"/>
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding RecipeStepsList}" BindableLayout.EmptyView="No steps for this Recipe">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Reference}"/>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
             </VerticalStackLayout>
         </Grid>

@@ -12,7 +12,7 @@ begin
 	where c.CuisineId = @CuisineId 
 	or @All = 1
 	or c.CuisineName like '%' + @CuisineName + '%'
-	union select 0, ''
+	union select 0, ' '
 	where @IncludeBlank = 1 
 	order by c.CuisineName
 end
