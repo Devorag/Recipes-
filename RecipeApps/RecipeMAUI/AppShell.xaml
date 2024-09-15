@@ -16,6 +16,12 @@
         Title="Recipe List"
         ContentTemplate="{DataTemplate local:RecipeList}"
         Route="RecipeList" />
+
+        <ShellContent
+            Title="Meal List"
+            ContentTemplate="{DataTemplate local:MealList}"
+            Route="MealList"
+            />
     </TabBar>
 
     <ShellContent

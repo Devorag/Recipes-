@@ -32,16 +32,18 @@
 
             <Label Grid.Column="0" Grid.Row="2" Text="Recipe Name" />
             <Entry Text="{Binding Path=RecipeName}" Grid.Column="1" Grid.Row="2" Placeholder="RecipeName"/>
-            <Label Grid.Column="2" Grid.Row="1" Text="Num Calories" />
-            <Entry Text="{Binding Path=Calories}" Grid.Column="3" Grid.Row="1" Placeholder="NumCalories"/>
+            <Label Grid.Column="2" Grid.Row="2" Text="Num Calories" />
+            <Entry Text="{Binding Path=Calories}" Grid.Column="3" Grid.Row="2" Placeholder="NumCalories"/>
 
-            <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Text="Current Status" />
+            <Label Grid.Column="0" Grid.Row="3" Text="Current Status" />
             <Entry Text="{Binding Path=RecipeStatus}" Grid.Column="1" Grid.Row="3" Placeholder="CurrentStatus"/>
+            <Label Grid.Column="2" Grid.Row="3" Text="Date Drafted" />
+            <Entry Grid.Column="3" Grid.Row="3" Text="{Binding DateDrafted, StringFormat='{0:d}'}"  />
 
-            <Label Grid.Column="0" Grid.Row="4" Text="Date Drafted" />
-            <Entry Grid.Column="1" Grid.Row="4" Text="{Binding DateDrafted, StringFormat='{0:d}'}"  />
-            <Label Grid.Column="2" Grid.Row="4" Text="Date Published" />
-            <Entry Grid.Column="3" Grid.Row="4" Text="{Binding DatePublished, StringFormat='{0:d}'}" />
+            <Label Grid.Column="0" Grid.Row="4" Text="Date Published" />
+            <Entry Grid.Column="1" Grid.Row="4" Text="{Binding DatePublished, StringFormat='{0:d}'}"  />
+            <Label Grid.Column="2" Grid.Row="4" Text="Date Archived" />
+            <Entry Grid.Column="3" Grid.Row="4" Text="{Binding DateArchived, StringFormat='{0:d}'}" />
             <HorizontalStackLayout Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="4" Spacing="10" HorizontalOptions="Center">
                 <Button x:Name="SaveBtn" Text="Save" Clicked="SaveBtn_Clicked_1"/>
                 <Button x:Name="DeleteBtn" Text="Delete" BackgroundColor="{StaticResource Key=Danger}" Clicked="DeleteBtn_Clicked"/>

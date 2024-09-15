@@ -26,10 +26,10 @@ namespace RecipeSystem
         private List<bizUsers> _lstusers;
         private List<bizRecipeIngredient> _lstrecipeingredient;
         private List<bizRecipeSteps> _lstrecipesteps;
-        public List<bizRecipe> Search(string recipenameval = "")
+        public List<bizRecipe> Search(string recipename)
         {
             SqlCommand cmd = SQLUtility.GetSQLCommand(this.GetSprocName);
-            SQLUtility.SetParamValue(cmd, "RecipeName", recipenameval);
+            SQLUtility.SetParamValue(cmd, "RecipeName", recipename);
             DataTable dt = SQLUtility.GetDataTable(cmd);
             return this.GetListFromDataTable(dt);
         }

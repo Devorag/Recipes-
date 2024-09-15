@@ -3,15 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecipeMAUI.RecipeList"
              Title="RecipeList">
-    <Grid RowDefinitions="Auto,*" HorizontalOptions="Center" RowSpacing="10" ColumnDefinitions="Auto,*">
-        <Button x:Name="SearchBtn" Text="Search" Grid.Row="0" Clicked="SearchBtn_Clicked" HorizontalOptions="Center"/>
-        <Button x:Name="NewBtn" Text="New Recipe" Grid.Column="3" Grid.Row="0" Clicked="NewBtn_Clicked"/>
-        <ListView x:Name="RecipeLst" Grid.Row="2" Grid.ColumnSpan="2" ItemTapped="RecipeLst_ItemTapped">
+    <Grid RowDefinitions="Auto,*" HorizontalOptions="Center" RowSpacing="10" ColumnDefinitions="*,*,*" Margin="0,10,0,0">
+        <Entry x:Name="RecipeNameTxt" Placeholder="Recipe Name" Grid.Row="0" Grid.Column="0"/>
+        <Button x:Name="SearchBtn" Text="Search" Grid.Row="0" Grid.Column="1" Clicked="SearchBtn_Clicked" HorizontalOptions="Center"/>
+        <Button x:Name="NewBtn" Text="New Recipe" Grid.Column="2" Grid.Row="0" Clicked="NewBtn_Clicked"/>
+        <ListView x:Name="RecipeLst" Grid.Row="2" Grid.ColumnSpan="3" ItemTapped="RecipeLst_ItemTapped"
+                  MaximumWidthRequest="{OnIdiom 300, Desktop=500, Tablet=500}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" ColumnSpacing="10" HorizontalOptions="Center">
-                            <Image Grid.Row="0" Grid.Column="0" WidthRequest="65" HeightRequest="65" Source="{Binding RecipePicture}"/>
+                            <Image Grid.Row="0" Grid.Column="0" WidthRequest="65" HeightRequest="{OnIdiom 65, Desktop 75, Tablet 75}" Source="{Binding RecipePicture}"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="{Binding RecipeName}" HorizontalOptions="StartAndExpand"/>
                         </Grid>
                     </ViewCell>

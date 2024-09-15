@@ -3,10 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecipeMAUI.Home"
              Title="Home">
-    <VerticalStackLayout>
-        <Label 
-            Text="Home"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,Auto,Auto" HorizontalOptions="Center" RowSpacing="10">
+        <Label Text="Welcome to Hearty Health. In this ap you can......." Grid.Row="0"/>
+        <VerticalStackLayout x:Name="DashboardLst" Grid.Row="1" HorizontalOptions="Center" >
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="Black">
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" ColumnSpacing="5" HorizontalOptions="Center">
+                            <Label Text="{Binding Type}" Grid.Column="0"/>
+                            <Label Text="{Binding Number}" Grid.Column="1"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="10">
+        <Button x:Name="RecipeBtn" Text="Recipes" Grid.Column="0" Clicked="RecipeBtn_Clicked"/>
+        <Button x:Name="MealBtn" Text="Meals" Grid.Column="1" Clicked="MealBtn_Clicked"/>
+        </Grid>
+    </Grid>
 </ContentPage>

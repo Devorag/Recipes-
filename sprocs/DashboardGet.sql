@@ -1,5 +1,7 @@
 create or alter proc dbo.DashboardGet(
-    @Message varchar(500) = '' output
+    @Message varchar(500) = '' output,
+	@IncludeBlank bit = 0,
+	@All bit = 0
 )
 as 
 begin 

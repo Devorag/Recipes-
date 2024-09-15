@@ -13,7 +13,7 @@ public partial class RecipeList : ContentPage
 	private void SearchRecipes()
 	{
 		bizRecipe recipe = new();
-		var lstRecipe = recipe.Search();
+		var lstRecipe = recipe.Search(RecipeNameTxt.Text);
 		RecipeLst.ItemsSource = lstRecipe;
 	}
 
