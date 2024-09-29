@@ -11,7 +11,7 @@ public partial class MealList : ContentPage
 	}
 	private void LoadMeals()
 	{
-		MealLst.ItemsSource = new bizMeals().GetList();
+		MealLst.ItemsSource = new bizMeal().GetList();
 	}
 
     private void MealsBtn_Clicked(object sender, EventArgs e)

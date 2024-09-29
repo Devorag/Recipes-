@@ -11,7 +11,6 @@ namespace RecipeSystem
         private int _recipestepsid;
         private int _recipeid;
         private string _instructions = "";
-        private int? _stepsequence;
 
         public List<bizRecipeSteps> LoadByRecipeId(int recipeId)
         {

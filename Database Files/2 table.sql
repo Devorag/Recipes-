@@ -69,6 +69,16 @@ create table dbo.Recipe(
     constraint ck_Recipe_DateDrafted_before_DatePublished_and_DateArchived_and_DatePublished_before_Archived check(DateDrafted<= DatePublished and isnull(DatePublished,DateDrafted) <= DateArchived)
 )
 go
+alter table dbo.Recipe 
+add isVeganInt bit not null default 0
+go
+alter table dbo.Recipe
+add isVegan as 
+	case 
+		when isVeganInt = 0 then 'No'
+		when isVeganInt = 1 then 'Yes'
+	end 
+go
 create table dbo.UnitOfMeasure(
     UnitOfMeasureId int not null identity primary key,
     MeasurementType varchar(50) not null
@@ -128,6 +138,9 @@ create table dbo.Meal(
     MealPicture as concat('Meal', '_', replace(MealName, ' ', '_'), '.jpg') PERSISTED 
 )
 go 
+alter table dbo.Meal 
+add MealDescription varchar(1000) null
+go
 create table dbo.MealCourse(
     MealCourseId int not null identity primary key,
     MealId int not null 
@@ -163,6 +176,18 @@ create table dbo.Cookbook(
     CookbookPicture as concat('Cookbook', '_', replace(CookbookName, ' ', '_'), '.jpg') persisted
 )
 go 
+alter table dbo.Cookbook
+add SkillLevel int not null 
+	constraint ck_Cookbook_SkillLevel check(SkillLevel between 1 and 3);
+go
+alter table dbo.Cookbook
+add SkillLevelDescription as 
+	case 
+		when SkillLevel = 1 then 'Beginner'
+		when SkillLevel = 2 then 'Intermediate'
+		when SkillLevel = 3 then 'Advanced'
+	end persisted;
+go
 create table dbo.CookbookRecipe(
     CookbookRecipeId int not null identity primary key,
     RecipeId int not null 

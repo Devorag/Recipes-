@@ -17,11 +17,14 @@ namespace RecipeSystem
         private int _cuisineId;
         private int _usersId;
         private string _recipename = "";
+        private string _usersname = "";
         private int? _calories;
         private string _recipestatus = "";
-        private DateTime? _datedrafted;
-        private DateTime? _datepublished;
-        private DateTime? _datearchived;
+        private string _isvegan = "";
+        private int? _numIngredients;
+        private DateTime? _dateDrafted;
+        private DateTime? _datePublished;
+        private DateTime? _dateArchived;
         private List<bizCuisine> _lstcuisine;
         private List<bizUsers> _lstusers;
         private List<bizRecipeIngredient> _lstrecipeingredient;
@@ -58,7 +61,8 @@ namespace RecipeSystem
         public bizCuisine? Cuisine
         {
             get => _lstcuisine?.FirstOrDefault(c => c.CuisineId == this.CuisineId);
-            set {
+            set
+            {
                 this.CuisineId = value == null ? 0 : value.CuisineId;
                 InvokePropertyChanged();
             }
@@ -66,15 +70,17 @@ namespace RecipeSystem
         public bizUsers? Users
         {
             get => _lstusers?.FirstOrDefault(u => u.UsersId == this.UsersId);
-            set {
+            set
+            {
                 this.UsersId = value == null ? 0 : value.UsersId;
                 InvokePropertyChanged();
             }
         }
         public List<bizRecipeIngredient> RecipeIngredientList
         {
-            get {
-                if(_lstrecipeingredient == null)
+            get
+            {
+                if (_lstrecipeingredient == null)
                 {
                     _lstrecipeingredient = new bizRecipeIngredient().LoadByRecipeId(this.RecipeId);
                 }
@@ -145,6 +151,19 @@ namespace RecipeSystem
             }
         }
 
+        public string UsersName
+        {
+            get { return _usersname; }
+            set
+            {
+                if (_usersname != value)
+                {
+                    _usersname = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
+
         public int? Calories
         {
             get { return _calories; }
@@ -153,6 +172,33 @@ namespace RecipeSystem
                 if (_calories != value)
                 {
                     _calories = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
+
+
+        public int? numIngredients
+        {
+            get { return _numIngredients; }
+            set
+            {
+                if (_numIngredients != value)
+                {
+                    _numIngredients = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
+
+        public string isVegan
+        {
+            get { return _isvegan; }
+            set
+            {
+                if (_isvegan != value)
+                {
+                    _isvegan = value;
                     InvokePropertyChanged();
                 }
             }
@@ -173,12 +219,12 @@ namespace RecipeSystem
 
         public DateTime? DateDrafted
         {
-            get { return _datedrafted; }
+            get { return _dateDrafted; }
             set
             {
-                if (_datedrafted != value)
+                if (_dateDrafted != value)
                 {
-                    _datedrafted = value;
+                    _dateDrafted = value;
                     InvokePropertyChanged();
                 }
             }
@@ -186,12 +232,12 @@ namespace RecipeSystem
 
         public DateTime? DatePublished
         {
-            get { return _datepublished; }
+            get { return _datePublished; }
             set
             {
-                if (_datepublished != value)
+                if (_datePublished != value)
                 {
-                    _datepublished = value;
+                    _datePublished = value;
                     InvokePropertyChanged();
                 }
             }
@@ -199,12 +245,12 @@ namespace RecipeSystem
 
         public DateTime? DateArchived
         {
-            get { return _datearchived; }
+            get { return _dateArchived; }
             set
             {
-                if (_datearchived != value)
+                if (_dateArchived != value)
                 {
-                    _datearchived = value;
+                    _dateArchived = value;
                     InvokePropertyChanged();
                 }
             }

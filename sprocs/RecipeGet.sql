@@ -22,7 +22,7 @@ begin
         group by r.RecipeName, r.recipeId
         )
 
-        select r.RecipeId, r.RecipeName, Status = r.recipestatus, u.UsersName, r.Calories, x.NumIngredients, r.RecipePicture
+        select r.RecipeId, r.RecipeName, r.recipestatus, r.datedrafted, r.datearchived, r.datepublished,u.UsersName, r.Calories, x.NumIngredients, r.RecipePicture, r.isVegan
         from x 
         join recipe r 
         on r.RecipeId = x.RecipeId
@@ -37,12 +37,12 @@ begin
 
 	select @RecipeName = nullif(@RecipeName,''), @IncludeBlank  = ISNULL(@IncludeBlank,0)
 	
-	select r.RecipeId, r.CuisineID, r.UsersId, r.RecipeName, r.Calories, r.Datedrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePicture, IsDeleteAllowed = dbo.IsDeleteAllowed(r.RecipeId)
+	select r.RecipeId, r.CuisineID, r.UsersId, r.RecipeName, r.Calories, r.Datedrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePicture, r.isVegan, IsDeleteAllowed = dbo.IsDeleteAllowed(r.RecipeId)
 	from Recipe r
 	where r.RecipeId = @RecipeId 
 	or r.RecipeName like '%' + @RecipeName + '%'
 	or @IncludeBlank = 1
-	union select 0,0,0,'',0,'','','','','',''
+	union select 0,0,0,'',0,'','','','','','', ''
 	where @IncludeBlank = 1 
 	order by r.recipename, r.datedrafted, r.datepublished, r.datearchived, r.recipestatus, r.calories, r.recipepicture
 end
@@ -50,3 +50,4 @@ end
 end
 go
 
+exec RecipeGet @All = 1

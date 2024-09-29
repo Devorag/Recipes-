@@ -1,20 +1,27 @@
 ﻿namespace RecipeSystem
 {
-    public class bizMeals : bizObject<bizMeals>
-    {
+    public class bizMeal : bizObject<bizMeal>
+    {   
+        public bizMeal()
+        {
+
+        }
+
         private int _mealid;
+        private string _mealname = "";
+        private string _usersname = "";
         private int? _numcalories;
         private int? _numcourses;
         private int? _numrecipes;
-        private string _mealname = "";
-        private string _usersname = "";
+        private string _mealdescription = "";
+ 
 
-        public int MealId
+        public int mealId
         {
-            get { return _mealid; }
+            get { return _mealid;  } 
             set
             {
-                if (_mealid != value)
+                if( _mealid != value)
                 {
                     _mealid = value;
                     InvokePropertyChanged();
@@ -82,6 +89,19 @@
                 if (_usersname != value)
                 {
                     _usersname = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
+
+        public string MealDescription
+        {
+            get { return _mealdescription; } 
+            set
+            {
+                if (_mealdescription != value)
+                {
+                    _mealdescription = value;
                     InvokePropertyChanged();
                 }
             }

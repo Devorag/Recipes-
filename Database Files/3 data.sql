@@ -78,16 +78,16 @@ union select 'Italian'
 union select 'Dutch'
 
 --I realized after this table that I should've done this using a CTE but this works also so please accept!!!!
-insert Recipe(CuisineID, UsersId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived)
-select (select c.cuisineId from Cuisine c where c.CuisineName = 'American'), u.usersID,  'Chocolate Chip Cookies', 450, '01-03-2023', null, '07-01-2024' from users u where u.lastname = 'Diena'
-union select (select c.cuisineId from Cuisine c where c.CuisineName = 'French'), u.usersId, 'Apple yogurt smoothie', 125, '04-05-2021', '12-10-2021', null from users u where u.LastName = 'Azoulay'
-union select (select c.cuisineId from Cuisine c where c.CuisineName = 'English'), u.usersId, 'Cheese bread', 350, '11-10-2017', '01-01-2018', '02-02-2019' from users u where u.lastname = 'Weinberger'
-union select (select c.CuisineId from cuisine c where c.CuisineName = 'American'), u.usersId, 'Butter muffins', 375, '01-01-2016', null , null from users u where u.LastName = 'Svei'
-union select (select c.cuisineId from Cuisine C where c.CuisineName = 'American'), u.usersId, 'Muddy Buddies', 300, '01-01-2019', '04-04-2019', '05-05-2020' from users u where u.lastname = 'Svei'
-union select (select c.cuisineId from cuisine c where c.CuisineName = 'French'), u.usersId, 'Ministroni soup', 200, '08-12-2023', null, '01-03-2024' from users u where u.lastname = 'Korb'
-union select (select c.cuisineId from cuisine c where c.CuisineName = 'Indian'), u.usersId, 'Roasted Vegetables', 150, '07-06-2015', null, null from users u where u.lastname = 'Mozes'
-union select (select c.cuisineId from cuisine c where c.CuisineName = 'Chinese'), u.usersId, 'Sesame Chicken', 325, '01-01-2021', '03-04-2021', '11-11-2021' from users u where u.lastname = 'Katz'
-union select (select c.cuisineId from cuisine c where c.CuisineName = 'Chinese'), u.usersId, 'Falafel balls', 450, '01-01-2021', '06-14-2021', '06-20-2021' from users u where u.lastname = 'Katz'
+insert Recipe(CuisineID, UsersId, RecipeName, Calories, DateDrafted, DatePublished, DateArchived, IsVeganInt)
+select (select c.cuisineId from Cuisine c where c.CuisineName = 'American'), u.usersID,  'Chocolate Chip Cookies', 450, '01-03-2023', null, '07-01-2024', 0 from users u where u.lastname = 'Diena'
+union select (select c.cuisineId from Cuisine c where c.CuisineName = 'French'), u.usersId, 'Apple yogurt smoothie', 125, '04-05-2021', '12-10-2021', null, 0 from users u where u.LastName = 'Azoulay'
+union select (select c.cuisineId from Cuisine c where c.CuisineName = 'English'), u.usersId, 'Cheese bread', 350, '11-10-2017', '01-01-2018', '02-02-2019',0 from users u where u.lastname = 'Weinberger'
+union select (select c.CuisineId from cuisine c where c.CuisineName = 'American'), u.usersId, 'Butter muffins', 375, '01-01-2016', null , null, 0 from users u where u.LastName = 'Svei'
+union select (select c.cuisineId from Cuisine C where c.CuisineName = 'American'), u.usersId, 'Muddy Buddies', 300, '01-01-2019', '04-04-2019', '05-05-2020',0 from users u where u.lastname = 'Svei'
+union select (select c.cuisineId from cuisine c where c.CuisineName = 'French'), u.usersId, 'Ministroni soup', 200, '08-12-2023', null, '01-03-2024', 1 from users u where u.lastname = 'Korb'
+union select (select c.cuisineId from cuisine c where c.CuisineName = 'Indian'), u.usersId, 'Roasted Vegetables', 150, '07-06-2015', null, null, 1 from users u where u.lastname = 'Mozes'
+union select (select c.cuisineId from cuisine c where c.CuisineName = 'Chinese'), u.usersId, 'Sesame Chicken', 325, '01-01-2021', '03-04-2021', '11-11-2021',0 from users u where u.lastname = 'Katz'
+union select (select c.cuisineId from cuisine c where c.CuisineName = 'Chinese'), u.usersId, 'Falafel balls', 450, '01-01-2021', '06-14-2021', '06-20-2021',1 from users u where u.lastname = 'Katz'
 ;
 
 insert UnitOfMeasure(MeasurementType)
@@ -288,11 +288,11 @@ join MealCourse mc
 on mc.courseID = c.CourseId 
 and mc.mealId = m.mealId 
 
-insert cookbook(UsersId, CookbookName, Price, Active)
-select u.usersID, 'Treats for two', 30, 1 from users u where u.LastName = 'Korb'
-union select u.usersId, 'The Cook''s Secret', 35, 1 from users u where u.lastname = 'Katz'
-union select u.usersId, 'Taste It', 40, 0 from users u where u.lastname = 'Svei' 
-union select u.usersID, 'Njoy', 25, 1 from users u where u.LastName = 'Weinberger'
+insert cookbook(UsersId, CookbookName, Price, Active, SkillLevel)
+select u.usersID, 'Treats for two', 30, 1, 3 from users u where u.LastName = 'Korb'
+union select u.usersId, 'The Cook''s Secret', 35, 1, 2 from users u where u.lastname = 'Katz'
+union select u.usersId, 'Taste It', 40, 0, 1 from users u where u.lastname = 'Svei' 
+union select u.usersID, 'Njoy', 25, 1, 3 from users u where u.LastName = 'Weinberger'
 ;
 with  x as(
     SELECT CookbookName = 'Treats for two', RecipeName = 'Chocolate Chip Cookies', RecipeSequence = 1

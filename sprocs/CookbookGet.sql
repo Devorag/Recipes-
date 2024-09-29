@@ -1,7 +1,8 @@
 create or alter procedure dbo.CookbookGet (
     @CookbookId int = 0, 
     @CookbookName varchar(100) = '',
-    @All bit = 0
+    @All bit = 0, 
+	@IncludeBlank bit = 0
 )
 as 
 begin 
@@ -15,7 +16,7 @@ begin
             LEFT JOIN CookbookRecipe cr ON c.CookbookId = cr.CookbookId
             GROUP BY c.CookbookId, c.CookbookName
         )
-        select c.CookbookId, c.CookbookName, Author = u.UsersName, NumRecipes = ISNULL(x.NumRecipes, 0), c.Price
+        select c.CookbookId, c.CookbookName, Author = u.UsersName, NumRecipes = ISNULL(x.NumRecipes, 0), c.Price, c.SkillLevelDescription
         from x 
         join Cookbook c 
 		on x.CookbookId = c.CookbookId
@@ -34,7 +35,7 @@ begin
             LEFT JOIN CookbookRecipe cr ON c.CookbookId = cr.CookbookId
             GROUP BY c.CookbookId, c.CookbookName
         )
-        select c.CookbookId, u.UsersId, c.CookbookName, c.Price, c.Active, c.DateCreated, c.CookbookPicture
+        select c.CookbookId, u.UsersId, c.CookbookName, c.Price, c.Active, c.DateCreated, c.CookbookPicture, c.SkillLevelDescription
         from Cookbook c 
         left join users u 
         on u.UsersId = c.UsersId
@@ -46,3 +47,5 @@ begin
     return @return;
 end
 go
+
+exec CookbookGet @All = 1
