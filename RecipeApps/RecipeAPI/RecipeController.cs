@@ -10,14 +10,7 @@ namespace RecipeAPI
         [HttpGet]   
         public List<bizRecipe> GetRecipes()
         {
-
-            var c = new bizRecipe();
-
-            var b = new bizRecipe().GetList();
-
             return new bizRecipe().GetList();
-
-
         }
 
         [HttpGet("getbyUser/{username}")]
@@ -32,16 +25,5 @@ namespace RecipeAPI
             return new bizRecipe().Search(cuisinename);
         }
 
-        [HttpGet("meals")]
-        public List<bizMeal> GetMeals()
-        {
-            return new bizMeal().GetList();
-        }
-
-        [HttpGet("cookbooks")]
-        public List<bizCookbook> GetCookbooks()
-        {
-            return new bizCookbook().GetList();
-        }
     }
 }
