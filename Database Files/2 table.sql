@@ -159,7 +159,7 @@ create table dbo.MealCourseRecipe(
         constraint f_MealCourseRecipe_Recipe foreign key references Recipe(RecipeId),
     MainDish bit not null,
         constraint u_MealCourseRecipe_MealCourseId_RecipeId unique(MealCourseId, RecipeId)
-)
+) 
 go
 create table dbo.Cookbook(
     CookbookId int not null identity primary key,

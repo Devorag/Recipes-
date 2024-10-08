@@ -305,7 +305,7 @@ with  x as(
     union select 'The Cook''s Secret', 'Sesame Chicken', 4
     union select 'Taste It', 'Chocolate Chip Cookies', 1 
     union select 'Taste It', 'Butter Muffins', 2
-    union select 'Taste It', 'Muddy Buddies', 3 
+    union select 'Taste It', 'Muddy Buddies', 3  
     union select 'Taste It', 'Roasted Vegetables', 4 
     union select 'Taste It', 'Sesame Chicken', 5
     union select 'Njoy', 'Ministroni soup', 1
