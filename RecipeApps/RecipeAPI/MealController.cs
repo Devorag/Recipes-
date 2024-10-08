@@ -13,7 +13,7 @@ namespace RecipeAPI
         {
             var m = new bizMeal().GetList();
             return new bizMeal().GetList();
-        }
+        } 
 
         [HttpGet("{id:int:min(0)}")]
         public bizMeal Get(int id)

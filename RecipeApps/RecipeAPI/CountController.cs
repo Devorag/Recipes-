@@ -11,7 +11,7 @@ namespace RecipeAPI
         [HttpGet]
         public List<bizDashboard> Get()
         {
-            return new bizDashboard().GetList();
+            return new bizDashboard().GetList(); 
         }
 
     }

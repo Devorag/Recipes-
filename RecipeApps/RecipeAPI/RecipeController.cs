@@ -13,7 +13,7 @@ namespace RecipeAPI
             return new bizRecipe().GetList();
         }
 
-        [HttpGet("getbyUser/{username}")]
+        [HttpGet("getbyUser/{username}")] 
         public List<bizRecipe> GetRecipesbyUser(string username)
         {
             return new bizRecipe().Search(username);
