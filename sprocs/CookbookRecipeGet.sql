@@ -12,7 +12,7 @@ BEGIN
     SELECT @All = ISNULL(@All, 0), 
            @CookbookRecipeId = ISNULL(@CookbookRecipeId, 0), 
            @CookbookId = ISNULL(@CookbookId, 0);
-    SELECT cr.CookbookRecipeId, cr.CookbookId, cr.RecipeId, cr.RecipeSequence, r.RecipeName
+    SELECT cr.CookbookRecipeId, cr.CookbookId, cr.RecipeId, cr.RecipeSequence, r.RecipeName, r.calories
     FROM CookbookRecipe cr 
     left join recipe r 
     on r.RecipeId = cr.RecipeId
