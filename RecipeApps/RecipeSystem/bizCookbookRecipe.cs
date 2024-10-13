@@ -1,8 +1,8 @@
 ﻿namespace RecipeSystem
 {
     public class bizCookbookRecipe : bizObject<bizCookbookRecipe>
-    {   
-        public bizCookbookRecipe ()
+    {
+        public bizCookbookRecipe()
         {
 
         }
@@ -12,11 +12,12 @@
         private int _recipeid;
         private int? _recipesequence;
         private string _recipeName = "";
+        private int? _calories;
 
-        public List<bizCookbookRecipe> LoadByCookbookId(int cookbookId)
+        public List<bizCookbookRecipe> LoadByCookbookCalories(int calories)
         {
             SqlCommand cmd = SQLUtility.GetSQLCommand("CookbookRecipeGet");
-            cmd.Parameters["@CookbookId"].Value = cookbookId;
+            cmd.Parameters["@Calories"].Value = calories;
             var dt = SQLUtility.GetDataTable(cmd);
             return this.GetListFromDataTable(dt);
         }
@@ -81,5 +82,19 @@
                 }
             }
         }
+
+        public int? Calories
+        {
+            get { return _calories; }
+            set
+            {
+                if (_calories != value)
+                {
+                    _calories = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
     }
 }
+
