@@ -14,6 +14,14 @@
         private decimal? _price;
         private string _skillleveldescription = "";
 
+        public List<bizCookbook> Search(string cookbookname)
+        {
+            SqlCommand cmd = SQLUtility.GetSQLCommand(this.GetSprocName);
+            SQLUtility.SetParamValue(cmd, "CookbookName", cookbookname);
+            DataTable dt = SQLUtility.GetDataTable(cmd);
+            return this.GetListFromDataTable(dt);
+        }
+
         public int cookbookId
         {
             get { return _cookbookid; }

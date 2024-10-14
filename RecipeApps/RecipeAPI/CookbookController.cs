@@ -13,10 +13,16 @@ namespace RecipeAPI
             return new bizCookbook().GetList(); 
         }
 
-        [HttpGet("{calories:int:min(0)}")]
-        public List<bizCookbookRecipe> GetCookbookRecipes(int calories)
+        [HttpGet("{cookbookId:int:min(0)}")]
+        public List<bizCookbookRecipe> GetCookbookRecipes(int id)
         {
-            return new bizCookbookRecipe().LoadByCookbookCalories(calories);
+            return new bizCookbookRecipe().LoadByCookbookId(id);
+        }
+
+        [HttpGet("getbyName/{cookbookname}")]
+        public List<bizCookbookRecipe> GetRecipesbyCookbook(string cookbookname)
+        {
+            return new bizCookbookRecipe().Search(cookbookname);
         }
     }
 }

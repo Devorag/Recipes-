@@ -14,11 +14,19 @@
         private string _recipeName = "";
         private int? _calories;
 
-        public List<bizCookbookRecipe> LoadByCookbookCalories(int calories)
+        public List<bizCookbookRecipe> LoadByCookbookId(int cookbookId)
         {
             SqlCommand cmd = SQLUtility.GetSQLCommand("CookbookRecipeGet");
-            cmd.Parameters["@Calories"].Value = calories;
+            cmd.Parameters["@CookbookId"].Value = cookbookId;
             var dt = SQLUtility.GetDataTable(cmd);
+            return this.GetListFromDataTable(dt);
+        }
+
+        public List<bizCookbookRecipe> Search(string cookbookname)
+        {
+            SqlCommand cmd = SQLUtility.GetSQLCommand(this.GetSprocName);
+            SQLUtility.SetParamValue(cmd, "CookbookName", cookbookname);
+            DataTable dt = SQLUtility.GetDataTable(cmd);
             return this.GetListFromDataTable(dt);
         }
 
