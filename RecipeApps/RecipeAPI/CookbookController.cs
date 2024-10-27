@@ -19,11 +19,11 @@ namespace RecipeAPI
             return new bizCookbookRecipe().LoadByCookbookId(id);
         }
 
-        [HttpGet("getbyName/{cookbookname}")]
-        public List<bizCookbookRecipe> GetRecipesbyCookbook(string cookbookname)
-        {
-            return new bizCookbookRecipe().Search(cookbookname);
-        }
+        //[HttpGet("getbyName/{cookbookname}")]
+        //public List<bizCookbookRecipe> GetRecipesbyCookbook(string cookbookname)
+        //{
+        //    return new bizCookbookRecipe().Search(cookbookname);
+        //}
     }
 }
 

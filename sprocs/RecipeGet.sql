@@ -1,53 +1,86 @@
-
-create or alter procedure dbo.RecipeGet(
-	@RecipeId int = 0, 
-	@RecipeName varchar(100) = '',
-	@All bit = 0,
-	@IncludeBlank bit = 0
+CREATE OR ALTER PROCEDURE dbo.RecipeGet
+(
+    @RecipeId INT = 0, 
+    @RecipeName VARCHAR(100) = '',
+    @CuisineName VARCHAR(100) = '',
+    @All BIT = 0,
+    @IncludeBlank BIT = 0
 )
-as 
-begin 
-	declare @return int = 0; 
+AS
+BEGIN
+    DECLARE @return INT = 0;
 
-	if @All = 1 and @IncludeBlank = 0
-	begin 
+    -- Set parameters to NULL if they are empty
+    SET @RecipeName = NULLIF(@RecipeName, '');
+    SET @CuisineName = NULLIF(@CuisineName, '');
 
-	    ;
-        with x as
-        ( 
-        select r.RecipeId, r.RecipeName, NumIngredients = count(ri.IngredientId) 
-        from recipe r 
-        left join RecipeIngredient ri 
-        on ri.RecipeId = r.RecipeId
-        group by r.RecipeName, r.recipeId
+    -- Case for fetching all recipes, optionally filtered by CuisineName
+    IF @All = 1 AND @IncludeBlank = 0
+    BEGIN
+        WITH RecipeSummary AS (
+            SELECT 
+                r.RecipeId, 
+                r.RecipeName, 
+                COUNT(ri.IngredientId) AS NumIngredients
+            FROM Recipe r
+            LEFT JOIN RecipeIngredient ri ON ri.RecipeId = r.RecipeId
+            GROUP BY r.RecipeId, r.RecipeName
         )
+        SELECT 
+            r.RecipeId, 
+            r.RecipeName, 
+            r.RecipeStatus, 
+            r.DateDrafted, 
+            r.DateArchived, 
+            r.DatePublished,
+            u.UsersName, 
+            r.Calories, 
+            rs.NumIngredients, 
+            r.RecipePicture, 
+            r.IsVegan, 
+            c.CuisineName
+        FROM Recipe r
+        JOIN RecipeSummary rs ON r.RecipeId = rs.RecipeId
+        LEFT JOIN Users u ON u.UsersId = r.UsersId
+        LEFT JOIN Cuisine c ON c.CuisineId = r.CuisineId
+        WHERE (@RecipeId = 0 OR r.RecipeId = @RecipeId)
+          AND (@CuisineName IS NULL OR c.CuisineName LIKE '%' + @CuisineName + '%')
+        ORDER BY r.RecipeStatus DESC;
 
-        select r.RecipeId, r.RecipeName, r.recipestatus, r.datedrafted, r.datearchived, r.datepublished,u.UsersName, r.Calories, x.NumIngredients, r.RecipePicture, r.isVegan
-        from x 
-        join recipe r 
-        on r.RecipeId = x.RecipeId
-        left join users u 
-        on u.usersid = r.usersid 
-        order by r.RecipeStatus desc 
-         
-        return @return
-	end 
-	else
-	begin
+        RETURN @return;
+    END
+    ELSE
+    BEGIN
+        -- Fetch recipes by RecipeId or RecipeName with optional IncludeBlank logic
+        SELECT 
+            r.RecipeId, 
+            r.CuisineId, 
+            r.UsersId, 
+            r.RecipeName, 
+            r.Calories, 
+            r.DateDrafted, 
+            r.DatePublished, 
+            r.DateArchived, 
+            r.RecipeStatus, 
+            r.RecipePicture, 
+            r.IsVegan, 
+            IsDeleteAllowed = dbo.IsDeleteAllowed(r.RecipeId)
+        FROM Recipe r
+        LEFT JOIN Cuisine c ON c.CuisineId = r.CuisineId
+        WHERE 
+            (@RecipeId = 0 OR r.RecipeId = @RecipeId)
+            AND (@RecipeName IS NULL OR r.RecipeName LIKE '%' + @RecipeName + '%')
+            AND (@CuisineName IS NULL OR c.CuisineName LIKE '%' + @CuisineName + '%')
+            OR @IncludeBlank = 1 -- Always include blank row if requested
 
-	select @RecipeName = nullif(@RecipeName,''), @IncludeBlank  = ISNULL(@IncludeBlank,0)
-	
-	select r.RecipeId, r.CuisineID, r.UsersId, r.RecipeName, r.Calories, r.Datedrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePicture, r.isVegan, IsDeleteAllowed = dbo.IsDeleteAllowed(r.RecipeId)
-	from Recipe r
-	where r.RecipeId = @RecipeId 
-	or r.RecipeName like '%' + @RecipeName + '%'
-	or @IncludeBlank = 1
-	union select 0,0,0,'',0,'','','','','','', ''
-	where @IncludeBlank = 1 
-	order by r.recipename, r.datedrafted, r.datepublished, r.datearchived, r.recipestatus, r.calories, r.recipepicture
-end
-	return @return
-end
-go
+        -- Add blank row if IncludeBlank is true
+        UNION ALL
+        SELECT 0, 0, 0, '', 0, NULL, NULL, NULL, '', '', '', ''
+        WHERE @IncludeBlank = 1
 
-exec RecipeGet @All = 1
+        ORDER BY r.RecipeName, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.Calories, r.RecipePicture;
+
+        RETURN @return;
+    END
+END;
+GO
