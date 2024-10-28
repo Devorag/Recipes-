@@ -23,5 +23,34 @@ namespace RecipeAPI
             c.Load(id);
             return c;
         }
+
+        [HttpPost]
+        public IActionResult Post(bizCuisine cuisine)
+        {
+            try {
+                cuisine.Save();
+                return Ok();
+            }
+            catch(Exception ex) {
+                return BadRequest(new { ex.Message });
+            }
+ 
+        }
+
+        [HttpDelete] 
+        public IActionResult Delete(int id)
+        {   
+            try
+            {
+                bizCuisine c = new();
+                c.Delete(id);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new {ex.Message});
+            }
+
+        }
     }
 }

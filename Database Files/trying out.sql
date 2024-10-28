@@ -1,21 +1,25 @@
-CREATE OR ALTER PROCEDURE dbo.RecipeGet
-(
+--CREATE OR ALTER PROCEDURE dbo.RecipeGet
+declare
     @RecipeId INT = 0, 
     @RecipeName VARCHAR(100) = '',
     @CuisineName VARCHAR(100) = '',
     @All BIT = 0,
     @IncludeBlank BIT = 0
-)
-AS
+
+	select @RecipeId = null ,  
+@RecipeName = null ,  
+@CuisineName = 'american' ,  
+@All = 1 ,  
+@IncludeBlank = 0  
+
 BEGIN
     DECLARE @return INT = 0;
 
     SET @RecipeName = NULLIF(@RecipeName, '');
     SET @CuisineName = NULLIF(@CuisineName, '');
 	select @RecipeId = isnull(@RecipeId,0)
-	select @IncludeBlank = ISNULL(@IncludeBlank,0)
 
-    IF @All = 1 AND @IncludeBlank = 0
+    IF @All = 1 AND isnull(@IncludeBlank,0) = 0
     BEGIN
         WITH RecipeSummary AS (
             SELECT 
@@ -36,7 +40,7 @@ BEGIN
           AND (@CuisineName IS NULL OR c.CuisineName LIKE '%' + @CuisineName + '%')
         ORDER BY r.RecipeStatus DESC;
 
-        RETURN @return;
+        
     END
     ELSE
     BEGIN
@@ -55,7 +59,7 @@ BEGIN
 
         ORDER BY r.RecipeName, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.Calories, r.RecipePicture;
 
-        RETURN @return;
+        
     END
 END;
 GO

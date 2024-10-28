@@ -44,10 +44,10 @@ create table dbo.Cuisine(
 go 
 create table dbo.Recipe(
     RecipeId int not null identity primary key, 
-    CuisineID int not null 
-        constraint f_Cuisine_Recipe foreign key references Cuisine(CuisineId),
-    UsersId int not null 
-        constraint f_User_Recipe foreign key references Users(UsersId),
+    CuisineID int not null ,
+       -- constraint f_Cuisine_Recipe foreign key references Cuisine(CuisineId),
+    UsersId int not null ,
+        --constraint f_User_Recipe foreign key references Users(UsersId)
     RecipeName varchar(100) not null 
         constraint ck_recipe_recipeName_Cannot_be_blank check(RecipeName <> '')
         constraint u_Recipe_RecipeName unique,
