@@ -34,7 +34,7 @@ namespace RecipeSystem
         {
             SqlCommand cmd = SQLUtility.GetSQLCommand(this.GetSprocName);
             SQLUtility.SetParamValue(cmd, "CuisineName", cuisinename);
-            SQLUtility.SetParamValue(cmd, "All", 1);
+            SQLUtility.SetParamValue(cmd, "All", 0);
             DataTable dt = SQLUtility.GetDataTable(cmd);
             return this.GetListFromDataTable(dt);
         }

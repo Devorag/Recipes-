@@ -1,6 +1,6 @@
 CREATE OR ALTER PROCEDURE dbo.RecipeDelete
     @RecipeId INT,
-    @Message VARCHAR(500) = '' OUTPUT 
+    @Message VARCHAR(500) = null OUTPUT 
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -14,8 +14,10 @@ BEGIN
               (r.RecipeStatus = 'Drafted' or DATEDIFF(day, r.DateArchived, GETDATE()) >= 30)
     )
     BEGIN
-        select @return = 1, @Message = 'Can only delete a recipe that is currently drafted or that has been archived in over 30 days.'
-        GOTO finished
+      SET @return = 1;
+        IF @Message IS NOT NULL 
+            SET @Message = 'Can only delete a recipe that is currently drafted or that has been archived in over 30 days.';
+        GOTO finished;
     END
 
 
@@ -31,15 +33,18 @@ BEGIN
 
         COMMIT;
 
-        SET @Message = 'Recipe deleted successfully.';
-        SET @return = 0;
+			SET @return = 0;     
+			IF @Message IS NOT NULL 
+            SET @Message = 'Recipe deleted successfully.';
+
 
     END TRY
     BEGIN CATCH
         ROLLBACK;
         
+		SET @return = 1;
+        IF @Message IS NOT NULL 
         SET @Message = ERROR_MESSAGE();
-        SET @return = 1;
  END CATCH
  
     finished:

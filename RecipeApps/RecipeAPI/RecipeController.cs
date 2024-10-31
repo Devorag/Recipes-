@@ -35,17 +35,19 @@ namespace RecipeAPI
             return new bizRecipe().Search(cuisinename);
         }
 
+        //[FromForm]
+
         [HttpPost]
-        public IActionResult Post([FromForm]bizRecipe recipe)
+        public IActionResult Post(bizRecipe recipe)
         {
             try
             {
                 recipe.Save();
-                return Ok(new {message = "recipe saved", recipeid = recipe.RecipeId });
+                return Ok(new { recipe });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { ex.Message });
+                return BadRequest( recipe );
             }
 
         }

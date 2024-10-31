@@ -59,3 +59,4 @@ BEGIN
     END
 END;
 GO
+grant execute on RecipeGet to approle
