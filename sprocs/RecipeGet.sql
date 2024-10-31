@@ -13,9 +13,9 @@ BEGIN
     SET @RecipeName = NULLIF(@RecipeName, '');
     SET @CuisineName = NULLIF(@CuisineName, '');
 	select @RecipeId = isnull(@RecipeId,0)
-	select @IncludeBlank = ISNULL(@IncludeBlank,0)
+	Set @All = 1;
 
-    IF @All = 1 AND @IncludeBlank = 0
+    IF isnull(@IncludeBlank,0) = 0
     BEGIN
         WITH RecipeSummary AS (
             SELECT 
@@ -33,7 +33,7 @@ BEGIN
         LEFT JOIN Users u ON u.UsersId = r.UsersId
         LEFT JOIN Cuisine c ON c.CuisineId = r.CuisineId
         WHERE (@RecipeId = 0 OR r.RecipeId = @RecipeId)
-          AND (@CuisineName IS NULL OR c.CuisineName LIKE '%' + @CuisineName + '%')
+          AND (c.CuisineName LIKE '%' + @CuisineName + '%')
         ORDER BY r.RecipeStatus DESC;
 
         RETURN @return;
@@ -59,4 +59,4 @@ BEGIN
     END
 END;
 GO
-grant execute on RecipeGet to approle
+--grant execute on RecipeGet to approle
