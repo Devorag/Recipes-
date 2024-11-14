@@ -13,42 +13,18 @@ BEGIN
     SET @RecipeName = NULLIF(@RecipeName, '');
     SET @CuisineName = NULLIF(@CuisineName, '');
 	select @RecipeId = isnull(@RecipeId,0)
-	Set @All = 1;
-
-    IF isnull(@IncludeBlank,0) = 0
-    BEGIN
-        WITH RecipeSummary AS (
-            SELECT 
-                r.RecipeId, 
-                r.RecipeName, 
-                COUNT(ri.IngredientId) AS NumIngredients
-            FROM Recipe r
-            LEFT JOIN RecipeIngredient ri ON ri.RecipeId = r.RecipeId
-            GROUP BY r.RecipeId, r.RecipeName
-        )
-        SELECT 
-            r.RecipeId, r.RecipeName, r.RecipeStatus, r.DateDrafted, r.DateArchived, r.DatePublished, u.UsersName, r.Calories, rs.NumIngredients, r.RecipePicture, r.IsVegan, c.CuisineName
-        FROM Recipe r
-        JOIN RecipeSummary rs ON r.RecipeId = rs.RecipeId
-        LEFT JOIN Users u ON u.UsersId = r.UsersId
-        LEFT JOIN Cuisine c ON c.CuisineId = r.CuisineId
-        WHERE (@RecipeId = 0 OR r.RecipeId = @RecipeId)
-          AND (c.CuisineName LIKE '%' + @CuisineName + '%')
-        ORDER BY r.RecipeStatus DESC;
-
-        RETURN @return;
-    END
-    ELSE
-    BEGIN
+	select @IncludeBlank = ISNULL(@IncludeBlank,0), @all = isnull(@all,0)
+	
         SELECT 
             r.RecipeId, r.CuisineId, r.UsersId, r.RecipeName, r.Calories, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePicture, r.IsVegan, IsDeleteAllowed = dbo.IsDeleteAllowed(r.RecipeId)
-        FROM Recipe r
+		FROM Recipe r
         LEFT JOIN Cuisine c ON c.CuisineId = r.CuisineId
         WHERE 
-            (@RecipeId = 0 OR r.RecipeId = @RecipeId)
-            AND (@RecipeName IS NULL OR r.RecipeName LIKE '%' + @RecipeName + '%')
-            AND (@CuisineName IS NULL OR c.CuisineName LIKE '%' + @CuisineName + '%')
+            r.RecipeId = @RecipeId
+            or (@RecipeName <> '' and r.RecipeName LIKE '%' + @RecipeName + '%')
+			or (@CuisineName <> '' and c.CuisineName LIKE '%' + @CuisineName + '%')
             OR @IncludeBlank = 1 
+			or @All = 1
         UNION ALL
         SELECT 0, 0, 0, '', 0, NULL, NULL, NULL, '', '', '', ''
         WHERE @IncludeBlank = 1
@@ -56,7 +32,7 @@ BEGIN
         ORDER BY r.RecipeName, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.Calories, r.RecipePicture;
 
         RETURN @return;
-    END
+
 END;
 GO
---grant execute on RecipeGet to approle
+grant execute on RecipeGet to approle

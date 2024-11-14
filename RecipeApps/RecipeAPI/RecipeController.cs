@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RecipeSystem; 
+using RecipeSystem;
+using System.Diagnostics;
 namespace RecipeAPI
 {
     [Route("api/[controller]")]
@@ -29,16 +30,24 @@ namespace RecipeAPI
             return new bizRecipe().Search(username);
         }
 
-        [HttpGet("getbyCuisine/{cuisinename}")]
+        [HttpGet("getbyCuisineName/{cuisinename}")]
         public List<bizRecipe> GetRecipesbyCuisine(string cuisinename)
         {
+            //var recipestring = ""
             return new bizRecipe().Search(cuisinename);
+        }
+
+        [HttpGet("testCuisineName/{cuisinename}")]
+        public string TestCuisine(string cuisinename)
+        {
+            //var recipestring = ""
+            return new bizRecipe().TestSearch(cuisinename);
         }
 
         //[FromForm]
 
         [HttpPost]
-        public IActionResult Post(bizRecipe recipe)
+        public IActionResult Post([FromBody]bizRecipe recipe)
         {
             try
             {
@@ -47,23 +56,26 @@ namespace RecipeAPI
             }
             catch (Exception ex)
             {
+                recipe.ErrorMessage = ex.Message;
                 return BadRequest( recipe );
             }
 
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromBody]int id)
         {
+            bizRecipe r = new();
             try
             {
-                bizRecipe r = new();
-                r.Delete(id);
-                return Ok(new { message = "recipe deleted"});
+                r.recipeDelete(id);
+                return Ok(r);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { ex.Message });
+                r.ErrorMessage = ex.Message;
+                Debug.Print("Delete API encountered an error: " + ex.Message);
+                return BadRequest(r);
             }
 
         }

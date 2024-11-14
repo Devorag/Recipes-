@@ -8,8 +8,8 @@ declare
 
 	select @RecipeId = null ,  
 @RecipeName = null ,  
-@CuisineName = 'american' ,  
-@All = 1 ,  
+@CuisineName = 'american',
+@All = 1, 
 @IncludeBlank = 0  
 
 BEGIN

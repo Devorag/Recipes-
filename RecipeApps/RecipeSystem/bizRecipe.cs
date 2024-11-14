@@ -34,9 +34,16 @@ namespace RecipeSystem
         {
             SqlCommand cmd = SQLUtility.GetSQLCommand(this.GetSprocName);
             SQLUtility.SetParamValue(cmd, "CuisineName", cuisinename);
-            //SQLUtility.SetParamValue(cmd, "All", 0);
             DataTable dt = SQLUtility.GetDataTable(cmd);
             return this.GetListFromDataTable(dt);
+        }
+
+        public string TestSearch(string cuisinename)
+        {
+            SqlCommand cmd = SQLUtility.GetSQLCommand("TestGetCuisineName");
+            SQLUtility.SetParamValue(cmd, "CuisineName", cuisinename);
+            DataTable dt = SQLUtility.GetDataTable(cmd);
+            return SQLUtility.GetValueFromFirstRowAsString(dt, "CuisineName");
         }
 
         public List<bizCuisine> CuisineList
