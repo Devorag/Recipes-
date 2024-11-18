@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace RecordKeeperAPI
+namespace RecipeAPI
 {
     public class AuthFilter : IAuthorizationFilter
     {
@@ -22,11 +22,10 @@ namespace RecordKeeperAPI
             }
             if (string.IsNullOrEmpty(sessionKey) || !IsAuthorized(sessionKey, _requiredrole, out var user))
             {
-                context.Result = new UnauthorizedResult(); // Early rejection
+                context.Result = new UnauthorizedResult(); 
                 return;
             }
 
-            // Store the user for later use in the request context
             context.HttpContext.Items["AuthorizedUser"] = user;
         }
 
@@ -35,7 +34,7 @@ namespace RecordKeeperAPI
             bool authorized = false;
             user = new bizUser();
             user.LoadBySessionKey();
-            if (user.UserId > 0 || user.RoleRank >= requiredrank)
+            if (user.UserId > 0 && user.RoleRank >= requiredrank)
             {
                 authorized = true;
             }
@@ -43,9 +42,5 @@ namespace RecordKeeperAPI
         }
     }
 }
-namespace RecipeAPI
-{
-    public class AuthFilter
-    {
-    }
-}
+
+

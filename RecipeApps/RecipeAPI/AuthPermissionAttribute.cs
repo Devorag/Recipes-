@@ -1,7 +1,6 @@
 ﻿namespace RecipeAPI
 {
     using Microsoft.AspNetCore.Mvc;
-    using RecordKeeperAPI;
     using System;
 
     public class AuthPermissionAttribute : TypeFilterAttribute
