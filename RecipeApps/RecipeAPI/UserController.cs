@@ -7,7 +7,7 @@ namespace RecipeAPI
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpGet] 
+        [HttpGet]
         public List<bizUsers> Get()
         {
             return new bizUsers().GetList();
