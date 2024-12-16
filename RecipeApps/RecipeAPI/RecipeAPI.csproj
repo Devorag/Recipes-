@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="secret-appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 

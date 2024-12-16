@@ -16,7 +16,7 @@ BEGIN
 	select @IncludeBlank = ISNULL(@IncludeBlank,0), @all = isnull(@all,0)
 	
         SELECT 
-            r.RecipeId, r.CuisineId, r.UsersId, r.RecipeName, r.Calories, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePicture, r.IsVegan, IsDeleteAllowed = dbo.IsDeleteAllowed(r.RecipeId)
+            r.RecipeId, r.CuisineId, r.UsersId, r.RecipeName, r.Calories, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.RecipePicture, r.IsVegan
 		FROM Recipe r
         LEFT JOIN Cuisine c ON c.CuisineId = r.CuisineId
         WHERE 
@@ -26,7 +26,7 @@ BEGIN
             OR @IncludeBlank = 1 
 			or @All = 1
         UNION ALL
-        SELECT 0, 0, 0, '', 0, NULL, NULL, NULL, '', '', '', ''
+        SELECT 0, 0, 0, '', 0, NULL, NULL, NULL, '', '', ''
         WHERE @IncludeBlank = 1
 
         ORDER BY r.RecipeName, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipeStatus, r.Calories, r.RecipePicture;

@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "apis1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/dgsRecipeAPI/apis/RecipeAPI",
+      "apiEndpoint": "https://dgrecipeapi.azure-api.net/hi",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/dgRecipeAPI/apis/RecipesAPI",
       "type": "apis.azure"
     }
   }

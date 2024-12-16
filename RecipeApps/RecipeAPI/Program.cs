@@ -9,9 +9,8 @@ builder.Services.AddCors(options =>
         builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
 
-builder.Configuration.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)).AddJsonFile("secret-appsettings.json", true, true);
+builder.Configuration.AddJsonFile("secret-appsettings.json", true, true);
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
 c =>
@@ -53,7 +52,7 @@ var app = builder.Build();
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+
 
 app.UseCors("AllowAllOrigins");
 app.UseAuthorization();

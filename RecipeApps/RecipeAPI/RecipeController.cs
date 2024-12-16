@@ -44,11 +44,10 @@ namespace RecipeAPI
             return new bizRecipe().TestSearch(cuisinename);
         }
 
-        //[FromForm]
+
 
         [HttpPost]
-        [AuthPermission(1)]
-        public IActionResult Post([FromBody]bizRecipe recipe)
+        public IActionResult Post([FromForm]bizRecipe recipe)
         {
             try
             {
@@ -64,8 +63,7 @@ namespace RecipeAPI
         }
 
         [HttpDelete]
-        [AuthPermission(3)]
-        public IActionResult Delete([FromBody]int id)
+        public IActionResult Delete(int id)
         {
             bizRecipe r = new();
             try
