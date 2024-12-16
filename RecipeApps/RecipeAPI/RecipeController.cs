@@ -47,7 +47,7 @@ namespace RecipeAPI
 
 
         [HttpPost]
-        public IActionResult Post([FromForm]bizRecipe recipe)
+        public IActionResult Post([FromBody]bizRecipe recipe)
         {
             try
             {
