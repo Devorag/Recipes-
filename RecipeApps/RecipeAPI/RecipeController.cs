@@ -47,20 +47,31 @@ namespace RecipeAPI
 
 
         [HttpPost]
-        public IActionResult Post([FromBody]bizRecipe recipe)
+        public IActionResult PostFromBody([FromBody] bizRecipe recipe)
         {
+            return SaveRecipe(recipe);
+        }
+
+        [HttpPost]
+        public IActionResult PostFromForm([FromForm] bizRecipe recipe)
+        {
+            return SaveRecipe(recipe);
+        }
+
+        private IActionResult SaveRecipe(bizRecipe recipe)
+        {
+
             try
             {
                 recipe.Save();
-                return Ok(new {recipe});
+                return Ok(new { recipe });
             }
             catch (Exception ex)
             {
-                recipe.ErrorMessage = ex.Message;
-                return BadRequest( recipe );
+                return BadRequest(new { ErrorMessage = ex.Message });
             }
-
         }
+
 
         [HttpDelete]
         public IActionResult Delete(int id)
