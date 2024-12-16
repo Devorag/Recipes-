@@ -58,7 +58,7 @@ namespace RecipeAPI
             return SaveRecipe(recipe);
         }
 
-        private IActionResult SaveRecipe(bizRecipe recipe)
+        public IActionResult SaveRecipe(bizRecipe recipe)
         {
 
             try
