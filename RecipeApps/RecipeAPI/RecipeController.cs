@@ -47,20 +47,9 @@ namespace RecipeAPI
 
 
         [HttpPost]
-        public IActionResult PostFromBody([FromBody] bizRecipe recipe)
-        {
-            return SaveRecipe(recipe);
-        }
 
-        [HttpPost]
-        public IActionResult PostFromForm([FromForm] bizRecipe recipe)
+        public IActionResult Post(bizRecipe recipe)
         {
-            return SaveRecipe(recipe);
-        }
-
-        public IActionResult SaveRecipe(bizRecipe recipe)
-        {
-
             try
             {
                 recipe.Save();
