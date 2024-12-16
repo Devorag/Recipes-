@@ -47,12 +47,12 @@ namespace RecipeAPI
 
 
         [HttpPost]
-        public IActionResult Post(bizRecipe recipe)
+        public IActionResult Post([FromBody]bizRecipe recipe)
         {
             try
             {
                 recipe.Save();
-                return Ok(new {message = "Recipe Saved", recipeid = recipe.RecipeId});
+                return Ok(new {recipe});
             }
             catch (Exception ex)
             {
